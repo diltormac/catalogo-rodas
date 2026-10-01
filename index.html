@@ -118,7 +118,6 @@
         gap: 14px;
       }
 
-      /* Novo estilo dos Filtros de Status */
       .filtros-status {
         display: flex;
         background: rgba(0, 0, 0, 0.25);
@@ -443,17 +442,8 @@
         <button class="btn-status" data-status="todos">Todos</button>
       </div>
 
-      <div class="filtros" id="filtros">
-        <button class="chip ativo" data-aro="todos">Todos os Aros</button>
-        <button class="chip" data-aro="14">Aro 14</button>
-        <button class="chip" data-aro="15">Aro 15</button>
-        <button class="chip" data-aro="16">Aro 16</button>
-        <button class="chip" data-aro="17">Aro 17</button>
-        <button class="chip" data-aro="18">Aro 18</button>
-        <button class="chip" data-aro="19">Aro 19</button>
-        <button class="chip" data-aro="20">Aro 20</button>
-        <button class="chip" data-aro="22">Aro 22</button>
-      </div>
+      <!-- Chips de aro são gerados DINAMICAMENTE pelo JS -->
+      <div class="filtros" id="filtrosAro"></div>
 
       <div class="ordenacao">
         <select id="ordenarPor">
@@ -515,7 +505,6 @@
             if (!Array.isArray(dados))
               throw new Error("Formato do produtos.json inválido");
 
-            // Limpa valores "NAN", "null", undefined, etc → string vazia
             function limparTexto(v) {
               if (v === null || v === undefined) return "";
               var s = String(v).trim();
@@ -553,6 +542,9 @@
 
             if (!produtos.length) throw new Error("Nenhum produto no arquivo");
 
+            // 🔥 Cria os chips de aro DINAMICAMENTE
+            gerarChipsDeAro();
+
             document.getElementById("loadingBox").style.display = "none";
             document.getElementById("gridRodas").style.display = "grid";
             renderizar();
@@ -573,11 +565,61 @@
           return m ? parseInt(m[1], 10) : null;
         }
 
+        /* ============ CHIPS DE ARO DINÂMICOS ============ */
+        function gerarChipsDeAro() {
+          var container = document.getElementById("filtrosAro");
+          container.innerHTML = "";
+
+          // 1. Extrai todos os aros únicos (ignora null)
+          var arosUnicos = [];
+          produtos.forEach(function (p) {
+            if (p.aro && arosUnicos.indexOf(p.aro) === -1) {
+              arosUnicos.push(p.aro);
+            }
+          });
+
+          // 2. Ordena do menor pro maior
+          arosUnicos.sort(function (a, b) { return a - b; });
+
+          // 3. Cria o chip "Todos os Aros" sempre primeiro
+          var chipTodos = document.createElement("button");
+          chipTodos.className = "chip ativo";
+          chipTodos.dataset.aro = "todos";
+          chipTodos.textContent = "Todos os Aros";
+          chipTodos.addEventListener("click", function () {
+            ativarChipAro(chipTodos, "todos");
+          });
+          container.appendChild(chipTodos);
+
+          // 4. Cria um chip pra cada aro encontrado
+          arosUnicos.forEach(function (aro) {
+            var chip = document.createElement("button");
+            chip.className = "chip";
+            chip.dataset.aro = String(aro);
+            chip.textContent = "Aro " + aro;
+            chip.addEventListener("click", function () {
+              ativarChipAro(chip, String(aro));
+            });
+            container.appendChild(chip);
+          });
+        }
+
+        function ativarChipAro(chipClicado, aro) {
+          document
+            .querySelectorAll("#filtrosAro .chip")
+            .forEach(function (c) {
+              c.classList.remove("ativo");
+            });
+          chipClicado.classList.add("ativo");
+          filtroAroAtual = aro;
+          renderizar();
+        }
+
         /* ============ FILTROS E ORDENAÇÃO ============ */
         function aplicarFiltros() {
           var lista = produtos.slice();
 
-          // 1. Filtro por Status (Disponíveis, Vendidos, Todos)
+          // 1. Filtro por Status
           if (filtroStatusAtual === "disponiveis") {
             lista = lista.filter(function (p) { return !p.vendido; });
           } else if (filtroStatusAtual === "vendidos") {
@@ -592,7 +634,7 @@
             });
           }
 
-          // 3. Filtro por Busca de Texto
+          // 3. Busca
           var termo = document
             .getElementById("searchInput")
             .value.toLowerCase()
@@ -609,24 +651,16 @@
           // 4. Ordenação
           switch (ordenacaoAtual) {
             case "menor":
-              lista.sort(function (a, b) {
-                return a.valor - b.valor;
-              });
+              lista.sort(function (a, b) { return a.valor - b.valor; });
               break;
             case "maior":
-              lista.sort(function (a, b) {
-                return b.valor - a.valor;
-              });
+              lista.sort(function (a, b) { return b.valor - a.valor; });
               break;
             case "nome":
-              lista.sort(function (a, b) {
-                return a.nome.localeCompare(b.nome);
-              });
+              lista.sort(function (a, b) { return a.nome.localeCompare(b.nome); });
               break;
             default:
-              lista.sort(function (a, b) {
-                return a.codigo.localeCompare(b.codigo);
-              });
+              lista.sort(function (a, b) { return a.codigo.localeCompare(b.codigo); });
           }
 
           return lista;
@@ -653,7 +687,6 @@
             var card = document.createElement("div");
             card.className = "card" + (item.vendido ? " vendido" : "");
 
-            // Imagem com fallback de extensões
             var img = document.createElement("img");
             img.alt = item.nome;
             img.loading = "lazy";
@@ -719,7 +752,6 @@
           .getElementById("searchInput")
           .addEventListener("input", renderizar);
 
-        // Eventos do seletor de status (Disponíveis/Vendidos/Todos)
         document.querySelectorAll(".btn-status").forEach(function (btn) {
           btn.addEventListener("click", function () {
             document.querySelectorAll(".btn-status").forEach(function (b) {
@@ -727,18 +759,6 @@
             });
             btn.classList.add("ativo");
             filtroStatusAtual = btn.dataset.status;
-            renderizar();
-          });
-        });
-
-        // Eventos dos chips de aro
-        document.querySelectorAll(".chip").forEach(function (chip) {
-          chip.addEventListener("click", function () {
-            document.querySelectorAll(".chip").forEach(function (c) {
-              c.classList.remove("ativo");
-            });
-            chip.classList.add("ativo");
-            filtroAroAtual = chip.dataset.aro;
             renderizar();
           });
         });
