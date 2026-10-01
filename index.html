@@ -111,11 +111,44 @@
       .controls-bar {
         background: var(--bg-surface);
         border-bottom: 1px solid var(--border-color);
-        padding: 12px 20px;
+        padding: 14px 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 12px;
+        gap: 14px;
+      }
+
+      /* Novo estilo dos Filtros de Status */
+      .filtros-status {
+        display: flex;
+        background: rgba(0, 0, 0, 0.25);
+        padding: 4px;
+        border-radius: 99px;
+        border: 1px solid var(--border-color);
+      }
+
+      .btn-status {
+        padding: 8px 18px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        border-radius: 99px;
+        border: none;
+        background: transparent;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-status.ativo {
+        background: var(--accent-color);
+        color: #0f172a;
+        box-shadow: 0 2px 8px var(--accent-glow);
+      }
+
+      .btn-status.ativo[data-status="vendidos"] {
+        background: #ef4444;
+        color: #ffffff;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
       }
 
       .filtros {
@@ -144,10 +177,9 @@
       }
 
       .filtros .chip.ativo {
-        background: var(--accent-color);
-        color: #0f172a;
-        border-color: var(--accent-color);
-        box-shadow: 0 0 12px var(--accent-glow);
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.3);
       }
 
       .ordenacao select {
@@ -404,8 +436,15 @@
     </header>
 
     <div class="controls-bar">
+      <!-- Seletor Principal de Status: Disponíveis / Vendidos / Todos -->
+      <div class="filtros-status">
+        <button class="btn-status ativo" data-status="disponiveis">Disponíveis</button>
+        <button class="btn-status" data-status="vendidos">Vendidos</button>
+        <button class="btn-status" data-status="todos">Todos</button>
+      </div>
+
       <div class="filtros" id="filtros">
-        <button class="chip ativo" data-aro="todos">Todos</button>
+        <button class="chip ativo" data-aro="todos">Todos os Aros</button>
         <button class="chip" data-aro="14">Aro 14</button>
         <button class="chip" data-aro="15">Aro 15</button>
         <button class="chip" data-aro="16">Aro 16</button>
@@ -457,6 +496,7 @@
         const EXTENSOES = ["jpg", "jpeg", "png", "webp"];
 
         let produtos = [];
+        let filtroStatusAtual = "disponiveis"; // Padrão: ocultar vendidos
         let filtroAroAtual = "todos";
         let ordenacaoAtual = "codigo";
 
@@ -537,6 +577,14 @@
         function aplicarFiltros() {
           var lista = produtos.slice();
 
+          // 1. Filtro por Status (Disponíveis, Vendidos, Todos)
+          if (filtroStatusAtual === "disponiveis") {
+            lista = lista.filter(function (p) { return !p.vendido; });
+          } else if (filtroStatusAtual === "vendidos") {
+            lista = lista.filter(function (p) { return p.vendido; });
+          }
+
+          // 2. Filtro por Aro
           if (filtroAroAtual !== "todos") {
             var aro = parseInt(filtroAroAtual, 10);
             lista = lista.filter(function (p) {
@@ -544,6 +592,7 @@
             });
           }
 
+          // 3. Filtro por Busca de Texto
           var termo = document
             .getElementById("searchInput")
             .value.toLowerCase()
@@ -557,6 +606,7 @@
             });
           }
 
+          // 4. Ordenação
           switch (ordenacaoAtual) {
             case "menor":
               lista.sort(function (a, b) {
@@ -669,6 +719,19 @@
           .getElementById("searchInput")
           .addEventListener("input", renderizar);
 
+        // Eventos do seletor de status (Disponíveis/Vendidos/Todos)
+        document.querySelectorAll(".btn-status").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            document.querySelectorAll(".btn-status").forEach(function (b) {
+              b.classList.remove("ativo");
+            });
+            btn.classList.add("ativo");
+            filtroStatusAtual = btn.dataset.status;
+            renderizar();
+          });
+        });
+
+        // Eventos dos chips de aro
         document.querySelectorAll(".chip").forEach(function (chip) {
           chip.addEventListener("click", function () {
             document.querySelectorAll(".chip").forEach(function (c) {
