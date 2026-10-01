@@ -472,9 +472,9 @@
     "nome": "JOGO 4 PNEUS ARO 16 DUNLOP",
     "valor": 1500,
     "status": "MONTADA",
-    "disponibilidade": "NAN",
+    "disponibilidade": "VENDIDO",
     "aro": 16,
-    "vendido": false
+    "vendido": true
   },
   {
     "codigo": "550373",
@@ -816,6 +816,42 @@
     "status": "MONTADA",
     "disponibilidade": "NAN",
     "aro": 20,
+    "vendido": false
+  },
+  {
+    "codigo": "552749",
+    "nome": "JOGO RODA ARO 17 COROLLA",
+    "valor": 3800,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "552771",
+    "nome": "JOGO RODA ARO 14 GM",
+    "valor": 2300,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 14,
+    "vendido": false
+  },
+  {
+    "codigo": "552774",
+    "nome": "JOGO RODA ARO 14 GM/ VW/TOYOTA",
+    "valor": 3800,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 14,
+    "vendido": false
+  },
+  {
+    "codigo": "552775",
+    "nome": "JOGO RODA ARO 17 COROLLA",
+    "valor": 3800,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
     "vendido": false
   }
 ]
