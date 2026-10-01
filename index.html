@@ -263,28 +263,7 @@
         font-size: 1.35rem;
         font-weight: 700;
         color: #16a34a;
-        margin: 6px 0 12px;
-      }
-
-      .card-body button {
-        margin-top: auto;
-        background: #25d366;
-        color: #fff;
-        border: none;
-        padding: 10px 14px;
-        border-radius: 8px;
-        font-size: 0.95rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition:
-          background 0.2s,
-          transform 0.1s;
-      }
-      .card-body button:hover {
-        background: #1ebe5b;
-      }
-      .card-body button:active {
-        transform: scale(0.97);
+        margin: 6px 0 0;
       }
 
       .vazio {
@@ -320,10 +299,6 @@
         }
         .preco {
           font-size: 1.1rem;
-        }
-        .card-body button {
-          font-size: 0.85rem;
-          padding: 8px 10px;
         }
       }
     </style>
@@ -398,7 +373,6 @@
         /* ============ CARREGAR JSON ============ */
         async function carregarProdutos() {
           try {
-            // cache: 'no-cache' força pegar sempre a versão mais recente
             const resposta = await fetch(URL_JSON, { cache: "no-cache" });
             if (!resposta.ok)
               throw new Error(
@@ -411,8 +385,7 @@
             if (!Array.isArray(dados))
               throw new Error("Formato do produtos.json inválido");
 
-            // Função que limpa valores: transforma "NAN", "nan", "null", undefined
-            // em string vazia. Também remove espaços extras.
+            // Limpa valores "NAN", "null", undefined, etc → string vazia
             function limparTexto(v) {
               if (v === null || v === undefined) return "";
               var s = String(v).trim();
@@ -594,37 +567,11 @@
               item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
             body.appendChild(pPreco);
 
-            var btn = document.createElement("button");
-            btn.type = "button";
-            btn.textContent = "Enviar no WhatsApp";
-            btn.addEventListener("click", function () {
-              compartilharWhatsApp(item);
-            });
-            body.appendChild(btn);
-
             card.appendChild(body);
             frag.appendChild(card);
           });
 
           container.appendChild(frag);
-        }
-
-        /* ============ WHATSAPP ============ */
-        function compartilharWhatsApp(item) {
-          var valorFmt = item.valor.toLocaleString("pt-BR", {
-            minimumFractionDigits: 2,
-          });
-          var texto = "Olá! Confira esse jogo de rodas:\n\n";
-          texto += "*Código:* " + item.codigo + "\n";
-          texto += "*Descrição:* " + item.nome + "\n";
-          if (item.status) texto += "*Status:* " + item.status + "\n";
-          if (item.disponibilidade)
-            texto += "*Disponibilidade:* " + item.disponibilidade + "\n";
-          texto += "*Valor:* R$ " + valorFmt;
-          window.open(
-            "https://api.whatsapp.com/send?text=" + encodeURIComponent(texto),
-            "_blank",
-          );
         }
 
         /* ============ EVENTOS ============ */
