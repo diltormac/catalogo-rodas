@@ -853,5 +853,32 @@
     "disponibilidade": "NAN",
     "aro": 17,
     "vendido": false
+  },
+  {
+    "codigo": "552951",
+    "nome": "JOGO RODA ARO 15 GM/ VW/TOYOTA",
+    "valor": 2600,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "552952",
+    "nome": "JOGO RODA ARO 15 NISSAN",
+    "valor": 2900,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "552954",
+    "nome": "JOGO RODA ARO 18 POLO/ GOLF/ JETTA",
+    "valor": 5500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 18,
+    "vendido": false
   }
 ]
