@@ -1,1681 +1,695 @@
 <!doctype html>
-
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Catálogo de Rodas</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    :root {
-      --bg: #f4f5f7;
-      --surface: #ffffff;
-      --dark: #111827;
-      --dark-2: #1f2937;
-      --text: #111827;
-      --muted: #6b7280;
-      --border: #e5e7eb;
-      --green: #16a34a;
-      --green-dark: #15803d;
-      --red: #dc2626;
-      --shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
-    }
-
-    body {
-      font-family:
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
-      background:
-        radial-gradient(
-          circle at top,
-          #ffffff 0,
-          #f4f5f7 45%,
-          #eef0f3 100%
-        );
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* =========================================================
-       HEADER
-    ========================================================= */
-
-    header {
-      background:
-        radial-gradient(
-          circle at 20% 0%,
-          rgba(255, 255, 255, 0.08),
-          transparent 35%
-        ),
-        linear-gradient(135deg, #111827, #030712);
-
-      color: #fff;
-      padding: 28px 18px 24px;
-
-      position: sticky;
-      top: 0;
-      z-index: 20;
-
-      box-shadow:
-        0 8px 30px rgba(0, 0, 0, 0.18);
-    }
-
-    .header-content {
-      width: 100%;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .brand-icon {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 12px;
-
-      font-size: 1.35rem;
-    }
-
-    header h1 {
-      font-size: 1.55rem;
-      font-weight: 750;
-      letter-spacing: -0.4px;
-    }
-
-    .search-wrapper {
-      width: 100%;
-      max-width: 760px;
-      margin: 0 auto;
-      position: relative;
-    }
-
-    #searchInput {
-      width: 100%;
-      height: 52px;
-
-      padding: 0 18px 0 48px;
-
-      font-size: 0.98rem;
-      color: #111827;
-
-      background: #ffffff;
-
-      border: 0;
-      border-radius: 16px;
-
-      outline: none;
-
-      box-shadow:
-        0 5px 20px rgba(0, 0, 0, 0.18);
-
-      transition:
-        box-shadow 0.2s,
-        transform 0.2s;
-    }
-
-    #searchInput::placeholder {
-      color: #9ca3af;
-    }
-
-    #searchInput:focus {
-      box-shadow:
-        0 0 0 3px rgba(34, 197, 94, 0.35),
-        0 8px 25px rgba(0, 0, 0, 0.2);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 17px;
-      top: 50%;
-
-      transform: translateY(-50%);
-
-      color: #6b7280;
-      font-size: 1.1rem;
-
-      pointer-events: none;
-    }
-
-    .contador {
-      margin-top: 12px;
-
-      text-align: center;
-
-      font-size: 0.82rem;
-      color: rgba(255, 255, 255, 0.65);
-    }
-
-    /* =========================================================
-       FILTROS
-    ========================================================= */
-
-    .toolbar {
-      position: sticky;
-      top: 121px;
-      z-index: 15;
-
-      background: rgba(248, 250, 252, 0.94);
-      backdrop-filter: blur(12px);
-
-      border-bottom: 1px solid var(--border);
-    }
-
-    .toolbar-inner {
-      max-width: 1400px;
-      margin: 0 auto;
-
-      padding: 12px 20px;
-
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .filtros {
-      flex: 1;
-
-      display: flex;
-      gap: 7px;
-
-      overflow-x: auto;
-      scrollbar-width: none;
-
-      padding: 2px;
-    }
-
-    .filtros::-webkit-scrollbar {
-      display: none;
-    }
-
-    .filtros .chip {
-      flex-shrink: 0;
-
-      padding: 8px 14px;
-
-      font-size: 0.78rem;
-      font-weight: 700;
-
-      color: #475569;
-      background: #fff;
-
-      border: 1px solid #dbe1e8;
-      border-radius: 999px;
-
-      cursor: pointer;
-
-      transition:
-        background 0.18s,
-        color 0.18s,
-        border 0.18s,
-        transform 0.18s;
-    }
-
-    .filtros .chip:hover {
-      transform: translateY(-1px);
-      border-color: #94a3b8;
-    }
-
-    .filtros .chip.ativo {
-      color: #fff;
-      background: #111827;
-      border-color: #111827;
-      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.18);
-    }
-
-    /* =========================================================
-       ORDENAÇÃO
-    ========================================================= */
-
-    .ordenacao {
-      flex-shrink: 0;
-    }
-
-    .ordenacao select {
-      height: 36px;
-
-      padding: 0 30px 0 12px;
-
-      border-radius: 10px;
-      border: 1px solid #dbe1e8;
-
-      background: #fff;
-      color: #374151;
-
-      font-size: 0.78rem;
-      font-weight: 600;
-
-      outline: none;
-      cursor: pointer;
-    }
-
-    /* =========================================================
-       LOADING
-    ========================================================= */
-
-    .loading {
-      flex: 1;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      padding: 80px 20px;
-
-      color: var(--muted);
-    }
-
-    .loading .spinner {
-      width: 42px;
-      height: 42px;
-
-      border: 4px solid #e5e7eb;
-      border-top-color: #16a34a;
-
-      border-radius: 50%;
-
-      animation: girar 0.8s linear infinite;
-
-      margin-bottom: 16px;
-    }
-
-    @keyframes girar {
-      to {
-        transform: rotate(360deg);
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catálogo de Rodas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg-main: #0b0f17;
+        --bg-surface: #151c28;
+        --bg-card: #1e293b;
+        --border-color: rgba(255, 255, 255, 0.08);
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --accent-color: #38bdf8;
+        --accent-glow: rgba(56, 189, 248, 0.2);
+        --price-color: #4ade80;
       }
-    }
 
-    /* =========================================================
-       ERRO
-    ========================================================= */
-
-    .erro-box {
-      flex: 1;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      padding: 50px 20px;
-
-      text-align: center;
-    }
-
-    .erro-box .icone {
-      font-size: 52px;
-      margin-bottom: 14px;
-    }
-
-    .erro-box h2 {
-      color: #991b1b;
-      margin-bottom: 8px;
-    }
-
-    .erro-box p {
-      color: var(--muted);
-      max-width: 450px;
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-
-    .erro-box button {
-      padding: 11px 20px;
-
-      font-size: 0.9rem;
-      font-weight: 700;
-
-      background: #111827;
-      color: #fff;
-
-      border: 0;
-      border-radius: 10px;
-
-      cursor: pointer;
-    }
-
-    /* =========================================================
-       GRID
-    ========================================================= */
-
-    .grid-container {
-      flex: 1;
-
-      display: grid;
-
-      grid-template-columns:
-        repeat(
-          auto-fill,
-          minmax(250px, 1fr)
-        );
-
-      gap: 22px;
-
-      padding: 28px;
-
-      max-width: 1400px;
-      width: 100%;
-
-      margin: 0 auto;
-    }
-
-    /* =========================================================
-       CARD
-    ========================================================= */
-
-    .card {
-      background: var(--surface);
-
-      border: 1px solid rgba(226, 232, 240, 0.9);
-
-      border-radius: 18px;
-
-      overflow: hidden;
-
-      box-shadow: var(--shadow);
-
-      display: flex;
-      flex-direction: column;
-
-      position: relative;
-
-      transition:
-        transform 0.22s ease,
-        box-shadow 0.22s ease,
-        border-color 0.22s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-
-      box-shadow:
-        0 16px 38px rgba(15, 23, 42, 0.14);
-
-      border-color: #d1d5db;
-    }
-
-    /* =========================================================
-       IMAGEM
-    ========================================================= */
-
-    .image-wrapper {
-      position: relative;
-      background: #eef0f3;
-      overflow: hidden;
-    }
-
-    .card img {
-      width: 100%;
-      height: 225px;
-
-      object-fit: cover;
-
-      display: block;
-
-      background: #eef0f3;
-
-      transition:
-        transform 0.35s ease;
-    }
-
-    .card:hover img {
-      transform: scale(1.035);
-    }
-
-    /* =========================================================
-       VENDIDO
-    ========================================================= */
-
-    .card.vendido::after {
-      content: "VENDIDO";
-
-      position: absolute;
-
-      top: 16px;
-      right: 16px;
-
-      background: rgba(220, 38, 38, 0.94);
-
-      color: #fff;
-
-      font-size: 0.68rem;
-      font-weight: 800;
-
-      padding: 6px 10px;
-
-      border-radius: 7px;
-
-      letter-spacing: 0.7px;
-
-      box-shadow:
-        0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .card.vendido img {
-      filter:
-        grayscale(70%)
-        brightness(0.8);
-    }
-
-    /* =========================================================
-       CORPO DO CARD
-    ========================================================= */
-
-    .card-body {
-      padding: 16px 17px 18px;
-
-      display: flex;
-      flex-direction: column;
-
-      gap: 8px;
-
-      flex: 1;
-    }
-
-    .codigo {
-      font-size: 0.72rem;
-
-      font-weight: 700;
-
-      color: #94a3b8;
-
-      letter-spacing: 0.7px;
-
-      text-transform: uppercase;
-    }
-
-    .card-body h3 {
-      font-size: 0.98rem;
-
-      line-height: 1.4;
-
-      color: #172033;
-
-      font-weight: 700;
-
-      min-height: 2.8em;
-    }
-
-    /* =========================================================
-       BADGES
-    ========================================================= */
-
-    .badges {
-      display: flex;
-      flex-wrap: wrap;
-
-      gap: 5px;
-
-      margin-top: 2px;
-    }
-
-    .status,
-    .dispo {
-      display: inline-flex;
-      align-items: center;
-
-      font-size: 0.66rem;
-
-      font-weight: 800;
-
-      padding: 4px 9px;
-
-      border-radius: 999px;
-
-      text-transform: uppercase;
-
-      letter-spacing: 0.4px;
-    }
-
-    .status {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .dispo {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    /* =========================================================
-       PREÇO
-    ========================================================= */
-
-    .preco {
-      font-size: 1.35rem;
-
-      font-weight: 800;
-
-      color: var(--green);
-
-      margin-top: auto;
-      padding-top: 8px;
-
-      letter-spacing: -0.3px;
-    }
-
-    /* =========================================================
-       VAZIO
-    ========================================================= */
-
-    .vazio {
-      grid-column: 1 / -1;
-
-      text-align: center;
-
-      font-size: 1rem;
-
-      color: #6b7280;
-
-      padding: 80px 20px;
-    }
-
-    /* =========================================================
-       FOOTER
-    ========================================================= */
-
-    footer {
-      background: #0b1120;
-
-      color: #64748b;
-
-      text-align: center;
-
-      padding: 18px;
-
-      font-size: 0.76rem;
-
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    /* =========================================================
-       MOBILE
-    ========================================================= */
-
-    @media (max-width: 800px) {
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-primary);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
 
       header {
-        padding: 20px 14px 18px;
-      }
-
-      .brand {
-        margin-bottom: 14px;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border-color);
+        padding: 24px 20px;
+        text-align: center;
+        position: sticky;
+        top: 0;
+        z-index: 20;
       }
 
       header h1 {
-        font-size: 1.3rem;
+        font-size: 1.75rem;
+        font-weight: 800;
+        margin-bottom: 16px;
+        letter-spacing: -0.5px;
+        background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
       }
 
-      .brand-icon {
-        width: 36px;
-        height: 36px;
-        font-size: 1.15rem;
+      .search-wrapper {
+        position: relative;
+        max-width: 540px;
+        margin: 0 auto;
       }
 
       #searchInput {
-        height: 48px;
-        font-size: 0.92rem;
+        width: 100%;
+        padding: 14px 20px 14px 46px;
+        font-size: 0.95rem;
+        font-family: inherit;
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        border: 1px solid var(--border-color);
+        border-radius: 99px;
+        outline: none;
+        transition: all 0.25s ease;
       }
 
-      .toolbar {
-        top: 106px;
+      .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-secondary);
+        pointer-events: none;
+        font-size: 1.1rem;
       }
 
-      .toolbar-inner {
-        padding: 9px 12px;
-        display: block;
+      #searchInput:focus {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 4px var(--accent-glow);
+      }
+
+      #searchInput::placeholder {
+        color: #64748b;
+      }
+
+      .contador {
+        margin-top: 10px;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+      }
+
+      .controls-bar {
+        background: var(--bg-surface);
+        border-bottom: 1px solid var(--border-color);
+        padding: 12px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
       }
 
       .filtros {
-        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
       }
 
-      .ordenacao {
-        margin-top: 8px;
-        text-align: right;
+      .filtros .chip {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+        font-family: inherit;
+        border: 1px solid var(--border-color);
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text-secondary);
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s ease;
+      }
+
+      .filtros .chip:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+      }
+
+      .filtros .chip.ativo {
+        background: var(--accent-color);
+        color: #0f172a;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 12px var(--accent-glow);
       }
 
       .ordenacao select {
-        width: 100%;
-        height: 34px;
+        padding: 8px 14px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        font-size: 0.85rem;
+        font-family: inherit;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-secondary);
+        outline: none;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .ordenacao select:hover, .ordenacao select:focus {
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #fff;
+      }
+
+      .loading {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 20px;
+        color: var(--text-secondary);
+      }
+
+      .loading .spinner {
+        width: 44px;
+        height: 44px;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+        border-top-color: var(--accent-color);
+        border-radius: 50%;
+        animation: girar 0.8s linear infinite;
+        margin-bottom: 18px;
+      }
+
+      @keyframes girar {
+        to { transform: rotate(360deg); }
+      }
+
+      .erro-box {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+        text-align: center;
+      }
+
+      .erro-box .icone {
+        font-size: 56px;
+        margin-bottom: 16px;
+      }
+
+      .erro-box h2 {
+        color: #f87171;
+        margin-bottom: 8px;
+        font-size: 1.3rem;
+      }
+
+      .erro-box p {
+        color: var(--text-secondary);
+        max-width: 420px;
+        margin-bottom: 24px;
+        line-height: 1.5;
+        font-size: 0.95rem;
+      }
+
+      .erro-box button {
+        padding: 12px 28px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        font-family: inherit;
+        background: var(--accent-color);
+        color: #0f172a;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .erro-box button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px var(--accent-glow);
       }
 
       .grid-container {
-        grid-template-columns:
-          repeat(
-            2,
-            minmax(0, 1fr)
-          );
-
-        gap: 12px;
-
-        padding: 14px;
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 24px;
+        padding: 32px 24px;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
       }
 
       .card {
-        border-radius: 14px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+      }
+
+      .card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      }
+
+      .card.vendido::before {
+        content: "VENDIDO";
+        position: absolute;
+        top: 16px;
+        right: -32px;
+        background: #ef4444;
+        color: #fff;
+        font-size: 0.65rem;
+        font-weight: 800;
+        padding: 4px 36px;
+        transform: rotate(35deg);
+        letter-spacing: 1px;
+        z-index: 2;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+
+      .card.vendido img {
+        filter: grayscale(80%) opacity(0.6);
       }
 
       .card img {
-        height: 155px;
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        background: #0f172a;
+        display: block;
+        border-bottom: 1px solid var(--border-color);
       }
 
       .card-body {
-        padding: 12px;
-        gap: 6px;
-      }
-
-      .card-body h3 {
-        font-size: 0.86rem;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex: 1;
       }
 
       .codigo {
-        font-size: 0.65rem;
-      }
-
-      .preco {
-        font-size: 1.08rem;
-      }
-
-      .status,
-      .dispo {
-        font-size: 0.58rem;
-        padding: 3px 7px;
-      }
-
-      .card.vendido::after {
-        top: 10px;
-        right: 10px;
-        font-size: 0.58rem;
-        padding: 5px 7px;
-      }
-    }
-
-    @media (max-width: 420px) {
-
-      .grid-container {
-        gap: 10px;
-        padding: 10px;
-      }
-
-      .card img {
-        height: 145px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--accent-color);
+        letter-spacing: 1px;
       }
 
       .card-body h3 {
-        font-size: 0.82rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        line-height: 1.4;
+        color: var(--text-primary);
+        min-height: 2.8em;
       }
-    }
-  </style>
 
-</head>
-
-<body>
-
-  <!-- =========================================================
-       HEADER
-  ========================================================= -->
-
-  <header>
-    <div class="header-content">
-
-```
-  <div class="brand">
-    <div class="brand-icon">🛞</div>
-    <h1>Catálogo de Rodas</h1>
-  </div>
-
-  <div class="search-wrapper">
-
-    <span class="search-icon">⌕</span>
-
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="Buscar por código, aro ou modelo..."
-      autocomplete="off"
-    />
-
-  </div>
-
-  <p id="contador" class="contador"></p>
-
-</div>
-```
-
-  </header>
-
-  <!-- =========================================================
-       TOOLBAR
-  ========================================================= -->
-
-  <div class="toolbar">
-
-```
-<div class="toolbar-inner">
-
-  <div class="filtros" id="filtros">
-
-    <button class="chip ativo" data-aro="todos">
-      Todos
-    </button>
-
-    <button class="chip" data-aro="14">
-      Aro 14
-    </button>
-
-    <button class="chip" data-aro="15">
-      Aro 15
-    </button>
-
-    <button class="chip" data-aro="16">
-      Aro 16
-    </button>
-
-    <button class="chip" data-aro="17">
-      Aro 17
-    </button>
-
-    <button class="chip" data-aro="18">
-      Aro 18
-    </button>
-
-    <button class="chip" data-aro="19">
-      Aro 19
-    </button>
-
-    <button class="chip" data-aro="20">
-      Aro 20
-    </button>
-
-    <button class="chip" data-aro="22">
-      Aro 22
-    </button>
-
-  </div>
-
-  <div class="ordenacao">
-
-    <select id="ordenarPor">
-
-      <option value="codigo">
-        Ordenar: Código
-      </option>
-
-      <option value="menor">
-        Menor preço
-      </option>
-
-      <option value="maior">
-        Maior preço
-      </option>
-
-      <option value="nome">
-        Nome (A-Z)
-      </option>
-
-    </select>
-
-  </div>
-
-</div>
-```
-
-  </div>
-
-  <!-- =========================================================
-       LOADING
-  ========================================================= -->
-
-  <div class="loading" id="loadingBox">
-
-```
-<div class="spinner"></div>
-
-<p>Carregando catálogo...</p>
-```
-
-  </div>
-
-  <!-- =========================================================
-       ERRO
-  ========================================================= -->
-
-  <div
-    class="erro-box"
-    id="erroBox"
-    style="display: none"
-  >
-
-```
-<div class="icone">⚠️</div>
-
-<h2>
-  Não foi possível carregar o catálogo
-</h2>
-
-<p id="erroMsg">
-  Verifique se o arquivo
-  <strong>produtos.json</strong>
-  está no repositório.
-</p>
-
-<button onclick="location.reload()">
-  🔄 Tentar novamente
-</button>
-```
-
-  </div>
-
-  <!-- =========================================================
-       PRODUTOS
-  ========================================================= -->
-
-  <main
-    id="gridRodas"
-    class="grid-container"
-    style="display: none"
-  ></main>
-
-  <!-- =========================================================
-       FOOTER
-  ========================================================= -->
-
-  <footer>
-    <p>© Catálogo de Rodas</p>
-  </footer>
-
-  <!-- =========================================================
-       JAVASCRIPT
-       LÓGICA ORIGINAL MANTIDA
-  ========================================================= -->
-
-  <script>
-
-    (function () {
-
-      "use strict";
-
-      const URL_JSON = "produtos.json";
-
-      const EXTENSOES = [
-        "jpg",
-        "jpeg",
-        "png",
-        "webp"
-      ];
-
-      let produtos = [];
-
-      let filtroAroAtual = "todos";
-
-      let ordenacaoAtual = "codigo";
-
-
-      /* =======================================================
-         CARREGAR JSON
-      ======================================================= */
-
-      async function carregarProdutos() {
-
-        try {
-
-          const resposta =
-            await fetch(
-              URL_JSON,
-              {
-                cache: "no-cache"
-              }
-            );
-
-          if (!resposta.ok)
-
-            throw new Error(
-              "Arquivo produtos.json não encontrado (HTTP " +
-              resposta.status +
-              ")"
-            );
-
-
-          const dados =
-            await resposta.json();
-
-
-          if (!Array.isArray(dados))
-
-            throw new Error(
-              "Formato do produtos.json inválido"
-            );
-
-
-          function limparTexto(v) {
-
-            if (
-              v === null ||
-              v === undefined
-            )
-
-              return "";
-
-            var s =
-              String(v).trim();
-
-            var low =
-              s.toLowerCase();
-
-
-            if (
-              low === "nan" ||
-              low === "null" ||
-              low === "undefined" ||
-              low === "none" ||
-              low === ""
-            )
-
-              return "";
-
-            return s.toUpperCase();
-
-          }
-
-
-          produtos =
-            dados
-
+      .badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 4px;
+      }
+
+      .status, .dispo {
+        display: inline-block;
+        font-size: 0.65rem;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .status {
+        background: rgba(34, 197, 94, 0.15);
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+      }
+
+      .dispo {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+      }
+
+      .preco {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--price-color);
+        margin-top: auto;
+        padding-top: 8px;
+      }
+
+      .vazio {
+        grid-column: 1 / -1;
+        text-align: center;
+        font-size: 1rem;
+        color: var(--text-secondary);
+        padding: 80px 20px;
+      }
+
+      footer {
+        background: var(--bg-surface);
+        border-top: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        text-align: center;
+        padding: 20px;
+        font-size: 0.85rem;
+        margin-top: auto;
+      }
+
+      @media (max-width: 600px) {
+        header h1 { font-size: 1.4rem; }
+        .grid-container {
+          grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+          gap: 14px;
+          padding: 16px 12px;
+        }
+        .card img { height: 160px; }
+        .card-body { padding: 12px; }
+        .card-body h3 { font-size: 0.85rem; }
+        .preco { font-size: 1.15rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>🛞 Catálogo de Rodas</h1>
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Buscar por código, aro ou modelo..."
+          autocomplete="off"
+        />
+      </div>
+      <p id="contador" class="contador"></p>
+    </header>
+
+    <div class="controls-bar">
+      <div class="filtros" id="filtros">
+        <button class="chip ativo" data-aro="todos">Todos</button>
+        <button class="chip" data-aro="14">Aro 14</button>
+        <button class="chip" data-aro="15">Aro 15</button>
+        <button class="chip" data-aro="16">Aro 16</button>
+        <button class="chip" data-aro="17">Aro 17</button>
+        <button class="chip" data-aro="18">Aro 18</button>
+        <button class="chip" data-aro="19">Aro 19</button>
+        <button class="chip" data-aro="20">Aro 20</button>
+        <button class="chip" data-aro="22">Aro 22</button>
+      </div>
+
+      <div class="ordenacao">
+        <select id="ordenarPor">
+          <option value="codigo">Ordenar: Código</option>
+          <option value="menor">Ordenar: Menor preço</option>
+          <option value="maior">Ordenar: Maior preço</option>
+          <option value="nome">Ordenar: Nome (A-Z)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Estado de carregamento -->
+    <div class="loading" id="loadingBox">
+      <div class="spinner"></div>
+      <p>Carregando catálogo...</p>
+    </div>
+
+    <!-- Estado de erro -->
+    <div class="erro-box" id="erroBox" style="display: none">
+      <div class="icone">⚠️</div>
+      <h2>Não foi possível carregar o catálogo</h2>
+      <p id="erroMsg">
+        Verifique se o arquivo <strong>produtos.json</strong> está no
+        repositório.
+      </p>
+      <button onclick="location.reload()">🔄 Tentar novamente</button>
+    </div>
+
+    <main id="gridRodas" class="grid-container" style="display: none"></main>
+
+    <footer>
+      <p>© Catálogo de Rodas</p>
+    </footer>
+
+    <script>
+      (function () {
+        "use strict";
+
+        const URL_JSON = "produtos.json";
+        const EXTENSOES = ["jpg", "jpeg", "png", "webp"];
+
+        let produtos = [];
+        let filtroAroAtual = "todos";
+        let ordenacaoAtual = "codigo";
+
+        /* ============ CARREGAR JSON ============ */
+        async function carregarProdutos() {
+          try {
+            const resposta = await fetch(URL_JSON, { cache: "no-cache" });
+            if (!resposta.ok)
+              throw new Error(
+                "Arquivo produtos.json não encontrado (HTTP " +
+                  resposta.status +
+                  ")",
+              );
+
+            const dados = await resposta.json();
+            if (!Array.isArray(dados))
+              throw new Error("Formato do produtos.json inválido");
+
+            // Limpa valores "NAN", "null", undefined, etc → string vazia
+            function limparTexto(v) {
+              if (v === null || v === undefined) return "";
+              var s = String(v).trim();
+              var low = s.toLowerCase();
+              if (
+                low === "nan" ||
+                low === "null" ||
+                low === "undefined" ||
+                low === "none" ||
+                low === ""
+              )
+                return "";
+              return s.toUpperCase();
+            }
+
+            produtos = dados
               .map(function (p) {
-
-                var status =
-                  limparTexto(p.status);
-
-                var disp =
-                  limparTexto(
-                    p.disponibilidade
-                  );
-
-
+                var status = limparTexto(p.status);
+                var disp = limparTexto(p.disponibilidade);
                 return {
-
-                  codigo:
-                    String(
-                      p.codigo || ""
-                    ).trim(),
-
-                  nome:
-                    String(
-                      p.nome || ""
-                    )
-                      .replace(
-                        /\s+/g,
-                        " "
-                      )
-                      .trim(),
-
-                  valor:
-                    Number(
-                      p.valor
-                    ) || 0,
-
-                  status:
-                    status,
-
-                  disponibilidade:
-                    disp,
-
-                  aro:
-                    p.aro ||
-                    extrairAro(p.nome),
-
-                  vendido:
-                    disp === "VENDIDO"
-
+                  codigo: String(p.codigo || "").trim(),
+                  nome: String(p.nome || "")
+                    .replace(/\s+/g, " ")
+                    .trim(),
+                  valor: Number(p.valor) || 0,
+                  status: status,
+                  disponibilidade: disp,
+                  aro: p.aro || extrairAro(p.nome),
+                  vendido: disp === "VENDIDO",
                 };
-
               })
-
               .filter(function (p) {
-
                 return p.codigo;
-
               });
 
+            if (!produtos.length) throw new Error("Nenhum produto no arquivo");
 
-          if (!produtos.length)
-
-            throw new Error(
-              "Nenhum produto no arquivo"
-            );
-
-
-          document
-            .getElementById(
-              "loadingBox"
-            )
-            .style.display = "none";
-
-
-          document
-            .getElementById(
-              "gridRodas"
-            )
-            .style.display = "grid";
-
-
-          renderizar();
-
-        }
-
-        catch (err) {
-
-          console.error(err);
-
-          document
-            .getElementById(
-              "loadingBox"
-            )
-            .style.display = "none";
-
-
-          document
-            .getElementById(
-              "erroBox"
-            )
-            .style.display = "flex";
-
-
-          document
-            .getElementById(
-              "erroMsg"
-            )
-            .innerHTML =
+            document.getElementById("loadingBox").style.display = "none";
+            document.getElementById("gridRodas").style.display = "grid";
+            renderizar();
+          } catch (err) {
+            console.error(err);
+            document.getElementById("loadingBox").style.display = "none";
+            document.getElementById("erroBox").style.display = "flex";
+            document.getElementById("erroMsg").innerHTML =
               "Erro: " +
               err.message +
               "<br><br>" +
-              "Verifique se o arquivo " +
-              "<strong>produtos.json</strong>" +
-              " está na mesma pasta do index.html.";
-
+              "Verifique se o arquivo <strong>produtos.json</strong> está na mesma pasta do index.html.";
+          }
         }
 
-      }
-
-
-      /* =======================================================
-         EXTRAIR ARO
-      ======================================================= */
-
-      function extrairAro(nome) {
-
-        var m =
-          String(nome).match(
-            /ARO\s*(\d{1,2})/i
-          );
-
-        return m
-          ? parseInt(m[1], 10)
-          : null;
-
-      }
-
-
-      /* =======================================================
-         FILTROS E ORDENAÇÃO
-      ======================================================= */
-
-      function aplicarFiltros() {
-
-        var lista =
-          produtos.slice();
-
-
-        if (
-          filtroAroAtual !==
-          "todos"
-        ) {
-
-          var aro =
-            parseInt(
-              filtroAroAtual,
-              10
-            );
-
-
-          lista =
-            lista.filter(
-              function (p) {
-
-                return p.aro === aro;
-
-              }
-            );
-
+        function extrairAro(nome) {
+          var m = String(nome).match(/ARO\s*(\d{1,2})/i);
+          return m ? parseInt(m[1], 10) : null;
         }
 
+        /* ============ FILTROS E ORDENAÇÃO ============ */
+        function aplicarFiltros() {
+          var lista = produtos.slice();
 
-        var termo =
-          document
-            .getElementById(
-              "searchInput"
-            )
-            .value
-            .toLowerCase()
+          if (filtroAroAtual !== "todos") {
+            var aro = parseInt(filtroAroAtual, 10);
+            lista = lista.filter(function (p) {
+              return p.aro === aro;
+            });
+          }
+
+          var termo = document
+            .getElementById("searchInput")
+            .value.toLowerCase()
             .trim();
+          if (termo) {
+            lista = lista.filter(function (p) {
+              return (
+                p.codigo.toLowerCase().indexOf(termo) !== -1 ||
+                p.nome.toLowerCase().indexOf(termo) !== -1
+              );
+            });
+          }
 
+          switch (ordenacaoAtual) {
+            case "menor":
+              lista.sort(function (a, b) {
+                return a.valor - b.valor;
+              });
+              break;
+            case "maior":
+              lista.sort(function (a, b) {
+                return b.valor - a.valor;
+              });
+              break;
+            case "nome":
+              lista.sort(function (a, b) {
+                return a.nome.localeCompare(b.nome);
+              });
+              break;
+            default:
+              lista.sort(function (a, b) {
+                return a.codigo.localeCompare(b.codigo);
+              });
+          }
 
-        if (termo) {
-
-          lista =
-            lista.filter(
-              function (p) {
-
-                return (
-
-                  p.codigo
-                    .toLowerCase()
-                    .indexOf(
-                      termo
-                    ) !== -1
-
-                  ||
-
-                  p.nome
-                    .toLowerCase()
-                    .indexOf(
-                      termo
-                    ) !== -1
-
-                );
-
-              }
-            );
-
+          return lista;
         }
 
+        /* ============ RENDER ============ */
+        function renderizar() {
+          var lista = aplicarFiltros();
+          var container = document.getElementById("gridRodas");
+          container.innerHTML = "";
 
-        switch (
-          ordenacaoAtual
-        ) {
+          document.getElementById("contador").textContent =
+            lista.length + " roda(s) encontrada(s)";
 
-          case "menor":
+          if (!lista.length) {
+            container.innerHTML =
+              '<p class="vazio">Nenhuma roda encontrada.</p>';
+            return;
+          }
 
-            lista.sort(
-              function (a, b) {
+          var frag = document.createDocumentFragment();
 
-                return (
-                  a.valor -
-                  b.valor
-                );
+          lista.forEach(function (item) {
+            var card = document.createElement("div");
+            card.className = "card" + (item.vendido ? " vendido" : "");
 
-              }
-            );
-
-            break;
-
-
-          case "maior":
-
-            lista.sort(
-              function (a, b) {
-
-                return (
-                  b.valor -
-                  a.valor
-                );
-
-              }
-            );
-
-            break;
-
-
-          case "nome":
-
-            lista.sort(
-              function (a, b) {
-
-                return a.nome.localeCompare(
-                  b.nome
-                );
-
-              }
-            );
-
-            break;
-
-
-          default:
-
-            lista.sort(
-              function (a, b) {
-
-                return a.codigo.localeCompare(
-                  b.codigo
-                );
-
-              }
-            );
-
-        }
-
-
-        return lista;
-
-      }
-
-
-      /* =======================================================
-         RENDER
-      ======================================================= */
-
-      function renderizar() {
-
-        var lista =
-          aplicarFiltros();
-
-
-        var container =
-          document.getElementById(
-            "gridRodas"
-          );
-
-
-        container.innerHTML = "";
-
-
-        document
-          .getElementById(
-            "contador"
-          )
-          .textContent =
-            lista.length +
-            " roda(s) encontrada(s)";
-
-
-        if (!lista.length) {
-
-          container.innerHTML =
-            '<p class="vazio">' +
-            "Nenhuma roda encontrada." +
-            "</p>";
-
-          return;
-
-        }
-
-
-        var frag =
-          document.createDocumentFragment();
-
-
-        lista.forEach(
-          function (item) {
-
-            var card =
-              document.createElement(
-                "div"
-              );
-
-
-            card.className =
-              "card" +
-              (
-                item.vendido
-                  ? " vendido"
-                  : ""
-              );
-
-
-            /* IMAGEM */
-
-            var imageWrapper =
-              document.createElement(
-                "div"
-              );
-
-            imageWrapper.className =
-              "image-wrapper";
-
-
-            var img =
-              document.createElement(
-                "img"
-              );
-
-
-            img.alt =
-              item.nome;
-
-
-            img.loading =
-              "lazy";
-
-
+            // Imagem com fallback de extensões
+            var img = document.createElement("img");
+            img.alt = item.nome;
+            img.loading = "lazy";
             var iExt = 0;
-
-
-            var tentarExt =
-              function () {
-
-                if (
-                  iExt >=
-                  EXTENSOES.length
-                ) {
-
-                  img.onerror =
-                    null;
-
-                  img.src =
-                    "placeholder.jpg";
-
-                  return;
-
-                }
-
-
-                img.src =
-                  "fotos/" +
-                  item.codigo +
-                  "." +
-                  EXTENSOES[
-                    iExt++
-                  ];
-
-              };
-
-
-            img.onerror =
-              tentarExt;
-
-
+            var tentarExt = function () {
+              if (iExt >= EXTENSOES.length) {
+                img.onerror = null;
+                img.src = "placeholder.jpg";
+                return;
+              }
+              img.src = "fotos/" + item.codigo + "." + EXTENSOES[iExt++];
+            };
+            img.onerror = tentarExt;
             tentarExt();
+            card.appendChild(img);
 
+            var body = document.createElement("div");
+            body.className = "card-body";
 
-            imageWrapper.appendChild(
-              img
-            );
+            var spanCod = document.createElement("span");
+            spanCod.className = "codigo";
+            spanCod.textContent = "CÓD: " + item.codigo;
+            body.appendChild(spanCod);
 
+            var h3 = document.createElement("h3");
+            h3.textContent = item.nome;
+            body.appendChild(h3);
 
-            card.appendChild(
-              imageWrapper
-            );
-
-
-            /* CORPO */
-
-            var body =
-              document.createElement(
-                "div"
-              );
-
-
-            body.className =
-              "card-body";
-
-
-            /* CÓDIGO */
-
-            var spanCod =
-              document.createElement(
-                "span"
-              );
-
-
-            spanCod.className =
-              "codigo";
-
-
-            spanCod.textContent =
-              "CÓD: " +
-              item.codigo;
-
-
-            body.appendChild(
-              spanCod
-            );
-
-
-            /* NOME */
-
-            var h3 =
-              document.createElement(
-                "h3"
-              );
-
-
-            h3.textContent =
-              item.nome;
-
-
-            body.appendChild(
-              h3
-            );
-
-
-            /* BADGES */
-
-            if (
-              item.status ||
-              item.disponibilidade
-            ) {
-
-              var badges =
-                document.createElement(
-                  "div"
-                );
-
-
-              badges.className =
-                "badges";
-
-
+            if (item.status || item.disponibilidade) {
+              var badges = document.createElement("div");
+              badges.className = "badges";
               if (item.status) {
-
-                var s =
-                  document.createElement(
-                    "span"
-                  );
-
-
-                s.className =
-                  "status";
-
-
-                s.textContent =
-                  item.status;
-
-
-                badges.appendChild(
-                  s
-                );
-
+                var s = document.createElement("span");
+                s.className = "status";
+                s.textContent = item.status;
+                badges.appendChild(s);
               }
-
-
-              if (
-                item.disponibilidade
-              ) {
-
-                var d =
-                  document.createElement(
-                    "span"
-                  );
-
-
-                d.className =
-                  "dispo";
-
-
-                d.textContent =
-                  item.disponibilidade;
-
-
-                badges.appendChild(
-                  d
-                );
-
+              if (item.disponibilidade) {
+                var d = document.createElement("span");
+                d.className = "dispo";
+                d.textContent = item.disponibilidade;
+                badges.appendChild(d);
               }
-
-
-              body.appendChild(
-                badges
-              );
-
+              body.appendChild(badges);
             }
 
-
-            /* PREÇO */
-
-            var pPreco =
-              document.createElement(
-                "p"
-              );
-
-
-            pPreco.className =
-              "preco";
-
-
+            var pPreco = document.createElement("p");
+            pPreco.className = "preco";
             pPreco.textContent =
               "R$ " +
-              item.valor.toLocaleString(
-                "pt-BR",
-                {
-                  minimumFractionDigits: 2
-                }
-              );
+              item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+            body.appendChild(pPreco);
 
+            card.appendChild(body);
+            frag.appendChild(card);
+          });
 
-            body.appendChild(
-              pPreco
-            );
+          container.appendChild(frag);
+        }
 
+        /* ============ EVENTOS ============ */
+        document
+          .getElementById("searchInput")
+          .addEventListener("input", renderizar);
 
-            card.appendChild(
-              body
-            );
-
-
-            frag.appendChild(
-              card
-            );
-
-          }
-        );
-
-
-        container.appendChild(
-          frag
-        );
-
-      }
-
-
-      /* =======================================================
-         EVENTOS
-      ======================================================= */
-
-      document
-        .getElementById(
-          "searchInput"
-        )
-        .addEventListener(
-          "input",
-          renderizar
-        );
-
-
-      document
-        .querySelectorAll(
-          ".chip"
-        )
-        .forEach(
-          function (chip) {
-
-            chip.addEventListener(
-              "click",
-              function () {
-
-                document
-                  .querySelectorAll(
-                    ".chip"
-                  )
-                  .forEach(
-                    function (c) {
-
-                      c.classList.remove(
-                        "ativo"
-                      );
-
-                    }
-                  );
-
-
-                chip.classList.add(
-                  "ativo"
-                );
-
-
-                filtroAroAtual =
-                  chip.dataset.aro;
-
-
-                renderizar();
-
-              }
-            );
-
-          }
-        );
-
-
-      document
-        .getElementById(
-          "ordenarPor"
-        )
-        .addEventListener(
-          "change",
-          function (e) {
-
-            ordenacaoAtual =
-              e.target.value;
-
+        document.querySelectorAll(".chip").forEach(function (chip) {
+          chip.addEventListener("click", function () {
+            document.querySelectorAll(".chip").forEach(function (c) {
+              c.classList.remove("ativo");
+            });
+            chip.classList.add("ativo");
+            filtroAroAtual = chip.dataset.aro;
             renderizar();
+          });
+        });
 
-          }
-        );
+        document
+          .getElementById("ordenarPor")
+          .addEventListener("change", function (e) {
+            ordenacaoAtual = e.target.value;
+            renderizar();
+          });
 
-
-      /* =======================================================
-         INIT
-      ======================================================= */
-
-      carregarProdutos();
-
-    })();
-
-  </script>
-
-</body>
+        /* ============ INIT ============ */
+        carregarProdutos();
+      })();
+    </script>
+  </body>
 </html>
