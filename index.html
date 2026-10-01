@@ -18,6 +18,7 @@
         --accent-color: #38bdf8;
         --accent-glow: rgba(56, 189, 248, 0.2);
         --price-color: #4ade80;
+        --topo-altura: auto;
       }
 
       * {
@@ -25,6 +26,10 @@
         margin: 0;
         padding: 0;
         -webkit-tap-highlight-color: transparent;
+      }
+
+      html {
+        scroll-behavior: smooth;
       }
 
       body {
@@ -36,22 +41,30 @@
         flex-direction: column;
       }
 
-      header {
-        background: rgba(15, 23, 42, 0.85);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--border-color);
-        padding: 24px 20px;
-        text-align: center;
+      /* ========== BARRA FIXA NO TOPO (Cabeçalho + Filtros) ========== */
+      .topo-fixo {
         position: sticky;
         top: 0;
         z-index: 20;
+        background: rgba(11, 15, 23, 0.92);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
       }
 
-      header h1 {
-        font-size: 1.75rem;
+      /* Cabeçalho (título + busca) */
+      .header-inner {
+        padding: 14px 20px 12px;
+        text-align: center;
+        background: rgba(15, 23, 42, 0.6);
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .header-inner h1 {
+        font-size: 1.4rem;
         font-weight: 800;
-        margin-bottom: 16px;
+        margin-bottom: 10px;
         letter-spacing: -0.5px;
         background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
         -webkit-background-clip: text;
@@ -59,7 +72,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 8px;
       }
 
       .search-wrapper {
@@ -70,7 +83,7 @@
 
       #searchInput {
         width: 100%;
-        padding: 14px 20px 14px 46px;
+        padding: 12px 18px 12px 42px;
         font-size: 0.95rem;
         font-family: inherit;
         background: rgba(255, 255, 255, 0.05);
@@ -83,12 +96,12 @@
 
       .search-icon {
         position: absolute;
-        left: 16px;
+        left: 14px;
         top: 50%;
         transform: translateY(-50%);
         color: var(--text-secondary);
         pointer-events: none;
-        font-size: 1.1rem;
+        font-size: 1rem;
       }
 
       #searchInput:focus {
@@ -102,20 +115,20 @@
       }
 
       .contador {
-        margin-top: 10px;
-        font-size: 0.85rem;
+        margin-top: 8px;
+        font-size: 0.8rem;
         color: var(--text-secondary);
         font-weight: 500;
       }
 
+      /* Filtros (barra abaixo do cabeçalho) */
       .controls-bar {
         background: var(--bg-surface);
-        border-bottom: 1px solid var(--border-color);
-        padding: 14px 20px;
+        padding: 10px 16px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 14px;
+        gap: 10px;
       }
 
       .filtros-status {
@@ -124,12 +137,14 @@
         padding: 4px;
         border-radius: 99px;
         border: 1px solid var(--border-color);
+        flex-shrink: 0;
       }
 
       .btn-status {
-        padding: 8px 18px;
-        font-size: 0.8rem;
+        padding: 7px 16px;
+        font-size: 0.78rem;
         font-weight: 700;
+        font-family: inherit;
         border-radius: 99px;
         border: none;
         background: transparent;
@@ -150,16 +165,48 @@
         box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
       }
 
+      /* Container dos chips: scroll horizontal em telas pequenas */
+      .filtros-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255,255,255,0.15) transparent;
+      }
+
+      .filtros-wrapper::-webkit-scrollbar {
+        height: 4px;
+      }
+      .filtros-wrapper::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 4px;
+      }
+
       .filtros {
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: 8px;
-        justify-content: center;
+        justify-content: flex-start;
+        padding: 2px 4px;
+        min-width: max-content;
+      }
+
+      /* Centraliza se couber na tela */
+      @media (min-width: 900px) {
+        .filtros-wrapper {
+          overflow-x: visible;
+        }
+        .filtros {
+          justify-content: center;
+          flex-wrap: wrap;
+          min-width: auto;
+        }
       }
 
       .filtros .chip {
-        padding: 8px 16px;
-        font-size: 0.8rem;
+        padding: 7px 14px;
+        font-size: 0.78rem;
         font-family: inherit;
         border: 1px solid var(--border-color);
         border-radius: 99px;
@@ -168,6 +215,8 @@
         cursor: pointer;
         font-weight: 600;
         transition: all 0.2s ease;
+        white-space: nowrap;
+        flex-shrink: 0;
       }
 
       .filtros .chip:hover {
@@ -182,10 +231,10 @@
       }
 
       .ordenacao select {
-        padding: 8px 14px;
+        padding: 7px 12px;
         border-radius: 10px;
         border: 1px solid var(--border-color);
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-family: inherit;
         background: rgba(255, 255, 255, 0.05);
         color: var(--text-secondary);
@@ -194,11 +243,13 @@
         transition: all 0.2s;
       }
 
-      .ordenacao select:hover, .ordenacao select:focus {
+      .ordenacao select:hover,
+      .ordenacao select:focus {
         border-color: rgba(255, 255, 255, 0.2);
         color: #fff;
       }
 
+      /* ========== CONTEÚDO PRINCIPAL ========== */
       .loading {
         flex: 1;
         display: flex;
@@ -406,7 +457,7 @@
         margin-top: auto;
       }
 
-      /* ===== LIGHTBOX ===== */
+      /* ========== LIGHTBOX ========== */
       .lightbox {
         position: fixed;
         inset: 0;
@@ -505,8 +556,43 @@
         margin-top: 4px;
       }
 
+      /* ========== RESPONSIVO ========== */
       @media (max-width: 600px) {
-        header h1 { font-size: 1.4rem; }
+        .header-inner {
+          padding: 10px 14px 10px;
+        }
+        .header-inner h1 {
+          font-size: 1.15rem;
+          margin-bottom: 8px;
+        }
+        #searchInput {
+          padding: 10px 16px 10px 38px;
+          font-size: 0.9rem;
+        }
+        .search-icon {
+          left: 12px;
+          font-size: 0.9rem;
+        }
+        .contador {
+          margin-top: 6px;
+          font-size: 0.75rem;
+        }
+        .controls-bar {
+          padding: 8px 12px;
+          gap: 8px;
+        }
+        .btn-status {
+          padding: 6px 14px;
+          font-size: 0.72rem;
+        }
+        .filtros .chip {
+          padding: 6px 12px;
+          font-size: 0.72rem;
+        }
+        .ordenacao select {
+          padding: 6px 10px;
+          font-size: 0.75rem;
+        }
         .grid-container {
           grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
           gap: 14px;
@@ -524,49 +610,51 @@
           height: 40px;
           font-size: 1.3rem;
         }
-
         .lightbox-info {
           bottom: 12px;
           padding: 10px 14px;
         }
-
         .lightbox-info .nome { font-size: 0.8rem; }
         .lightbox-info .preco-lb { font-size: 1rem; }
       }
     </style>
   </head>
   <body>
-    <header>
-      <h1>🛞 Catálogo de Rodas</h1>
-      <div class="search-wrapper">
-        <span class="search-icon">🔍</span>
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Buscar por código, aro ou modelo..."
-          autocomplete="off"
-        />
-      </div>
-      <p id="contador" class="contador"></p>
-    </header>
-
-    <div class="controls-bar">
-      <div class="filtros-status">
-        <button class="btn-status ativo" data-status="disponiveis">Disponíveis</button>
-        <button class="btn-status" data-status="vendidos">Vendidos</button>
-        <button class="btn-status" data-status="todos">Todos</button>
+    <!-- ===== TOPO FIXO: cabeçalho + filtros juntos ===== -->
+    <div class="topo-fixo">
+      <div class="header-inner">
+        <h1>🛞 Catálogo de Rodas</h1>
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Buscar por código, aro ou modelo..."
+            autocomplete="off"
+          />
+        </div>
+        <p id="contador" class="contador"></p>
       </div>
 
-      <!-- Chips de aro gerados dinamicamente -->
-      <div class="filtros" id="filtrosAro"></div>
+      <div class="controls-bar">
+        <div class="filtros-status">
+          <button class="btn-status ativo" data-status="disponiveis">Disponíveis</button>
+          <button class="btn-status" data-status="vendidos">Vendidos</button>
+          <button class="btn-status" data-status="todos">Todos</button>
+        </div>
 
-      <div class="ordenacao">
-        <select id="ordenarPor">
-          <option value="codigo">Ordenar: Código</option>
-          <option value="menor">Ordenar: Menor preço</option>
-          <option value="maior">Ordenar: Maior preço</option>
-          <option value="nome">Ordenar: Nome (A-Z)</option>
-        </select>
+        <div class="filtros-wrapper">
+          <div class="filtros" id="filtrosAro"></div>
+        </div>
+
+        <div class="ordenacao">
+          <select id="ordenarPor">
+            <option value="codigo">Ordenar: Código</option>
+            <option value="menor">Ordenar: Menor preço</option>
+            <option value="maior">Ordenar: Maior preço</option>
+            <option value="nome">Ordenar: Nome (A-Z)</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -610,7 +698,7 @@
         const EXTENSOES = ["jpg", "jpeg", "png", "webp"];
 
         let produtos = [];
-        let filtroStatusAtual = "disponiveis"; // Padrão: ocultar vendidos
+        let filtroStatusAtual = "disponiveis";
         let filtroAroAtual = "todos";
         let ordenacaoAtual = "codigo";
 
@@ -666,7 +754,6 @@
 
             if (!produtos.length) throw new Error("Nenhum produto no arquivo");
 
-            // Cria os chips de aro dinamicamente
             gerarChipsDeAro();
 
             document.getElementById("loadingBox").style.display = "none";
@@ -694,7 +781,6 @@
           var container = document.getElementById("filtrosAro");
           container.innerHTML = "";
 
-          // Extrai aros únicos
           var arosUnicos = [];
           produtos.forEach(function (p) {
             if (p.aro && arosUnicos.indexOf(p.aro) === -1) {
@@ -704,7 +790,6 @@
 
           arosUnicos.sort(function (a, b) { return a - b; });
 
-          // Chip "Todos os Aros"
           var chipTodos = document.createElement("button");
           chipTodos.className = "chip ativo";
           chipTodos.dataset.aro = "todos";
@@ -714,7 +799,6 @@
           });
           container.appendChild(chipTodos);
 
-          // Chips individuais
           arosUnicos.forEach(function (aro) {
             var chip = document.createElement("button");
             chip.className = "chip";
@@ -806,7 +890,6 @@
             var card = document.createElement("div");
             card.className = "card" + (item.vendido ? " vendido" : "");
 
-            // Imagem com fallback de extensões
             var img = document.createElement("img");
             img.alt = item.nome;
             img.loading = "lazy";
@@ -823,7 +906,6 @@
             img.onerror = tentarExt;
             tentarExt();
 
-            // Clique na imagem abre o lightbox
             img.addEventListener("click", function () {
               abrirLightbox(item, img);
             });
