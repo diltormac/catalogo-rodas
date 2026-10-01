@@ -1,0 +1,821 @@
+[
+  {
+    "codigo": "550096",
+    "nome": "JOGO RODA ARO 17 ESPORTIVA MONTADA",
+    "valor": 4500,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550118",
+    "nome": "JOGO RODA ARO 16 VIRTUS PNEU PIRELLI MONTADA",
+    "valor": 3600,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550121",
+    "nome": "JOGO RODA ARO 18 ESPORTIVA MONTADA",
+    "valor": 6500,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 18,
+    "vendido": false
+  },
+  {
+    "codigo": "550122",
+    "nome": "JOGO RODA ARO 17 ESPORTIVA MONTADA",
+    "valor": 4000,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550150",
+    "nome": "JOGO RODA ARO 19 ESPORTIVA MONTADA",
+    "valor": 6500,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 19,
+    "vendido": false
+  },
+  {
+    "codigo": "550154",
+    "nome": "JOGO RODA ARO 16 L200 MONTADA",
+    "valor": 4000,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550158",
+    "nome": "JOGO RODA ARO 16 VIRTUS NOVO MONTADA",
+    "valor": 4000,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550167",
+    "nome": "JOGO RODA ARO 22 L200 6X139 MONTADA",
+    "valor": 5500,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 22,
+    "vendido": false
+  },
+  {
+    "codigo": "550168",
+    "nome": "JOGO RODA ARO 20 HILUX MONTADA",
+    "valor": 5000,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 20,
+    "vendido": false
+  },
+  {
+    "codigo": "550171",
+    "nome": "JOGO RODA ARO 16 HILUX MONTADA",
+    "valor": 3500,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550247",
+    "nome": "JOGO RODA ARO 17 4X100",
+    "valor": 3600,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550250",
+    "nome": "JOGO RODA ARO 20 4X100",
+    "valor": 3500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 20,
+    "vendido": false
+  },
+  {
+    "codigo": "550257",
+    "nome": "JOGO RODA ARO 17 4X108",
+    "valor": 3000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550260",
+    "nome": "JOGO RODA ARO 16 5X114",
+    "valor": 2800,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550262",
+    "nome": "JOGO RODA ARO 17 5X114",
+    "valor": 3000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550265",
+    "nome": "JOGO RODA ARO 16 6X139",
+    "valor": 2800,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550267",
+    "nome": "JOGO RODA ARO 17 AMAROK EXTREME MONTADA",
+    "valor": 3000,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550273",
+    "nome": "JOGO RODA ARO 17 AMAROK V6 MONTADA",
+    "valor": 4500,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550278",
+    "nome": "JOGO RODA ARO 18 AMAROK 5X120 MONTADA",
+    "valor": 5000,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 18,
+    "vendido": false
+  },
+  {
+    "codigo": "550290",
+    "nome": "JOGO RODA ARO 19 AMAROK 5X120 MONTADA",
+    "valor": 4500,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 19,
+    "vendido": false
+  },
+  {
+    "codigo": "550295",
+    "nome": "JOGO RODA ARO 17 AMAROK",
+    "valor": 4000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550296",
+    "nome": "JOGO RODA ARO 18 AMAROK",
+    "valor": 5000,
+    "status": "NAN",
+    "disponibilidade": "VENDIDO",
+    "aro": 18,
+    "vendido": true
+  },
+  {
+    "codigo": "550298",
+    "nome": "JOGO RODA ARO 20 ORBITAL",
+    "valor": 4000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 20,
+    "vendido": false
+  },
+  {
+    "codigo": "550300",
+    "nome": "JOGO RODA ARO 15 COROLLA/ ETIOS",
+    "valor": 2400,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "550301",
+    "nome": "JOGO RODA ARO 16 COROLLA",
+    "valor": 2800,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550302",
+    "nome": "JOGO RODA ARO 17 COROLLA",
+    "valor": 3600,
+    "status": "NAN",
+    "disponibilidade": "VENDIDO",
+    "aro": 17,
+    "vendido": true
+  },
+  {
+    "codigo": "550305",
+    "nome": "JOGO RODA ARO 16 COROLLA XRS",
+    "valor": 3000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550309",
+    "nome": "JOGO RODA ARO 17 CRUZE",
+    "valor": 2800,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550319",
+    "nome": "JOGO RODA ARO 17 CRV 5X114",
+    "valor": 3000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550321",
+    "nome": "JOGO RODA ARO 16 DUSTER",
+    "valor": 2800,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550323",
+    "nome": "JOGO RODA ARO 16 ECOSPORT",
+    "valor": 2800,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550327",
+    "nome": "JOGO RODA ARO 14 FIAT",
+    "valor": 2300,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 14,
+    "vendido": false
+  },
+  {
+    "codigo": "550331",
+    "nome": "JOGO RODA ARO 15 FIAT ADVENTURE",
+    "valor": 2300,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "550336",
+    "nome": "JOGO RODA ARO 15 FIAT STILO",
+    "valor": 2300,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "550340",
+    "nome": "JOGO RODA ARO 14 FIAT ARGO/ UNO/ PALIO",
+    "valor": 2300,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 14,
+    "vendido": false
+  },
+  {
+    "codigo": "550344",
+    "nome": "JOGO RODA ARO 17 FIAT TORO",
+    "valor": 3700,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550347",
+    "nome": "JOGO RODA ARO 16 FOCUS",
+    "valor": 2700,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550348",
+    "nome": "JOGO RODA ARO 15 FORD/ PEUGEOT",
+    "valor": 2600,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "550349",
+    "nome": "JOGO RODA ARO 15 KA/ ECOSPORT",
+    "valor": 2500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "550350",
+    "nome": "JOGO RODA ARO 17 JEEP",
+    "valor": 3500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550352",
+    "nome": "JOGO RODA ARO 15 GM 4X100 VECTRA/ ASTRA/ AGILE/CELTA",
+    "valor": 2200,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "550353",
+    "nome": "JOGO RODA ARO 15 GOL",
+    "valor": 2200,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "550354",
+    "nome": "JOGO RODA ARO 14 GOL",
+    "valor": 2300,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 14,
+    "vendido": false
+  },
+  {
+    "codigo": "550355",
+    "nome": "JOGO RODA ARO 16 GOLF",
+    "valor": 2700,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550358",
+    "nome": "JOGO RODA ARO 17 HILUX MONTADA",
+    "valor": 5500,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550359",
+    "nome": "JOGO RODA ARO 18 HILUX",
+    "valor": 5000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 18,
+    "vendido": false
+  },
+  {
+    "codigo": "550360",
+    "nome": "JOGO RODA ARO 18 HILUX SRX/ SRV MONTADA",
+    "valor": 7000,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 18,
+    "vendido": false
+  },
+  {
+    "codigo": "550362",
+    "nome": "JOGO RODA ARO 20 HILUX SRX/ SRV MONTADA",
+    "valor": 6000,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 20,
+    "vendido": false
+  },
+  {
+    "codigo": "550364",
+    "nome": "JOGO RODA ARO 16 HILUX",
+    "valor": 3000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550366",
+    "nome": "JOGO RODA ARO 17 HILUX",
+    "valor": 4300,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550368",
+    "nome": "JOGO RODA ARO 17 HILUX",
+    "valor": 4000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550369",
+    "nome": "JOGO RODA ARO 18 HILUX",
+    "valor": 5500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 18,
+    "vendido": false
+  },
+  {
+    "codigo": "550370",
+    "nome": "JOGO 4 PNEUS ARO 16 DUNLOP",
+    "valor": 1500,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550373",
+    "nome": "JOGO RODA ARO 19 MERCEDES",
+    "valor": 3000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 19,
+    "vendido": false
+  },
+  {
+    "codigo": "550375",
+    "nome": "JOGO RODA ARO 20 MERCEDES",
+    "valor": 3500,
+    "status": "MONTADA",
+    "disponibilidade": "VENDIDO",
+    "aro": 20,
+    "vendido": true
+  },
+  {
+    "codigo": "550377",
+    "nome": "JOGO RODA ARO 22 MITSUBISHI",
+    "valor": 5000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 22,
+    "vendido": false
+  },
+  {
+    "codigo": "550379",
+    "nome": "JOGO RODA ARO 16 MONTANA/ TRAKER 5X110",
+    "valor": 3000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550380",
+    "nome": "JOGO RODA ARO 18 NISSAN",
+    "valor": 5000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 18,
+    "vendido": false
+  },
+  {
+    "codigo": "550400",
+    "nome": "JOGO RODA ARO 14 POLO/ FOX",
+    "valor": 2200,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 14,
+    "vendido": false
+  },
+  {
+    "codigo": "550468",
+    "nome": "JOGO RODA ARO 17 RANGER",
+    "valor": 3000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550469",
+    "nome": "JOGO RODA ARO 17 RANGER",
+    "valor": 3500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550470",
+    "nome": "JOGO RODA ARO 17 RANGER",
+    "valor": 3600,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550471",
+    "nome": "JOGO RODA ARO 16 S10",
+    "valor": 5500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550472",
+    "nome": "JOGO RODA ARO 16 S10",
+    "valor": 3000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550475",
+    "nome": "JOGO RODA ARO 18 S10",
+    "valor": 5500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 18,
+    "vendido": false
+  },
+  {
+    "codigo": "550476",
+    "nome": "JOGO RODA ARO 15 S10",
+    "valor": 3000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "550478",
+    "nome": "JOGO RODA ARO 16 S10",
+    "valor": 3500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "550479",
+    "nome": "JOGO RODA ARO 17 S10",
+    "valor": 3500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "550481",
+    "nome": "JOGO RODA ARO 18 S10",
+    "valor": 5500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 18,
+    "vendido": false
+  },
+  {
+    "codigo": "551068",
+    "nome": "JOGO RODA ARO 15 SAFIRA 5X110",
+    "valor": 2300,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "551069",
+    "nome": "JOGO RODA ARO 18 SW4 DAIMON",
+    "valor": 6000,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 18,
+    "vendido": false
+  },
+  {
+    "codigo": "551070",
+    "nome": "JOGO RODA ARO 16 FIAT TORO",
+    "valor": 3000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "551071",
+    "nome": "RODA DE FERRO ARO 17 TOYOTA UNIDADE",
+    "valor": 450,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "551074",
+    "nome": "JOGO RODA DE FERRO ARO 13 UNO",
+    "valor": 800,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 13,
+    "vendido": false
+  },
+  {
+    "codigo": "551075",
+    "nome": "JOGO RODA ARO 18 S10 MONTADA",
+    "valor": 6000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 18,
+    "vendido": false
+  },
+  {
+    "codigo": "551078",
+    "nome": "RODA DE FERRO ARO 15 FIAT UNIDADE",
+    "valor": 400,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "551080",
+    "nome": "JOGO RODA ARO 15 FIAT",
+    "valor": 2500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "551084",
+    "nome": "JOGO RODA ARO 15 FIAT",
+    "valor": 2500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "551085",
+    "nome": "JOGO RODA ARO 15 4X100 GM/ VW",
+    "valor": 2500,
+    "status": "NAN",
+    "disponibilidade": "VENDIDO",
+    "aro": 15,
+    "vendido": true
+  },
+  {
+    "codigo": "551100",
+    "nome": "JOGO RODA ARO 15 4X100 GM/ VW",
+    "valor": 2500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "551102",
+    "nome": "JOGO RODA ARO 14 FIAT",
+    "valor": 2000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 14,
+    "vendido": false
+  },
+  {
+    "codigo": "551104",
+    "nome": "JOGO RODA ARO 15 GM / VW 4X100",
+    "valor": 2500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "551105",
+    "nome": "JOGO RODA ARO 15 GM / VW 4X100",
+    "valor": 2500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "551110",
+    "nome": "JOGO RODA ARO 15 5X114",
+    "valor": 2000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "551169",
+    "nome": "JOGO RODA ARO 17 MONTANA MONTADA",
+    "valor": 4500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "551340",
+    "nome": "JOGO RODA ARO 14 OPALA",
+    "valor": 2600,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 14,
+    "vendido": false
+  },
+  {
+    "codigo": "551581",
+    "nome": "JOGO RODA ARO 16 COROLLA MONTADA",
+    "valor": 3000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "551950",
+    "nome": "JOGO RODA ARO 18 LAND ROVER MONTADA",
+    "valor": 3000,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 18,
+    "vendido": false
+  },
+  {
+    "codigo": "551991",
+    "nome": "JOGO RODA ARO 18 RANGER RAPTOR 6X139",
+    "valor": 6000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 18,
+    "vendido": false
+  },
+  {
+    "codigo": "552011",
+    "nome": "JOGO RODA ARO 16 TOYOTA HILUX/ SW4 MONTADA",
+    "valor": 3000,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
+  },
+  {
+    "codigo": "552050",
+    "nome": "JOGO RODA ARO 20 ESPORTIVA 5X114 MONTADA",
+    "valor": 4000,
+    "status": "MONTADA",
+    "disponibilidade": "NAN",
+    "aro": 20,
+    "vendido": false
+  }
+]
