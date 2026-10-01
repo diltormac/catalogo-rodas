@@ -325,6 +325,7 @@
         background: #0f172a;
         display: block;
         border-bottom: 1px solid var(--border-color);
+        cursor: zoom-in;
       }
 
       .card-body {
@@ -405,6 +406,105 @@
         margin-top: auto;
       }
 
+      /* ===== LIGHTBOX ===== */
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.92);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+        padding: 20px;
+        animation: fadeIn 0.2s ease;
+      }
+
+      .lightbox.ativo {
+        display: flex;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      .lightbox img {
+        max-width: 95vw;
+        max-height: 90vh;
+        object-fit: contain;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        cursor: zoom-out;
+        animation: zoomIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      @keyframes zoomIn {
+        from { transform: scale(0.85); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+      }
+
+      .lightbox-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        z-index: 10;
+        line-height: 1;
+      }
+
+      .lightbox-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: rotate(90deg);
+      }
+
+      .lightbox-info {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(15, 23, 42, 0.9);
+        padding: 12px 20px;
+        border-radius: 12px;
+        color: #fff;
+        text-align: center;
+        max-width: 90%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        pointer-events: none;
+      }
+
+      .lightbox-info .cod {
+        font-size: 0.75rem;
+        color: var(--accent-color);
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
+      .lightbox-info .nome {
+        font-size: 0.9rem;
+        margin-top: 4px;
+        color: #e2e8f0;
+      }
+
+      .lightbox-info .preco-lb {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--price-color);
+        margin-top: 4px;
+      }
+
       @media (max-width: 600px) {
         header h1 { font-size: 1.4rem; }
         .grid-container {
@@ -416,6 +516,22 @@
         .card-body { padding: 12px; }
         .card-body h3 { font-size: 0.85rem; }
         .preco { font-size: 1.15rem; }
+
+        .lightbox-close {
+          top: 12px;
+          right: 12px;
+          width: 40px;
+          height: 40px;
+          font-size: 1.3rem;
+        }
+
+        .lightbox-info {
+          bottom: 12px;
+          padding: 10px 14px;
+        }
+
+        .lightbox-info .nome { font-size: 0.8rem; }
+        .lightbox-info .preco-lb { font-size: 1rem; }
       }
     </style>
   </head>
@@ -435,14 +551,13 @@
     </header>
 
     <div class="controls-bar">
-      <!-- Seletor Principal de Status: Disponíveis / Vendidos / Todos -->
       <div class="filtros-status">
         <button class="btn-status ativo" data-status="disponiveis">Disponíveis</button>
         <button class="btn-status" data-status="vendidos">Vendidos</button>
         <button class="btn-status" data-status="todos">Todos</button>
       </div>
 
-      <!-- Chips de aro são gerados DINAMICAMENTE pelo JS -->
+      <!-- Chips de aro gerados dinamicamente -->
       <div class="filtros" id="filtrosAro"></div>
 
       <div class="ordenacao">
@@ -455,13 +570,11 @@
       </div>
     </div>
 
-    <!-- Estado de carregamento -->
     <div class="loading" id="loadingBox">
       <div class="spinner"></div>
       <p>Carregando catálogo...</p>
     </div>
 
-    <!-- Estado de erro -->
     <div class="erro-box" id="erroBox" style="display: none">
       <div class="icone">⚠️</div>
       <h2>Não foi possível carregar o catálogo</h2>
@@ -477,6 +590,17 @@
     <footer>
       <p>© Catálogo de Rodas</p>
     </footer>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Fechar">✕</button>
+      <img id="lightboxImg" src="" alt="" />
+      <div class="lightbox-info">
+        <div class="cod" id="lightboxCod"></div>
+        <div class="nome" id="lightboxNome"></div>
+        <div class="preco-lb" id="lightboxPreco"></div>
+      </div>
+    </div>
 
     <script>
       (function () {
@@ -542,7 +666,7 @@
 
             if (!produtos.length) throw new Error("Nenhum produto no arquivo");
 
-            // 🔥 Cria os chips de aro DINAMICAMENTE
+            // Cria os chips de aro dinamicamente
             gerarChipsDeAro();
 
             document.getElementById("loadingBox").style.display = "none";
@@ -570,7 +694,7 @@
           var container = document.getElementById("filtrosAro");
           container.innerHTML = "";
 
-          // 1. Extrai todos os aros únicos (ignora null)
+          // Extrai aros únicos
           var arosUnicos = [];
           produtos.forEach(function (p) {
             if (p.aro && arosUnicos.indexOf(p.aro) === -1) {
@@ -578,10 +702,9 @@
             }
           });
 
-          // 2. Ordena do menor pro maior
           arosUnicos.sort(function (a, b) { return a - b; });
 
-          // 3. Cria o chip "Todos os Aros" sempre primeiro
+          // Chip "Todos os Aros"
           var chipTodos = document.createElement("button");
           chipTodos.className = "chip ativo";
           chipTodos.dataset.aro = "todos";
@@ -591,7 +714,7 @@
           });
           container.appendChild(chipTodos);
 
-          // 4. Cria um chip pra cada aro encontrado
+          // Chips individuais
           arosUnicos.forEach(function (aro) {
             var chip = document.createElement("button");
             chip.className = "chip";
@@ -619,14 +742,12 @@
         function aplicarFiltros() {
           var lista = produtos.slice();
 
-          // 1. Filtro por Status
           if (filtroStatusAtual === "disponiveis") {
             lista = lista.filter(function (p) { return !p.vendido; });
           } else if (filtroStatusAtual === "vendidos") {
             lista = lista.filter(function (p) { return p.vendido; });
           }
 
-          // 2. Filtro por Aro
           if (filtroAroAtual !== "todos") {
             var aro = parseInt(filtroAroAtual, 10);
             lista = lista.filter(function (p) {
@@ -634,7 +755,6 @@
             });
           }
 
-          // 3. Busca
           var termo = document
             .getElementById("searchInput")
             .value.toLowerCase()
@@ -648,7 +768,6 @@
             });
           }
 
-          // 4. Ordenação
           switch (ordenacaoAtual) {
             case "menor":
               lista.sort(function (a, b) { return a.valor - b.valor; });
@@ -687,9 +806,11 @@
             var card = document.createElement("div");
             card.className = "card" + (item.vendido ? " vendido" : "");
 
+            // Imagem com fallback de extensões
             var img = document.createElement("img");
             img.alt = item.nome;
             img.loading = "lazy";
+            img.title = "Clique para ampliar";
             var iExt = 0;
             var tentarExt = function () {
               if (iExt >= EXTENSOES.length) {
@@ -701,6 +822,12 @@
             };
             img.onerror = tentarExt;
             tentarExt();
+
+            // Clique na imagem abre o lightbox
+            img.addEventListener("click", function () {
+              abrirLightbox(item, img);
+            });
+
             card.appendChild(img);
 
             var body = document.createElement("div");
@@ -746,6 +873,43 @@
 
           container.appendChild(frag);
         }
+
+        /* ============ LIGHTBOX ============ */
+        var lightbox = document.getElementById("lightbox");
+        var lightboxImg = document.getElementById("lightboxImg");
+        var lightboxCod = document.getElementById("lightboxCod");
+        var lightboxNome = document.getElementById("lightboxNome");
+        var lightboxPreco = document.getElementById("lightboxPreco");
+        var lightboxClose = document.getElementById("lightboxClose");
+
+        function abrirLightbox(item, imgElemento) {
+          lightboxImg.src = imgElemento.src;
+          lightboxImg.alt = item.nome;
+          lightboxCod.textContent = "CÓD: " + item.codigo;
+          lightboxNome.textContent = item.nome;
+          lightboxPreco.textContent =
+            "R$ " +
+            item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+          lightbox.classList.add("ativo");
+          document.body.style.overflow = "hidden";
+        }
+
+        function fecharLightbox() {
+          lightbox.classList.remove("ativo");
+          document.body.style.overflow = "";
+        }
+
+        lightboxClose.addEventListener("click", fecharLightbox);
+
+        lightbox.addEventListener("click", function (e) {
+          if (e.target === lightbox) fecharLightbox();
+        });
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && lightbox.classList.contains("ativo")) {
+            fecharLightbox();
+          }
+        });
 
         /* ============ EVENTOS ============ */
         document
