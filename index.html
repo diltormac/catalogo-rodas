@@ -411,21 +411,37 @@
             if (!Array.isArray(dados))
               throw new Error("Formato do produtos.json inválido");
 
+            // Função que limpa valores: transforma "NAN", "nan", "null", undefined
+            // em string vazia. Também remove espaços extras.
+            function limparTexto(v) {
+              if (v === null || v === undefined) return "";
+              var s = String(v).trim();
+              var low = s.toLowerCase();
+              if (
+                low === "nan" ||
+                low === "null" ||
+                low === "undefined" ||
+                low === "none" ||
+                low === ""
+              )
+                return "";
+              return s.toUpperCase();
+            }
+
             produtos = dados
               .map(function (p) {
+                var status = limparTexto(p.status);
+                var disp = limparTexto(p.disponibilidade);
                 return {
                   codigo: String(p.codigo || "").trim(),
                   nome: String(p.nome || "")
                     .replace(/\s+/g, " ")
                     .trim(),
                   valor: Number(p.valor) || 0,
-                  status: p.status ? String(p.status).toUpperCase() : "",
-                  disponibilidade: p.disponibilidade
-                    ? String(p.disponibilidade).toUpperCase()
-                    : "",
+                  status: status,
+                  disponibilidade: disp,
                   aro: p.aro || extrairAro(p.nome),
-                  vendido:
-                    (p.disponibilidade || "").toUpperCase() === "VENDIDO",
+                  vendido: disp === "VENDIDO",
                 };
               })
               .filter(function (p) {
