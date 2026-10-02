@@ -373,9 +373,9 @@
     "nome": "JOGO RODA ARO 15 GOL",
     "valor": 2200,
     "status": "NAN",
-    "disponibilidade": "NAN",
+    "disponibilidade": "VENDIDO",
     "aro": 15,
-    "vendido": false
+    "vendido": true
   },
   {
     "codigo": "550354",
@@ -874,7 +874,7 @@
   },
   {
     "codigo": "552954",
-    "nome": "JOGO RODA ARO 18 POLO/ GOLF/ JETTA",
+    "nome": "JOGO RODA ARO 18 POLO/ GOLF/ JETTA MONTADA",
     "valor": 5500,
     "status": "MONTADA",
     "disponibilidade": "NAN",
@@ -888,6 +888,15 @@
     "status": "NAN",
     "disponibilidade": "NAN",
     "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "553168",
+    "nome": "JOGO RODA ARO 17 POLO/ GOLF/ JETTA/ VIRTUS",
+    "valor": 3800,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
     "vendido": false
   }
 ]
