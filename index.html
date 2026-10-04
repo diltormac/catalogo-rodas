@@ -18,7 +18,6 @@
         --accent-color: #38bdf8;
         --accent-glow: rgba(56, 189, 248, 0.2);
         --price-color: #4ade80;
-        --topo-altura: auto;
       }
 
       * {
@@ -26,10 +25,6 @@
         margin: 0;
         padding: 0;
         -webkit-tap-highlight-color: transparent;
-      }
-
-      html {
-        scroll-behavior: smooth;
       }
 
       body {
@@ -41,50 +36,54 @@
         flex-direction: column;
       }
 
-      /* ========== BARRA FIXA NO TOPO (Cabeçalho + Filtros) ========== */
-      .topo-fixo {
+      /* ========== BARRA SUPERIOR COMPACTA ========== */
+      .topbar {
         position: sticky;
         top: 0;
         z-index: 20;
-        background: rgba(11, 15, 23, 0.92);
+        background: rgba(11, 15, 23, 0.94);
         backdrop-filter: blur(14px);
         -webkit-backdrop-filter: blur(14px);
         border-bottom: 1px solid var(--border-color);
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
       }
 
-      /* Cabeçalho (título + busca) */
-      .header-inner {
-        padding: 14px 20px 12px;
-        text-align: center;
-        background: rgba(15, 23, 42, 0.6);
-        border-bottom: 1px solid var(--border-color);
+      /* Linha principal: título + busca + botões */
+      .topbar-main {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 16px;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
       }
 
-      .header-inner h1 {
-        font-size: 1.4rem;
+      .topbar-titulo {
+        font-size: 1.1rem;
         font-weight: 800;
-        margin-bottom: 10px;
         letter-spacing: -0.5px;
+        white-space: nowrap;
         background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 8px;
+        gap: 6px;
+        flex-shrink: 0;
       }
 
       .search-wrapper {
         position: relative;
-        max-width: 540px;
-        margin: 0 auto;
+        flex: 1;
+        min-width: 0;
+        max-width: 500px;
       }
 
       #searchInput {
         width: 100%;
-        padding: 12px 18px 12px 42px;
-        font-size: 0.95rem;
+        padding: 9px 14px 9px 38px;
+        font-size: 0.9rem;
         font-family: inherit;
         background: rgba(255, 255, 255, 0.05);
         color: #fff;
@@ -96,39 +95,119 @@
 
       .search-icon {
         position: absolute;
-        left: 14px;
+        left: 13px;
         top: 50%;
         transform: translateY(-50%);
         color: var(--text-secondary);
         pointer-events: none;
-        font-size: 1rem;
+        font-size: 0.9rem;
       }
 
       #searchInput:focus {
         background: rgba(255, 255, 255, 0.08);
         border-color: var(--accent-color);
-        box-shadow: 0 0 0 4px var(--accent-glow);
+        box-shadow: 0 0 0 3px var(--accent-glow);
       }
 
       #searchInput::placeholder {
         color: #64748b;
       }
 
-      .contador {
-        margin-top: 8px;
+      /* Botão para abrir/fechar os filtros */
+      .btn-toggle-filtros {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
         font-size: 0.8rem;
+        font-family: inherit;
+        font-weight: 700;
+        color: var(--text-secondary);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border-color);
+        border-radius: 99px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+      }
+
+      .btn-toggle-filtros:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+      }
+
+      .btn-toggle-filtros.aberto {
+        background: var(--accent-color);
+        color: #0f172a;
+        border-color: var(--accent-color);
+      }
+
+      .btn-toggle-filtros .seta {
+        display: inline-block;
+        transition: transform 0.25s ease;
+        font-size: 0.65rem;
+      }
+
+      .btn-toggle-filtros.aberto .seta {
+        transform: rotate(180deg);
+      }
+
+      /* Badge no botão mostrando quantos filtros estão ativos */
+      .btn-toggle-filtros .badge-filtros {
+        display: none;
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #ef4444;
+        color: #fff;
+        font-size: 0.65rem;
+        font-weight: 800;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 9px;
+        padding: 0 5px;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid var(--bg-main);
+      }
+
+      .btn-toggle-filtros.tem-filtro .badge-filtros {
+        display: flex;
+      }
+
+      /* Contador de resultados */
+      .contador {
+        padding: 0 16px 8px;
+        text-align: center;
+        font-size: 0.75rem;
         color: var(--text-secondary);
         font-weight: 500;
       }
 
-      /* Filtros (barra abaixo do cabeçalho) */
-      .controls-bar {
+      /* ========== PAINEL DE FILTROS (expansível) ========== */
+      .painel-filtros {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, opacity 0.2s ease, padding 0.3s ease;
+        opacity: 0;
         background: var(--bg-surface);
-        padding: 10px 16px;
+        border-top: 1px solid var(--border-color);
+      }
+
+      .painel-filtros.aberto {
+        max-height: 400px;
+        opacity: 1;
+        padding: 14px 16px;
+      }
+
+      .painel-conteudo {
+        max-width: 1400px;
+        margin: 0 auto;
         display: flex;
         flex-direction: column;
+        gap: 12px;
         align-items: center;
-        gap: 10px;
       }
 
       .filtros-status {
@@ -137,7 +216,6 @@
         padding: 4px;
         border-radius: 99px;
         border: 1px solid var(--border-color);
-        flex-shrink: 0;
       }
 
       .btn-status {
@@ -165,7 +243,6 @@
         box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
       }
 
-      /* Container dos chips: scroll horizontal em telas pequenas */
       .filtros-wrapper {
         width: 100%;
         overflow-x: auto;
@@ -175,9 +252,7 @@
         scrollbar-color: rgba(255,255,255,0.15) transparent;
       }
 
-      .filtros-wrapper::-webkit-scrollbar {
-        height: 4px;
-      }
+      .filtros-wrapper::-webkit-scrollbar { height: 4px; }
       .filtros-wrapper::-webkit-scrollbar-thumb {
         background: rgba(255, 255, 255, 0.15);
         border-radius: 4px;
@@ -192,11 +267,8 @@
         min-width: max-content;
       }
 
-      /* Centraliza se couber na tela */
       @media (min-width: 900px) {
-        .filtros-wrapper {
-          overflow-x: visible;
-        }
+        .filtros-wrapper { overflow-x: visible; }
         .filtros {
           justify-content: center;
           flex-wrap: wrap;
@@ -249,7 +321,25 @@
         color: #fff;
       }
 
-      /* ========== CONTEÚDO PRINCIPAL ========== */
+      /* Botão "limpar filtros" dentro do painel */
+      .btn-limpar-filtros {
+        padding: 6px 14px;
+        font-size: 0.75rem;
+        font-family: inherit;
+        font-weight: 700;
+        color: #f87171;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        border-radius: 99px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-limpar-filtros:hover {
+        background: rgba(239, 68, 68, 0.2);
+      }
+
+      /* ========== CONTEÚDO ========== */
       .loading {
         flex: 1;
         display: flex;
@@ -270,9 +360,7 @@
         margin-bottom: 18px;
       }
 
-      @keyframes girar {
-        to { transform: rotate(360deg); }
-      }
+      @keyframes girar { to { transform: rotate(360deg); } }
 
       .erro-box {
         flex: 1;
@@ -284,17 +372,8 @@
         text-align: center;
       }
 
-      .erro-box .icone {
-        font-size: 56px;
-        margin-bottom: 16px;
-      }
-
-      .erro-box h2 {
-        color: #f87171;
-        margin-bottom: 8px;
-        font-size: 1.3rem;
-      }
-
+      .erro-box .icone { font-size: 56px; margin-bottom: 16px; }
+      .erro-box h2 { color: #f87171; margin-bottom: 8px; font-size: 1.3rem; }
       .erro-box p {
         color: var(--text-secondary);
         max-width: 420px;
@@ -326,7 +405,7 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
         gap: 24px;
-        padding: 32px 24px;
+        padding: 24px;
         max-width: 1400px;
         margin: 0 auto;
         width: 100%;
@@ -365,9 +444,7 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
       }
 
-      .card.vendido img {
-        filter: grayscale(80%) opacity(0.6);
-      }
+      .card.vendido img { filter: grayscale(80%) opacity(0.6); }
 
       .card img {
         width: 100%;
@@ -472,14 +549,9 @@
         animation: fadeIn 0.2s ease;
       }
 
-      .lightbox.ativo {
-        display: flex;
-      }
+      .lightbox.ativo { display: flex; }
 
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
       .lightbox img {
         max-width: 95vw;
@@ -557,29 +629,41 @@
       }
 
       /* ========== RESPONSIVO ========== */
-      @media (max-width: 600px) {
-        .header-inner {
-          padding: 10px 14px 10px;
-        }
-        .header-inner h1 {
-          font-size: 1.15rem;
-          margin-bottom: 8px;
-        }
-        #searchInput {
-          padding: 10px 16px 10px 38px;
-          font-size: 0.9rem;
-        }
-        .search-icon {
-          left: 12px;
-          font-size: 0.9rem;
-        }
-        .contador {
-          margin-top: 6px;
-          font-size: 0.75rem;
-        }
-        .controls-bar {
+      @media (max-width: 700px) {
+        .topbar-main {
           padding: 8px 12px;
           gap: 8px;
+        }
+        .topbar-titulo {
+          font-size: 0.95rem;
+        }
+        .topbar-titulo .texto-titulo {
+          display: none;
+        }
+        #searchInput {
+          padding: 8px 12px 8px 34px;
+          font-size: 0.85rem;
+        }
+        .search-icon {
+          left: 11px;
+          font-size: 0.8rem;
+        }
+        .btn-toggle-filtros {
+          padding: 8px 10px;
+          font-size: 0.75rem;
+        }
+        .btn-toggle-filtros .texto-btn {
+          display: none;
+        }
+        .contador {
+          padding: 0 12px 6px;
+          font-size: 0.7rem;
+        }
+        .painel-filtros.aberto {
+          padding: 12px;
+        }
+        .painel-conteudo {
+          gap: 10px;
         }
         .btn-status {
           padding: 6px 14px;
@@ -620,10 +704,13 @@
     </style>
   </head>
   <body>
-    <!-- ===== TOPO FIXO: cabeçalho + filtros juntos ===== -->
-    <div class="topo-fixo">
-      <div class="header-inner">
-        <h1>🛞 Catálogo de Rodas</h1>
+    <!-- ===== BARRA SUPERIOR COMPACTA ===== -->
+    <div class="topbar">
+      <div class="topbar-main">
+        <div class="topbar-titulo">
+          🛞 <span class="texto-titulo">Catálogo de Rodas</span>
+        </div>
+
         <div class="search-wrapper">
           <span class="search-icon">🔍</span>
           <input
@@ -633,27 +720,42 @@
             autocomplete="off"
           />
         </div>
-        <p id="contador" class="contador"></p>
+
+        <button class="btn-toggle-filtros" id="btnToggleFiltros" aria-label="Filtros">
+          <span>⚙️</span>
+          <span class="texto-btn">Filtros</span>
+          <span class="seta">▼</span>
+          <span class="badge-filtros" id="badgeFiltros">0</span>
+        </button>
       </div>
 
-      <div class="controls-bar">
-        <div class="filtros-status">
-          <button class="btn-status ativo" data-status="disponiveis">Disponíveis</button>
-          <button class="btn-status" data-status="vendidos">Vendidos</button>
-          <button class="btn-status" data-status="todos">Todos</button>
-        </div>
+      <p id="contador" class="contador"></p>
 
-        <div class="filtros-wrapper">
-          <div class="filtros" id="filtrosAro"></div>
-        </div>
+      <!-- Painel expansível de filtros -->
+      <div class="painel-filtros" id="painelFiltros">
+        <div class="painel-conteudo">
+          <div class="filtros-status">
+            <button class="btn-status ativo" data-status="disponiveis">Disponíveis</button>
+            <button class="btn-status" data-status="vendidos">Vendidos</button>
+            <button class="btn-status" data-status="todos">Todos</button>
+          </div>
 
-        <div class="ordenacao">
-          <select id="ordenarPor">
-            <option value="codigo">Ordenar: Código</option>
-            <option value="menor">Ordenar: Menor preço</option>
-            <option value="maior">Ordenar: Maior preço</option>
-            <option value="nome">Ordenar: Nome (A-Z)</option>
-          </select>
+          <div class="filtros-wrapper">
+            <div class="filtros" id="filtrosAro"></div>
+          </div>
+
+          <div class="ordenacao">
+            <select id="ordenarPor">
+              <option value="codigo">Ordenar: Código</option>
+              <option value="menor">Ordenar: Menor preço</option>
+              <option value="maior">Ordenar: Maior preço</option>
+              <option value="nome">Ordenar: Nome (A-Z)</option>
+            </select>
+          </div>
+
+          <button class="btn-limpar-filtros" id="btnLimparFiltros" style="display: none;">
+            ✕ Limpar filtros
+          </button>
         </div>
       </div>
     </div>
@@ -748,9 +850,7 @@
                   vendido: disp === "VENDIDO",
                 };
               })
-              .filter(function (p) {
-                return p.codigo;
-              });
+              .filter(function (p) { return p.codigo; });
 
             if (!produtos.length) throw new Error("Nenhum produto no arquivo");
 
@@ -764,8 +864,7 @@
             document.getElementById("loadingBox").style.display = "none";
             document.getElementById("erroBox").style.display = "flex";
             document.getElementById("erroMsg").innerHTML =
-              "Erro: " +
-              err.message +
+              "Erro: " + err.message +
               "<br><br>" +
               "Verifique se o arquivo <strong>produtos.json</strong> está na mesma pasta do index.html.";
           }
@@ -812,14 +911,13 @@
         }
 
         function ativarChipAro(chipClicado, aro) {
-          document
-            .querySelectorAll("#filtrosAro .chip")
-            .forEach(function (c) {
-              c.classList.remove("ativo");
-            });
+          document.querySelectorAll("#filtrosAro .chip").forEach(function (c) {
+            c.classList.remove("ativo");
+          });
           chipClicado.classList.add("ativo");
           filtroAroAtual = aro;
           renderizar();
+          atualizarBadgeFiltros();
         }
 
         /* ============ FILTROS E ORDENAÇÃO ============ */
@@ -834,36 +932,22 @@
 
           if (filtroAroAtual !== "todos") {
             var aro = parseInt(filtroAroAtual, 10);
-            lista = lista.filter(function (p) {
-              return p.aro === aro;
-            });
+            lista = lista.filter(function (p) { return p.aro === aro; });
           }
 
-          var termo = document
-            .getElementById("searchInput")
-            .value.toLowerCase()
-            .trim();
+          var termo = document.getElementById("searchInput").value.toLowerCase().trim();
           if (termo) {
             lista = lista.filter(function (p) {
-              return (
-                p.codigo.toLowerCase().indexOf(termo) !== -1 ||
-                p.nome.toLowerCase().indexOf(termo) !== -1
-              );
+              return p.codigo.toLowerCase().indexOf(termo) !== -1 ||
+                     p.nome.toLowerCase().indexOf(termo) !== -1;
             });
           }
 
           switch (ordenacaoAtual) {
-            case "menor":
-              lista.sort(function (a, b) { return a.valor - b.valor; });
-              break;
-            case "maior":
-              lista.sort(function (a, b) { return b.valor - a.valor; });
-              break;
-            case "nome":
-              lista.sort(function (a, b) { return a.nome.localeCompare(b.nome); });
-              break;
-            default:
-              lista.sort(function (a, b) { return a.codigo.localeCompare(b.codigo); });
+            case "menor": lista.sort(function (a, b) { return a.valor - b.valor; }); break;
+            case "maior": lista.sort(function (a, b) { return b.valor - a.valor; }); break;
+            case "nome":  lista.sort(function (a, b) { return a.nome.localeCompare(b.nome); }); break;
+            default:      lista.sort(function (a, b) { return a.codigo.localeCompare(b.codigo); });
           }
 
           return lista;
@@ -879,8 +963,7 @@
             lista.length + " roda(s) encontrada(s)";
 
           if (!lista.length) {
-            container.innerHTML =
-              '<p class="vazio">Nenhuma roda encontrada.</p>';
+            container.innerHTML = '<p class="vazio">Nenhuma roda encontrada.</p>';
             return;
           }
 
@@ -945,8 +1028,7 @@
             var pPreco = document.createElement("p");
             pPreco.className = "preco";
             pPreco.textContent =
-              "R$ " +
-              item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+              "R$ " + item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
             body.appendChild(pPreco);
 
             card.appendChild(body);
@@ -955,6 +1037,45 @@
 
           container.appendChild(frag);
         }
+
+        /* ============ PAINEL DE FILTROS ============ */
+        var btnToggle = document.getElementById("btnToggleFiltros");
+        var painel = document.getElementById("painelFiltros");
+        var badge = document.getElementById("badgeFiltros");
+        var btnLimpar = document.getElementById("btnLimparFiltros");
+
+        btnToggle.addEventListener("click", function () {
+          var aberto = painel.classList.toggle("aberto");
+          btnToggle.classList.toggle("aberto", aberto);
+        });
+
+        function atualizarBadgeFiltros() {
+          var count = 0;
+          if (filtroStatusAtual !== "disponiveis") count++;
+          if (filtroAroAtual !== "todos") count++;
+
+          badge.textContent = count;
+          btnToggle.classList.toggle("tem-filtro", count > 0);
+          btnLimpar.style.display = count > 0 ? "inline-block" : "none";
+        }
+
+        btnLimpar.addEventListener("click", function () {
+          // Reseta tudo
+          filtroStatusAtual = "disponiveis";
+          filtroAroAtual = "todos";
+          document.getElementById("searchInput").value = "";
+
+          document.querySelectorAll(".btn-status").forEach(function (b) {
+            b.classList.toggle("ativo", b.dataset.status === "disponiveis");
+          });
+
+          document.querySelectorAll("#filtrosAro .chip").forEach(function (c) {
+            c.classList.toggle("ativo", c.dataset.aro === "todos");
+          });
+
+          renderizar();
+          atualizarBadgeFiltros();
+        });
 
         /* ============ LIGHTBOX ============ */
         var lightbox = document.getElementById("lightbox");
@@ -970,8 +1091,7 @@
           lightboxCod.textContent = "CÓD: " + item.codigo;
           lightboxNome.textContent = item.nome;
           lightboxPreco.textContent =
-            "R$ " +
-            item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+            "R$ " + item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
           lightbox.classList.add("ativo");
           document.body.style.overflow = "hidden";
         }
@@ -982,11 +1102,9 @@
         }
 
         lightboxClose.addEventListener("click", fecharLightbox);
-
         lightbox.addEventListener("click", function (e) {
           if (e.target === lightbox) fecharLightbox();
         });
-
         document.addEventListener("keydown", function (e) {
           if (e.key === "Escape" && lightbox.classList.contains("ativo")) {
             fecharLightbox();
@@ -994,9 +1112,7 @@
         });
 
         /* ============ EVENTOS ============ */
-        document
-          .getElementById("searchInput")
-          .addEventListener("input", renderizar);
+        document.getElementById("searchInput").addEventListener("input", renderizar);
 
         document.querySelectorAll(".btn-status").forEach(function (btn) {
           btn.addEventListener("click", function () {
@@ -1006,15 +1122,14 @@
             btn.classList.add("ativo");
             filtroStatusAtual = btn.dataset.status;
             renderizar();
+            atualizarBadgeFiltros();
           });
         });
 
-        document
-          .getElementById("ordenarPor")
-          .addEventListener("change", function (e) {
-            ordenacaoAtual = e.target.value;
-            renderizar();
-          });
+        document.getElementById("ordenarPor").addEventListener("change", function (e) {
+          ordenacaoAtual = e.target.value;
+          renderizar();
+        });
 
         /* ============ INIT ============ */
         carregarProdutos();
