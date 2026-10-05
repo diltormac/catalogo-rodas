@@ -898,5 +898,59 @@
     "disponibilidade": "NAN",
     "aro": 17,
     "vendido": false
+  },
+  {
+    "codigo": "553597",
+    "nome": "JOGO RODA ARO 15 VW",
+    "valor": 2700,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "553628",
+    "nome": "JOGO RODA ARO 15 VW",
+    "valor": 2700,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "553630",
+    "nome": "JOGO RODA ARO 15 GM",
+    "valor": 2700,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "553631",
+    "nome": "JOGO RODA ARO 15 FIAT",
+    "valor": 2700,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
+    "vendido": false
+  },
+  {
+    "codigo": "553634",
+    "nome": "JOGO RODA ARO 14 FIAT",
+    "valor": 2400,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 14,
+    "vendido": false
+  },
+  {
+    "codigo": "553636",
+    "nome": "JOGO RODA ARO 16 S10",
+    "valor": 4500,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 16,
+    "vendido": false
   }
 ]
