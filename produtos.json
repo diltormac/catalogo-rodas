@@ -409,9 +409,9 @@
     "nome": "JOGO RODA ARO 18 HILUX",
     "valor": 5000,
     "status": "NAN",
-    "disponibilidade": "NAN",
+    "disponibilidade": "VENDIDO",
     "aro": 18,
-    "vendido": false
+    "vendido": true
   },
   {
     "codigo": "550360",
@@ -648,12 +648,39 @@
     "vendido": false
   },
   {
+    "codigo": "551071",
+    "nome": "RODA DE FERRO ARO 17 TOYOTA UNIDADE",
+    "valor": 450,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 17,
+    "vendido": false
+  },
+  {
+    "codigo": "551074",
+    "nome": "JOGO RODA DE FERRO ARO 13 UNO",
+    "valor": 800,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 13,
+    "vendido": false
+  },
+  {
     "codigo": "551075",
     "nome": "JOGO RODA ARO 18 S10 MONTADA",
     "valor": 6000,
     "status": "NAN",
     "disponibilidade": "NAN",
     "aro": 18,
+    "vendido": false
+  },
+  {
+    "codigo": "551078",
+    "nome": "RODA DE FERRO ARO 15 FIAT UNIDADE",
+    "valor": 400,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 15,
     "vendido": false
   },
   {
@@ -825,33 +852,6 @@
     "status": "NAN",
     "disponibilidade": "NAN",
     "aro": 17,
-    "vendido": false
-  },
-  {
-    "codigo": "551071",
-    "nome": "RODA DE FERRO ARO 17 TOYOTA UNIDADE",
-    "valor": 450,
-    "status": "NAN",
-    "disponibilidade": "NAN",
-    "aro": 17,
-    "vendido": false
-  },
-  {
-    "codigo": "551074",
-    "nome": "JOGO RODA DE FERRO ARO 13 UNO",
-    "valor": 800,
-    "status": "NAN",
-    "disponibilidade": "NAN",
-    "aro": 13,
-    "vendido": false
-  },
-  {
-    "codigo": "551078",
-    "nome": "RODA DE FERRO ARO 15 FIAT UNIDADE",
-    "valor": 400,
-    "status": "NAN",
-    "disponibilidade": "NAN",
-    "aro": 15,
     "vendido": false
   },
   {
