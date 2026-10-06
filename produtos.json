@@ -952,5 +952,14 @@
     "disponibilidade": "NAN",
     "aro": 16,
     "vendido": false
+  },
+  {
+    "codigo": "553855",
+    "nome": "JOGO RODA ARO 18 S10/ HILUX/ SW4/ RANGER/ TRITON",
+    "valor": 6000,
+    "status": "NAN",
+    "disponibilidade": "NAN",
+    "aro": 18,
+    "vendido": false
   }
 ]
