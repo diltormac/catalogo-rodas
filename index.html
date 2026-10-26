@@ -20,718 +20,141 @@
         --price-color: #4ade80;
       }
 
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        -webkit-tap-highlight-color: transparent;
-      }
+      * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+      body { font-family: "Plus Jakarta Sans", sans-serif; background-color: var(--bg-main); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; }
 
-      body {
-        font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-        background-color: var(--bg-main);
-        color: var(--text-primary);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
+      /* ========== BARRA SUPERIOR ========== */
+      .topbar { position: sticky; top: 0; z-index: 20; background: rgba(11, 15, 23, 0.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+      .topbar-main { display: flex; align-items: center; gap: 12px; padding: 10px 16px; max-width: 1400px; margin: 0 auto; width: 100%; }
+      .topbar-titulo { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; white-space: nowrap; background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+      .search-wrapper { position: relative; flex: 1; min-width: 0; max-width: 500px; }
+      #searchInput { width: 100%; padding: 9px 14px 9px 38px; font-size: 0.9rem; font-family: inherit; background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid var(--border-color); border-radius: 99px; outline: none; transition: all 0.25s ease; }
+      .search-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); pointer-events: none; font-size: 0.9rem; }
+      #searchInput:focus { background: rgba(255, 255, 255, 0.08); border-color: var(--accent-color); box-shadow: 0 0 0 3px var(--accent-glow); }
+      #searchInput::placeholder { color: #64748b; }
 
-      /* ========== BARRA SUPERIOR COMPACTA ========== */
-      .topbar {
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        background: rgba(11, 15, 23, 0.94);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-        border-bottom: 1px solid var(--border-color);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      }
+      .btn-toggle-filtros { flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 0.8rem; font-family: inherit; font-weight: 700; color: var(--text-secondary); background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 99px; cursor: pointer; transition: all 0.2s ease; position: relative; }
+      .btn-toggle-filtros:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+      .btn-toggle-filtros.aberto { background: var(--accent-color); color: #0f172a; border-color: var(--accent-color); }
+      .btn-toggle-filtros .seta { display: inline-block; transition: transform 0.25s ease; font-size: 0.65rem; }
+      .btn-toggle-filtros.aberto .seta { transform: rotate(180deg); }
+      .btn-toggle-filtros .badge-filtros { display: none; position: absolute; top: -5px; right: -5px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 800; min-width: 18px; height: 18px; border-radius: 9px; padding: 0 5px; align-items: center; justify-content: center; border: 2px solid var(--bg-main); }
+      .btn-toggle-filtros.tem-filtro .badge-filtros { display: flex; }
 
-      /* Linha principal: título + busca + botões */
-      .topbar-main {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px 16px;
-        max-width: 1400px;
-        margin: 0 auto;
-        width: 100%;
-      }
+      .contador { padding: 0 16px 8px; text-align: center; font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; }
 
-      .topbar-titulo {
-        font-size: 1.1rem;
-        font-weight: 800;
-        letter-spacing: -0.5px;
-        white-space: nowrap;
-        background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        flex-shrink: 0;
-      }
+      /* ========== PAINEL DE FILTROS ========== */
+      .painel-filtros { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, opacity 0.2s ease, padding 0.3s ease; opacity: 0; background: var(--bg-surface); border-top: 1px solid var(--border-color); }
+      .painel-filtros.aberto { max-height: 400px; opacity: 1; padding: 14px 16px; }
+      .painel-conteudo { max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; align-items: center; }
 
-      .search-wrapper {
-        position: relative;
-        flex: 1;
-        min-width: 0;
-        max-width: 500px;
-      }
+      .filtros-status { display: flex; background: rgba(0, 0, 0, 0.25); padding: 4px; border-radius: 99px; border: 1px solid var(--border-color); }
+      .btn-status { padding: 7px 16px; font-size: 0.78rem; font-weight: 700; font-family: inherit; border-radius: 99px; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; transition: all 0.2s ease; }
+      .btn-status.ativo { background: var(--accent-color); color: #0f172a; box-shadow: 0 2px 8px var(--accent-glow); }
+      .btn-status.ativo[data-status="vendidos"] { background: #ef4444; color: #ffffff; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3); }
 
-      #searchInput {
-        width: 100%;
-        padding: 9px 14px 9px 38px;
-        font-size: 0.9rem;
-        font-family: inherit;
-        background: rgba(255, 255, 255, 0.05);
-        color: #fff;
-        border: 1px solid var(--border-color);
-        border-radius: 99px;
-        outline: none;
-        transition: all 0.25s ease;
-      }
-
-      .search-icon {
-        position: absolute;
-        left: 13px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--text-secondary);
-        pointer-events: none;
-        font-size: 0.9rem;
-      }
-
-      #searchInput:focus {
-        background: rgba(255, 255, 255, 0.08);
-        border-color: var(--accent-color);
-        box-shadow: 0 0 0 3px var(--accent-glow);
-      }
-
-      #searchInput::placeholder {
-        color: #64748b;
-      }
-
-      /* Botão para abrir/fechar os filtros */
-      .btn-toggle-filtros {
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 14px;
-        font-size: 0.8rem;
-        font-family: inherit;
-        font-weight: 700;
-        color: var(--text-secondary);
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid var(--border-color);
-        border-radius: 99px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        position: relative;
-      }
-
-      .btn-toggle-filtros:hover {
-        background: rgba(255, 255, 255, 0.08);
-        color: #fff;
-      }
-
-      .btn-toggle-filtros.aberto {
-        background: var(--accent-color);
-        color: #0f172a;
-        border-color: var(--accent-color);
-      }
-
-      .btn-toggle-filtros .seta {
-        display: inline-block;
-        transition: transform 0.25s ease;
-        font-size: 0.65rem;
-      }
-
-      .btn-toggle-filtros.aberto .seta {
-        transform: rotate(180deg);
-      }
-
-      /* Badge no botão mostrando quantos filtros estão ativos */
-      .btn-toggle-filtros .badge-filtros {
-        display: none;
-        position: absolute;
-        top: -5px;
-        right: -5px;
-        background: #ef4444;
-        color: #fff;
-        font-size: 0.65rem;
-        font-weight: 800;
-        min-width: 18px;
-        height: 18px;
-        border-radius: 9px;
-        padding: 0 5px;
-        align-items: center;
-        justify-content: center;
-        border: 2px solid var(--bg-main);
-      }
-
-      .btn-toggle-filtros.tem-filtro .badge-filtros {
-        display: flex;
-      }
-
-      /* Contador de resultados */
-      .contador {
-        padding: 0 16px 8px;
-        text-align: center;
-        font-size: 0.75rem;
-        color: var(--text-secondary);
-        font-weight: 500;
-      }
-
-      /* ========== PAINEL DE FILTROS (expansível) ========== */
-      .painel-filtros {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease, opacity 0.2s ease, padding 0.3s ease;
-        opacity: 0;
-        background: var(--bg-surface);
-        border-top: 1px solid var(--border-color);
-      }
-
-      .painel-filtros.aberto {
-        max-height: 400px;
-        opacity: 1;
-        padding: 14px 16px;
-      }
-
-      .painel-conteudo {
-        max-width: 1400px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        align-items: center;
-      }
-
-      .filtros-status {
-        display: flex;
-        background: rgba(0, 0, 0, 0.25);
-        padding: 4px;
-        border-radius: 99px;
-        border: 1px solid var(--border-color);
-      }
-
-      .btn-status {
-        padding: 7px 16px;
-        font-size: 0.78rem;
-        font-weight: 700;
-        font-family: inherit;
-        border-radius: 99px;
-        border: none;
-        background: transparent;
-        color: var(--text-secondary);
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-
-      .btn-status.ativo {
-        background: var(--accent-color);
-        color: #0f172a;
-        box-shadow: 0 2px 8px var(--accent-glow);
-      }
-
-      .btn-status.ativo[data-status="vendidos"] {
-        background: #ef4444;
-        color: #ffffff;
-        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
-      }
-
-      .filtros-wrapper {
-        width: 100%;
-        overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: thin;
-        scrollbar-color: rgba(255,255,255,0.15) transparent;
-      }
-
+      .filtros-wrapper { width: 100%; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.15) transparent; }
       .filtros-wrapper::-webkit-scrollbar { height: 4px; }
-      .filtros-wrapper::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.15);
-        border-radius: 4px;
-      }
+      .filtros-wrapper::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+      .filtros { display: flex; flex-wrap: nowrap; gap: 8px; justify-content: flex-start; padding: 2px 4px; min-width: max-content; }
+      @media (min-width: 900px) { .filtros-wrapper { overflow-x: visible; } .filtros { justify-content: center; flex-wrap: wrap; min-width: auto; } }
+      .filtros .chip { padding: 7px 14px; font-size: 0.78rem; font-family: inherit; border: 1px solid var(--border-color); border-radius: 99px; background: rgba(255, 255, 255, 0.03); color: var(--text-secondary); cursor: pointer; font-weight: 600; transition: all 0.2s ease; white-space: nowrap; flex-shrink: 0; }
+      .filtros .chip:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+      .filtros .chip.ativo { background: rgba(255, 255, 255, 0.15); color: #fff; border-color: rgba(255, 255, 255, 0.3); }
 
-      .filtros {
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 8px;
-        justify-content: flex-start;
-        padding: 2px 4px;
-        min-width: max-content;
-      }
+      .ordenacao select { padding: 7px 12px; border-radius: 10px; border: 1px solid var(--border-color); font-size: 0.8rem; font-family: inherit; background: rgba(255, 255, 255, 0.05); color: var(--text-secondary); outline: none; cursor: pointer; transition: all 0.2s; }
+      .ordenacao select:hover, .ordenacao select:focus { border-color: rgba(255, 255, 255, 0.2); color: #fff; }
 
-      @media (min-width: 900px) {
-        .filtros-wrapper { overflow-x: visible; }
-        .filtros {
-          justify-content: center;
-          flex-wrap: wrap;
-          min-width: auto;
-        }
-      }
-
-      .filtros .chip {
-        padding: 7px 14px;
-        font-size: 0.78rem;
-        font-family: inherit;
-        border: 1px solid var(--border-color);
-        border-radius: 99px;
-        background: rgba(255, 255, 255, 0.03);
-        color: var(--text-secondary);
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.2s ease;
-        white-space: nowrap;
-        flex-shrink: 0;
-      }
-
-      .filtros .chip:hover {
-        background: rgba(255, 255, 255, 0.08);
-        color: #fff;
-      }
-
-      .filtros .chip.ativo {
-        background: rgba(255, 255, 255, 0.15);
-        color: #fff;
-        border-color: rgba(255, 255, 255, 0.3);
-      }
-
-      .ordenacao select {
-        padding: 7px 12px;
-        border-radius: 10px;
-        border: 1px solid var(--border-color);
-        font-size: 0.8rem;
-        font-family: inherit;
-        background: rgba(255, 255, 255, 0.05);
-        color: var(--text-secondary);
-        outline: none;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-
-      .ordenacao select:hover,
-      .ordenacao select:focus {
-        border-color: rgba(255, 255, 255, 0.2);
-        color: #fff;
-      }
-
-      /* Botão "limpar filtros" dentro do painel */
-      .btn-limpar-filtros {
-        padding: 6px 14px;
-        font-size: 0.75rem;
-        font-family: inherit;
-        font-weight: 700;
-        color: #f87171;
-        background: rgba(239, 68, 68, 0.1);
-        border: 1px solid rgba(239, 68, 68, 0.3);
-        border-radius: 99px;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-
-      .btn-limpar-filtros:hover {
-        background: rgba(239, 68, 68, 0.2);
-      }
+      .btn-limpar-filtros { padding: 6px 14px; font-size: 0.75rem; font-family: inherit; font-weight: 700; color: #f87171; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 99px; cursor: pointer; transition: all 0.2s; }
+      .btn-limpar-filtros:hover { background: rgba(239, 68, 68, 0.2); }
 
       /* ========== CONTEÚDO ========== */
-      .loading {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 80px 20px;
-        color: var(--text-secondary);
-      }
-
-      .loading .spinner {
-        width: 44px;
-        height: 44px;
-        border: 3px solid rgba(255, 255, 255, 0.1);
-        border-top-color: var(--accent-color);
-        border-radius: 50%;
-        animation: girar 0.8s linear infinite;
-        margin-bottom: 18px;
-      }
-
+      .loading { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; color: var(--text-secondary); }
+      .loading .spinner { width: 44px; height: 44px; border: 3px solid rgba(255, 255, 255, 0.1); border-top-color: var(--accent-color); border-radius: 50%; animation: girar 0.8s linear infinite; margin-bottom: 18px; }
       @keyframes girar { to { transform: rotate(360deg); } }
 
-      .erro-box {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 60px 20px;
-        text-align: center;
-      }
-
+      .erro-box { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; }
       .erro-box .icone { font-size: 56px; margin-bottom: 16px; }
       .erro-box h2 { color: #f87171; margin-bottom: 8px; font-size: 1.3rem; }
-      .erro-box p {
-        color: var(--text-secondary);
-        max-width: 420px;
-        margin-bottom: 24px;
-        line-height: 1.5;
-        font-size: 0.95rem;
-      }
+      .erro-box p { color: var(--text-secondary); max-width: 420px; margin-bottom: 24px; line-height: 1.5; font-size: 0.95rem; }
+      .erro-box button { padding: 12px 28px; font-size: 0.9rem; font-weight: 700; font-family: inherit; background: var(--accent-color); color: #0f172a; border: none; border-radius: 12px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
 
-      .erro-box button {
-        padding: 12px 28px;
-        font-size: 0.9rem;
-        font-weight: 700;
-        font-family: inherit;
-        background: var(--accent-color);
-        color: #0f172a;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
-      }
+      .grid-container { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; padding: 24px; max-width: 1400px; margin: 0 auto; width: 100%; }
 
-      .erro-box button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 16px var(--accent-glow);
-      }
-
-      .grid-container {
-        flex: 1;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        gap: 24px;
-        padding: 24px;
-        max-width: 1400px;
-        margin: 0 auto;
-        width: 100%;
-      }
-
-      .card {
-        background: var(--bg-card);
-        border: 1px solid var(--border-color);
-        border-radius: 16px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-      }
-
-      .card:hover {
-        transform: translateY(-6px);
-        border-color: rgba(255, 255, 255, 0.2);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-      }
-
-      .card.vendido::before {
-        content: "VENDIDO";
-        position: absolute;
-        top: 16px;
-        right: -32px;
-        background: #ef4444;
-        color: #fff;
-        font-size: 0.65rem;
-        font-weight: 800;
-        padding: 4px 36px;
-        transform: rotate(35deg);
-        letter-spacing: 1px;
-        z-index: 2;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-      }
-
+      .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+      .card:hover { transform: translateY(-6px); border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3); }
+      .card.vendido::before { content: "VENDIDO"; position: absolute; top: 16px; right: -32px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 800; padding: 4px 36px; transform: rotate(35deg); letter-spacing: 1px; z-index: 2; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); }
       .card.vendido img { filter: grayscale(80%) opacity(0.6); }
 
-      .card img {
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-        background: #0f172a;
-        display: block;
-        border-bottom: 1px solid var(--border-color);
-        cursor: zoom-in;
-      }
+      .card img { width: 100%; height: 220px; object-fit: cover; background: #0f172a; display: block; border-bottom: 1px solid var(--border-color); cursor: zoom-in; }
+      .card-body { padding: 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+      .codigo { font-size: 0.75rem; font-weight: 700; color: var(--accent-color); letter-spacing: 1px; }
+      .card-body h3 { font-size: 0.95rem; font-weight: 600; line-height: 1.4; color: var(--text-primary); min-height: 2.8em; }
 
-      .card-body {
-        padding: 18px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        flex: 1;
-      }
+      .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+      .status, .dispo { display: inline-block; font-size: 0.65rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+      .status { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+      .dispo { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
 
-      .codigo {
-        font-size: 0.75rem;
-        font-weight: 700;
-        color: var(--accent-color);
-        letter-spacing: 1px;
-      }
+      .preco { font-size: 1.4rem; font-weight: 800; color: var(--price-color); margin-top: auto; padding-top: 8px; }
 
-      .card-body h3 {
-        font-size: 0.95rem;
-        font-weight: 600;
-        line-height: 1.4;
-        color: var(--text-primary);
-        min-height: 2.8em;
-      }
+      .vazio { grid-column: 1 / -1; text-align: center; font-size: 1rem; color: var(--text-secondary); padding: 80px 20px; }
 
-      .badges {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-top: 4px;
-      }
-
-      .status, .dispo {
-        display: inline-block;
-        font-size: 0.65rem;
-        font-weight: 700;
-        padding: 4px 10px;
-        border-radius: 6px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .status {
-        background: rgba(34, 197, 94, 0.15);
-        color: #4ade80;
-        border: 1px solid rgba(34, 197, 94, 0.3);
-      }
-
-      .dispo {
-        background: rgba(239, 68, 68, 0.15);
-        color: #f87171;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-      }
-
-      .preco {
-        font-size: 1.4rem;
-        font-weight: 800;
-        color: var(--price-color);
-        margin-top: auto;
-        padding-top: 8px;
-      }
-
-      .vazio {
-        grid-column: 1 / -1;
-        text-align: center;
-        font-size: 1rem;
-        color: var(--text-secondary);
-        padding: 80px 20px;
-      }
-
-      footer {
-        background: var(--bg-surface);
-        border-top: 1px solid var(--border-color);
-        color: var(--text-secondary);
-        text-align: center;
-        padding: 20px;
-        font-size: 0.85rem;
-        margin-top: auto;
-      }
+      footer { background: var(--bg-surface); border-top: 1px solid var(--border-color); color: var(--text-secondary); text-align: center; padding: 20px; font-size: 0.85rem; margin-top: auto; }
 
       /* ========== LIGHTBOX ========== */
-      .lightbox {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.92);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 999;
-        padding: 20px;
-        animation: fadeIn 0.2s ease;
-      }
-
+      .lightbox { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 999; padding: 20px; animation: fadeIn 0.2s ease; }
       .lightbox.ativo { display: flex; }
-
       @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      .lightbox img { max-width: 95vw; max-height: 90vh; object-fit: contain; border-radius: 12px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); cursor: zoom-out; animation: zoomIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+      @keyframes zoomIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+      .lightbox-close { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 10; line-height: 1; }
+      .lightbox-close:hover { background: rgba(255, 255, 255, 0.2); transform: rotate(90deg); }
+      .lightbox-info { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.9); padding: 12px 20px; border-radius: 12px; color: #fff; text-align: center; max-width: 90%; border: 1px solid rgba(255, 255, 255, 0.1); pointer-events: none; }
+      .lightbox-info .cod { font-size: 0.75rem; color: var(--accent-color); font-weight: 700; letter-spacing: 1px; }
+      .lightbox-info .nome { font-size: 0.9rem; margin-top: 4px; color: #e2e8f0; }
+      .lightbox-info .preco-lb { font-size: 1.2rem; font-weight: 800; color: var(--price-color); margin-top: 4px; }
 
-      .lightbox img {
-        max-width: 95vw;
-        max-height: 90vh;
-        object-fit: contain;
-        border-radius: 12px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-        cursor: zoom-out;
-        animation: zoomIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-      }
-
-      @keyframes zoomIn {
-        from { transform: scale(0.85); opacity: 0; }
-        to { transform: scale(1); opacity: 1; }
-      }
-
-      .lightbox-close {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        font-size: 1.5rem;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s;
-        z-index: 10;
-        line-height: 1;
-      }
-
-      .lightbox-close:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: rotate(90deg);
-      }
-
-      .lightbox-info {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(15, 23, 42, 0.9);
-        padding: 12px 20px;
-        border-radius: 12px;
-        color: #fff;
-        text-align: center;
-        max-width: 90%;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        pointer-events: none;
-      }
-
-      .lightbox-info .cod {
-        font-size: 0.75rem;
-        color: var(--accent-color);
-        font-weight: 700;
-        letter-spacing: 1px;
-      }
-
-      .lightbox-info .nome {
-        font-size: 0.9rem;
-        margin-top: 4px;
-        color: #e2e8f0;
-      }
-
-      .lightbox-info .preco-lb {
-        font-size: 1.2rem;
-        font-weight: 800;
-        color: var(--price-color);
-        margin-top: 4px;
-      }
-
-      /* ========== RESPONSIVO ========== */
       @media (max-width: 700px) {
-        .topbar-main {
-          padding: 8px 12px;
-          gap: 8px;
-        }
-        .topbar-titulo {
-          font-size: 0.95rem;
-        }
-        .topbar-titulo .texto-titulo {
-          display: none;
-        }
-        #searchInput {
-          padding: 8px 12px 8px 34px;
-          font-size: 0.85rem;
-        }
-        .search-icon {
-          left: 11px;
-          font-size: 0.8rem;
-        }
-        .btn-toggle-filtros {
-          padding: 8px 10px;
-          font-size: 0.75rem;
-        }
-        .btn-toggle-filtros .texto-btn {
-          display: none;
-        }
-        .contador {
-          padding: 0 12px 6px;
-          font-size: 0.7rem;
-        }
-        .painel-filtros.aberto {
-          padding: 12px;
-        }
-        .painel-conteudo {
-          gap: 10px;
-        }
-        .btn-status {
-          padding: 6px 14px;
-          font-size: 0.72rem;
-        }
-        .filtros .chip {
-          padding: 6px 12px;
-          font-size: 0.72rem;
-        }
-        .ordenacao select {
-          padding: 6px 10px;
-          font-size: 0.75rem;
-        }
-        .grid-container {
-          grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-          gap: 14px;
-          padding: 16px 12px;
-        }
+        .topbar-main { padding: 8px 12px; gap: 8px; }
+        .topbar-titulo { font-size: 0.95rem; }
+        .topbar-titulo .texto-titulo { display: none; }
+        #searchInput { padding: 8px 12px 8px 34px; font-size: 0.85rem; }
+        .search-icon { left: 11px; font-size: 0.8rem; }
+        .btn-toggle-filtros { padding: 8px 10px; font-size: 0.75rem; }
+        .btn-toggle-filtros .texto-btn { display: none; }
+        .contador { padding: 0 12px 6px; font-size: 0.7rem; }
+        .painel-filtros.aberto { padding: 12px; }
+        .painel-conteudo { gap: 10px; }
+        .btn-status { padding: 6px 14px; font-size: 0.72rem; }
+        .filtros .chip { padding: 6px 12px; font-size: 0.72rem; }
+        .ordenacao select { padding: 6px 10px; font-size: 0.75rem; }
+        .grid-container { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; padding: 16px 12px; }
         .card img { height: 160px; }
         .card-body { padding: 12px; }
         .card-body h3 { font-size: 0.85rem; }
         .preco { font-size: 1.15rem; }
-
-        .lightbox-close {
-          top: 12px;
-          right: 12px;
-          width: 40px;
-          height: 40px;
-          font-size: 1.3rem;
-        }
-        .lightbox-info {
-          bottom: 12px;
-          padding: 10px 14px;
-        }
+        .lightbox-close { top: 12px; right: 12px; width: 40px; height: 40px; font-size: 1.3rem; }
+        .lightbox-info { bottom: 12px; padding: 10px 14px; }
         .lightbox-info .nome { font-size: 0.8rem; }
         .lightbox-info .preco-lb { font-size: 1rem; }
       }
     </style>
   </head>
   <body>
-    <!-- ===== BARRA SUPERIOR COMPACTA ===== -->
     <div class="topbar">
       <div class="topbar-main">
-        <div class="topbar-titulo">
-          🛞 <span class="texto-titulo">Catálogo de Rodas</span>
-        </div>
-
+        <div class="topbar-titulo">🛞 <span class="texto-titulo">Catálogo de Rodas</span></div>
         <div class="search-wrapper">
           <span class="search-icon">🔍</span>
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="Buscar por código, aro ou modelo..."
-            autocomplete="off"
-          />
+          <input type="text" id="searchInput" placeholder="Buscar por código, aro ou modelo..." autocomplete="off" />
         </div>
-
         <button class="btn-toggle-filtros" id="btnToggleFiltros" aria-label="Filtros">
-          <span>⚙️</span>
-          <span class="texto-btn">Filtros</span>
-          <span class="seta">▼</span>
+          <span>⚙️</span><span class="texto-btn">Filtros</span><span class="seta">▼</span>
           <span class="badge-filtros" id="badgeFiltros">0</span>
         </button>
       </div>
-
       <p id="contador" class="contador"></p>
-
-      <!-- Painel expansível de filtros -->
       <div class="painel-filtros" id="painelFiltros">
         <div class="painel-conteudo">
           <div class="filtros-status">
@@ -739,11 +162,7 @@
             <button class="btn-status" data-status="vendidos">Vendidos</button>
             <button class="btn-status" data-status="todos">Todos</button>
           </div>
-
-          <div class="filtros-wrapper">
-            <div class="filtros" id="filtrosAro"></div>
-          </div>
-
+          <div class="filtros-wrapper"><div class="filtros" id="filtrosAro"></div></div>
           <div class="ordenacao">
             <select id="ordenarPor">
               <option value="codigo">Ordenar: Código</option>
@@ -752,36 +171,27 @@
               <option value="nome">Ordenar: Nome (A-Z)</option>
             </select>
           </div>
-
-          <button class="btn-limpar-filtros" id="btnLimparFiltros" style="display: none;">
-            ✕ Limpar filtros
-          </button>
+          <button class="btn-limpar-filtros" id="btnLimparFiltros" style="display: none;">✕ Limpar filtros</button>
         </div>
       </div>
     </div>
 
     <div class="loading" id="loadingBox">
       <div class="spinner"></div>
-      <p>Carregando catálogo...</p>
+      <p>Carregando catálogo do banco de dados...</p>
     </div>
 
     <div class="erro-box" id="erroBox" style="display: none">
       <div class="icone">⚠️</div>
       <h2>Não foi possível carregar o catálogo</h2>
-      <p id="erroMsg">
-        Verifique se o arquivo <strong>produtos.json</strong> está no
-        repositório.
-      </p>
+      <p id="erroMsg">Verifique sua conexão com a internet ou tente novamente mais tarde.</p>
       <button onclick="location.reload()">🔄 Tentar novamente</button>
     </div>
 
     <main id="gridRodas" class="grid-container" style="display: none"></main>
 
-    <footer>
-      <p>© Catálogo de Rodas</p>
-    </footer>
+    <footer><p>© Catálogo de Rodas</p></footer>
 
-    <!-- LIGHTBOX -->
     <div class="lightbox" id="lightbox">
       <button class="lightbox-close" id="lightboxClose" aria-label="Fechar">✕</button>
       <img id="lightboxImg" src="" alt="" />
@@ -792,70 +202,37 @@
       </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       (function () {
         "use strict";
 
-        const URL_JSON = "produtos.json";
-        const EXTENSOES = ["jpg", "jpeg", "png", "webp"];
+        const supabaseUrl = "https://kiiswukzwwoznkgjyaod.supabase.co";
+        const supabaseKey = "sb_publishable_WPRvraB-40Fz1RuKbd5bRg_3tGvyAxg";
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
+        const EXTENSOES = ["jpg", "jpeg", "png", "webp"];
         let produtos = [];
         let filtroStatusAtual = "disponiveis";
         let filtroAroAtual = "todos";
         let ordenacaoAtual = "codigo";
 
-        /* ============ CARREGAR JSON ============ */
         async function carregarProdutos() {
           try {
-            const resposta = await fetch(URL_JSON, { cache: "no-cache" });
-            if (!resposta.ok)
-              throw new Error(
-                "Arquivo produtos.json não encontrado (HTTP " +
-                  resposta.status +
-                  ")",
-              );
+            const { data, error } = await supabaseClient
+              .from("catalogo_rodas")
+              .select("*")
+              .order("codigo", { ascending: true });
 
-            const dados = await resposta.json();
-            if (!Array.isArray(dados))
-              throw new Error("Formato do produtos.json inválido");
+            if (error) throw error;
+            if (!data || data.length === 0) throw new Error("Nenhum produto cadastrado no banco.");
 
-            function limparTexto(v) {
-              if (v === null || v === undefined) return "";
-              var s = String(v).trim();
-              var low = s.toLowerCase();
-              if (
-                low === "nan" ||
-                low === "null" ||
-                low === "undefined" ||
-                low === "none" ||
-                low === ""
-              )
-                return "";
-              return s.toUpperCase();
-            }
-
-            produtos = dados
-              .map(function (p) {
-                var status = limparTexto(p.status);
-                var disp = limparTexto(p.disponibilidade);
-                return {
-                  codigo: String(p.codigo || "").trim(),
-                  nome: String(p.nome || "")
-                    .replace(/\s+/g, " ")
-                    .trim(),
-                  valor: Number(p.valor) || 0,
-                  status: status,
-                  disponibilidade: disp,
-                  aro: p.aro || extrairAro(p.nome),
-                  vendido: disp === "VENDIDO",
-                };
-              })
-              .filter(function (p) { return p.codigo; });
-
-            if (!produtos.length) throw new Error("Nenhum produto no arquivo");
+            produtos = data.map(p => ({
+              ...p,
+              valor: Number(p.valor) || 0
+            }));
 
             gerarChipsDeAro();
-
             document.getElementById("loadingBox").style.display = "none";
             document.getElementById("gridRodas").style.display = "grid";
             renderizar();
@@ -863,39 +240,24 @@
             console.error(err);
             document.getElementById("loadingBox").style.display = "none";
             document.getElementById("erroBox").style.display = "flex";
-            document.getElementById("erroMsg").innerHTML =
-              "Erro: " + err.message +
-              "<br><br>" +
-              "Verifique se o arquivo <strong>produtos.json</strong> está na mesma pasta do index.html.";
+            document.getElementById("erroMsg").innerHTML = "Erro: " + err.message;
           }
         }
 
-        function extrairAro(nome) {
-          var m = String(nome).match(/ARO\s*(\d{1,2})/i);
-          return m ? parseInt(m[1], 10) : null;
-        }
-
-        /* ============ CHIPS DE ARO DINÂMICOS ============ */
         function gerarChipsDeAro() {
           var container = document.getElementById("filtrosAro");
           container.innerHTML = "";
-
           var arosUnicos = [];
           produtos.forEach(function (p) {
-            if (p.aro && arosUnicos.indexOf(p.aro) === -1) {
-              arosUnicos.push(p.aro);
-            }
+            if (p.aro && arosUnicos.indexOf(p.aro) === -1) arosUnicos.push(p.aro);
           });
-
           arosUnicos.sort(function (a, b) { return a - b; });
 
           var chipTodos = document.createElement("button");
           chipTodos.className = "chip ativo";
           chipTodos.dataset.aro = "todos";
           chipTodos.textContent = "Todos os Aros";
-          chipTodos.addEventListener("click", function () {
-            ativarChipAro(chipTodos, "todos");
-          });
+          chipTodos.addEventListener("click", function () { ativarChipAro(chipTodos, "todos"); });
           container.appendChild(chipTodos);
 
           arosUnicos.forEach(function (aro) {
@@ -903,64 +265,48 @@
             chip.className = "chip";
             chip.dataset.aro = String(aro);
             chip.textContent = "Aro " + aro;
-            chip.addEventListener("click", function () {
-              ativarChipAro(chip, String(aro));
-            });
+            chip.addEventListener("click", function () { ativarChipAro(chip, String(aro)); });
             container.appendChild(chip);
           });
         }
 
         function ativarChipAro(chipClicado, aro) {
-          document.querySelectorAll("#filtrosAro .chip").forEach(function (c) {
-            c.classList.remove("ativo");
-          });
+          document.querySelectorAll("#filtrosAro .chip").forEach(function (c) { c.classList.remove("ativo"); });
           chipClicado.classList.add("ativo");
           filtroAroAtual = aro;
           renderizar();
           atualizarBadgeFiltros();
         }
 
-        /* ============ FILTROS E ORDENAÇÃO ============ */
         function aplicarFiltros() {
           var lista = produtos.slice();
-
-          if (filtroStatusAtual === "disponiveis") {
-            lista = lista.filter(function (p) { return !p.vendido; });
-          } else if (filtroStatusAtual === "vendidos") {
-            lista = lista.filter(function (p) { return p.vendido; });
-          }
-
+          if (filtroStatusAtual === "disponiveis") lista = lista.filter(p => !p.vendido);
+          else if (filtroStatusAtual === "vendidos") lista = lista.filter(p => p.vendido);
+          
           if (filtroAroAtual !== "todos") {
             var aro = parseInt(filtroAroAtual, 10);
-            lista = lista.filter(function (p) { return p.aro === aro; });
+            lista = lista.filter(p => p.aro === aro);
           }
 
           var termo = document.getElementById("searchInput").value.toLowerCase().trim();
           if (termo) {
-            lista = lista.filter(function (p) {
-              return p.codigo.toLowerCase().indexOf(termo) !== -1 ||
-                     p.nome.toLowerCase().indexOf(termo) !== -1;
-            });
+            lista = lista.filter(p => p.codigo.toLowerCase().includes(termo) || p.nome.toLowerCase().includes(termo));
           }
 
           switch (ordenacaoAtual) {
-            case "menor": lista.sort(function (a, b) { return a.valor - b.valor; }); break;
-            case "maior": lista.sort(function (a, b) { return b.valor - a.valor; }); break;
-            case "nome":  lista.sort(function (a, b) { return a.nome.localeCompare(b.nome); }); break;
-            default:      lista.sort(function (a, b) { return a.codigo.localeCompare(b.codigo); });
+            case "menor": lista.sort((a, b) => a.valor - b.valor); break;
+            case "maior": lista.sort((a, b) => b.valor - a.valor); break;
+            case "nome":  lista.sort((a, b) => a.nome.localeCompare(b.nome)); break;
+            default:      lista.sort((a, b) => a.codigo.localeCompare(b.codigo));
           }
-
           return lista;
         }
 
-        /* ============ RENDER ============ */
         function renderizar() {
           var lista = aplicarFiltros();
           var container = document.getElementById("gridRodas");
           container.innerHTML = "";
-
-          document.getElementById("contador").textContent =
-            lista.length + " roda(s) encontrada(s)";
+          document.getElementById("contador").textContent = lista.length + " roda(s) encontrada(s)";
 
           if (!lista.length) {
             container.innerHTML = '<p class="vazio">Nenhuma roda encontrada.</p>';
@@ -968,7 +314,6 @@
           }
 
           var frag = document.createDocumentFragment();
-
           lista.forEach(function (item) {
             var card = document.createElement("div");
             card.className = "card" + (item.vendido ? " vendido" : "");
@@ -977,22 +322,21 @@
             img.alt = item.nome;
             img.loading = "lazy";
             img.title = "Clique para ampliar";
-            var iExt = 0;
-            var tentarExt = function () {
-              if (iExt >= EXTENSOES.length) {
-                img.onerror = null;
-                img.src = "placeholder.jpg";
-                return;
-              }
-              img.src = "fotos/" + item.codigo + "." + EXTENSOES[iExt++];
-            };
-            img.onerror = tentarExt;
-            tentarExt();
 
-            img.addEventListener("click", function () {
-              abrirLightbox(item, img);
-            });
+            // Se tiver foto no Supabase, usa ela. Se não, tenta achar na pasta local.
+            if (item.fotos_urls && item.fotos_urls.length > 0) {
+              img.src = item.fotos_urls[0];
+            } else {
+              var iExt = 0;
+              var tentarExt = function () {
+                if (iExt >= EXTENSOES.length) { img.onerror = null; img.src = "placeholder.jpg"; return; }
+                img.src = "fotos/" + item.codigo + "." + EXTENSOES[iExt++];
+              };
+              img.onerror = tentarExt;
+              tentarExt();
+            }
 
+            img.addEventListener("click", function () { abrirLightbox(item, img); });
             card.appendChild(img);
 
             var body = document.createElement("div");
@@ -1010,35 +354,27 @@
             if (item.status || item.disponibilidade) {
               var badges = document.createElement("div");
               badges.className = "badges";
-              if (item.status) {
-                var s = document.createElement("span");
-                s.className = "status";
-                s.textContent = item.status;
-                badges.appendChild(s);
+              if (item.status && item.status !== "NAN") {
+                var s = document.createElement("span"); s.className = "status"; s.textContent = item.status; badges.appendChild(s);
               }
-              if (item.disponibilidade) {
-                var d = document.createElement("span");
-                d.className = "dispo";
-                d.textContent = item.disponibilidade;
-                badges.appendChild(d);
+              if (item.disponibilidade && item.disponibilidade !== "NAN") {
+                var d = document.createElement("span"); d.className = "dispo"; d.textContent = item.disponibilidade; badges.appendChild(d);
               }
               body.appendChild(badges);
             }
 
             var pPreco = document.createElement("p");
             pPreco.className = "preco";
-            pPreco.textContent =
-              "R$ " + item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+            pPreco.textContent = "R$ " + item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
             body.appendChild(pPreco);
 
             card.appendChild(body);
             frag.appendChild(card);
           });
-
           container.appendChild(frag);
         }
 
-        /* ============ PAINEL DE FILTROS ============ */
+        /* Eventos de UI */
         var btnToggle = document.getElementById("btnToggleFiltros");
         var painel = document.getElementById("painelFiltros");
         var badge = document.getElementById("badgeFiltros");
@@ -1053,31 +389,19 @@
           var count = 0;
           if (filtroStatusAtual !== "disponiveis") count++;
           if (filtroAroAtual !== "todos") count++;
-
           badge.textContent = count;
           btnToggle.classList.toggle("tem-filtro", count > 0);
           btnLimpar.style.display = count > 0 ? "inline-block" : "none";
         }
 
         btnLimpar.addEventListener("click", function () {
-          // Reseta tudo
-          filtroStatusAtual = "disponiveis";
-          filtroAroAtual = "todos";
+          filtroStatusAtual = "disponiveis"; filtroAroAtual = "todos";
           document.getElementById("searchInput").value = "";
-
-          document.querySelectorAll(".btn-status").forEach(function (b) {
-            b.classList.toggle("ativo", b.dataset.status === "disponiveis");
-          });
-
-          document.querySelectorAll("#filtrosAro .chip").forEach(function (c) {
-            c.classList.toggle("ativo", c.dataset.aro === "todos");
-          });
-
-          renderizar();
-          atualizarBadgeFiltros();
+          document.querySelectorAll(".btn-status").forEach(b => b.classList.toggle("ativo", b.dataset.status === "disponiveis"));
+          document.querySelectorAll("#filtrosAro .chip").forEach(c => c.classList.toggle("ativo", c.dataset.aro === "todos"));
+          renderizar(); atualizarBadgeFiltros();
         });
 
-        /* ============ LIGHTBOX ============ */
         var lightbox = document.getElementById("lightbox");
         var lightboxImg = document.getElementById("lightboxImg");
         var lightboxCod = document.getElementById("lightboxCod");
@@ -1090,8 +414,7 @@
           lightboxImg.alt = item.nome;
           lightboxCod.textContent = "CÓD: " + item.codigo;
           lightboxNome.textContent = item.nome;
-          lightboxPreco.textContent =
-            "R$ " + item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+          lightboxPreco.textContent = "R$ " + item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
           lightbox.classList.add("ativo");
           document.body.style.overflow = "hidden";
         }
@@ -1102,36 +425,20 @@
         }
 
         lightboxClose.addEventListener("click", fecharLightbox);
-        lightbox.addEventListener("click", function (e) {
-          if (e.target === lightbox) fecharLightbox();
-        });
-        document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape" && lightbox.classList.contains("ativo")) {
-            fecharLightbox();
-          }
-        });
+        lightbox.addEventListener("click", function (e) { if (e.target === lightbox) fecharLightbox(); });
+        document.addEventListener("keydown", function (e) { if (e.key === "Escape" && lightbox.classList.contains("ativo")) fecharLightbox(); });
 
-        /* ============ EVENTOS ============ */
         document.getElementById("searchInput").addEventListener("input", renderizar);
-
         document.querySelectorAll(".btn-status").forEach(function (btn) {
           btn.addEventListener("click", function () {
-            document.querySelectorAll(".btn-status").forEach(function (b) {
-              b.classList.remove("ativo");
-            });
+            document.querySelectorAll(".btn-status").forEach(b => b.classList.remove("ativo"));
             btn.classList.add("ativo");
             filtroStatusAtual = btn.dataset.status;
-            renderizar();
-            atualizarBadgeFiltros();
+            renderizar(); atualizarBadgeFiltros();
           });
         });
+        document.getElementById("ordenarPor").addEventListener("change", function (e) { ordenacaoAtual = e.target.value; renderizar(); });
 
-        document.getElementById("ordenarPor").addEventListener("change", function (e) {
-          ordenacaoAtual = e.target.value;
-          renderizar();
-        });
-
-        /* ============ INIT ============ */
         carregarProdutos();
       })();
     </script>
