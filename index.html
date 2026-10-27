@@ -215,7 +215,7 @@
 
           <div style="border: 1px dashed var(--border-color); padding: 14px; border-radius: 12px;">
             <h3 style="font-size: 0.95rem; margin-bottom: 6px;">2. Imagens de Capa</h3>
-            <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 10px;">Nome do arquivo = código (ex: 550096.jpg). Não sobrescreve foto existente.</p>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 10px;">Nome do arquivo = código (ex: 550096.jpg). Não sobrescreve foto existente. <b>As imagens serão comprimidas.</b></p>
             <div style="display: flex; gap: 10px; align-items: center;">
               <label for="inputFotos" class="imp-btn">📸 Escolher Imagens</label>
               <input type="file" id="inputFotos" multiple accept="image/*" style="display:none;" />
@@ -264,7 +264,7 @@
           </div>
 
           <div class="form-group">
-            <label>Adicionar novas fotos</label>
+            <label>Adicionar novas fotos (serão comprimidas)</label>
             <label for="editInputFotos" class="upload-area">
               <div style="font-size: 1.5rem;">📸</div>
               <p>Clique para selecionar imagens</p>
@@ -319,7 +319,7 @@
         let isAdmin = false;
 
         /* ============================================================
-           UTILITÁRIOS
+           UTILITÁRIOS E COMPRESSÃO DE IMAGEM
         ============================================================ */
         function normalizar(s) {
           return String(s).replace(/\s+/g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -341,6 +341,44 @@
             const reader = new FileReader();
             reader.onloadend = () => resolve(reader.result.split(",")[1]);
             reader.readAsDataURL(blob);
+          });
+        }
+
+        // FUNÇÃO DE COMPRESSÃO ADAPTADA DO OSFACIL
+        function comprimirImagem(arquivo) {
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(arquivo);
+            reader.onload = (event) => {
+              const img = new Image();
+              img.src = event.target.result;
+              img.onload = () => {
+                const canvas = document.createElement("canvas");
+                const MAX_WIDTH = 1280;
+                const MAX_HEIGHT = 1280;
+                let width = img.width;
+                let height = img.height;
+                if (width > height) {
+                  if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                } else {
+                  if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, width, height);
+                canvas.toBlob(
+                  (blob) => {
+                    const arquivoComprimido = new File([blob], arquivo.name, { type: "image/jpeg", lastModified: Date.now() });
+                    resolve(arquivoComprimido);
+                  },
+                  "image/jpeg",
+                  0.7
+                );
+              };
+              img.onerror = (error) => reject(error);
+            };
+            reader.onerror = (error) => reject(error);
           });
         }
 
@@ -413,7 +451,8 @@
         }
 
         /* ============================================================
-           FILTROS E RENDERIZAÇÃO DO CATÁLOGO        ============================================================ */
+           FILTROS E RENDERIZAÇÃO DO CATÁLOGO
+        ============================================================ */
         function gerarChipsDeAro() {
           var container = document.getElementById("filtrosAro"); container.innerHTML = "";
           var arosUnicos = [];
@@ -542,7 +581,7 @@
           document.getElementById("lightboxPreco").textContent = "R$ " + item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
           
           lbFotos = item.fotos_urls || [];
-          if (lbFotos.length === 0) lbFotos = [imgUrlInicial]; // Se não tem array, usa a que clicou (placeholder)
+          if (lbFotos.length === 0) lbFotos = [imgUrlInicial];
           
           lbIndex = lbFotos.indexOf(imgUrlInicial);
           if (lbIndex === -1) lbIndex = 0;
@@ -607,7 +646,7 @@
         window.fecharPin = function () { document.getElementById("pinOverlay").classList.remove("ativo"); };
 
         /* ============================================================
-           MODAL DE EDIÇÃO INDIVIDUAL (V4)
+           MODAL DE EDIÇÃO INDIVIDUAL
         ============================================================ */
         let produtoEditando = null;
         let novasFotosSelecionadas = [];
@@ -620,7 +659,6 @@
           document.getElementById("editNome").value = produtoEditando.nome;
           document.getElementById("editValor").value = produtoEditando.valor;
           
-          // Renderizar fotos atuais
           const containerFotos = document.getElementById("editFotosAtuais");
           containerFotos.innerHTML = "";
           if (produtoEditando.fotos_urls && produtoEditando.fotos_urls.length > 0) {
@@ -634,7 +672,6 @@
             containerFotos.innerHTML = '<p style="font-size:0.8rem; color:var(--text-secondary);">Nenhuma foto cadastrada.</p>';
           }
 
-          // Limpar novas fotos e log
           novasFotosSelecionadas = [];
           document.getElementById("editPreviewNovas").innerHTML = "";
           document.getElementById("editInputFotos").value = "";
@@ -672,20 +709,21 @@
           const novoValor = parseFloat(document.getElementById("editValor").value) || 0;
           
           let fotosAtualizadas = [...(produtoEditando.fotos_urls || [])];
-          let errorOcorrido = false;
 
           try {
-            // 1. Upload de novas fotos (se houver)
             if (novasFotosSelecionadas.length > 0) {
-              logEl.innerHTML += `<div style="color:#38bdf8">📸 Enviando ${novasFotosSelecionadas.length} nova(s) foto(s)...</div>`;
+              logEl.innerHTML += `<div style="color:#38bdf8">📸 Otimizando e enviando ${novasFotosSelecionadas.length} foto(s)...</div>`;
               
               for (let i = 0; i < novasFotosSelecionadas.length; i++) {
-                const file = novasFotosSelecionadas[i];
-                const ext = file.name.split('.').pop();
-                // Nome único para não sobrescrever a capa ou outras fotos
+                const fileOriginal = novasFotosSelecionadas[i];
+                
+                // COMPRIME A IMAGEM ANTES DO UPLOAD
+                const fileComprimido = await comprimirImagem(fileOriginal);
+                
+                const ext = fileComprimido.name.split('.').pop();
                 const nomeArquivo = `${produtoEditando.codigo}_galeria_${Date.now()}_${i}.${ext}`;
                 
-                const { error: upError } = await supabaseClient.storage.from(BUCKET_FOTOS).upload(nomeArquivo, file, { upsert: false });
+                const { error: upError } = await supabaseClient.storage.from(BUCKET_FOTOS).upload(nomeArquivo, fileComprimido, { upsert: false });
                 if (upError) throw new Error(`Erro no upload: ${upError.message}`);
                 
                 const { data: urlData } = supabaseClient.storage.from(BUCKET_FOTOS).getPublicUrl(nomeArquivo);
@@ -694,7 +732,6 @@
               }
             }
 
-            // 2. Atualiza dados no banco (Nome, Valor e Array de Fotos)
             logEl.innerHTML += `<div style="color:#38bdf8">💾 Atualizando banco de dados...</div>`;
             const { error: dbError } = await supabaseClient
               .from("catalogo_rodas")
@@ -703,7 +740,6 @@
 
             if (dbError) throw dbError;
             
-            // 3. Atualiza cache local e fecha
             produtoEditando.nome = novoNome;
             produtoEditando.valor = novoValor;
             produtoEditando.fotos_urls = fotosAtualizadas;
@@ -720,7 +756,7 @@
         };
 
         /* ============================================================
-           IMPORTAÇÃO EM LOTE (Mantida da V3)
+           IMPORTAÇÃO EM LOTE (V3)
         ============================================================ */
         const impLogEl = document.getElementById("impLog");
         function impLog(msg, type = "") {
@@ -794,20 +830,24 @@
             }
 
             if (arquivosFotos.length > 0) {
-              impLog(`📸 Processando imagens...`, "info");
+              impLog(`📸 Processando imagens de capa...`, "info");
               const { data: atuais } = await supabaseClient.from("catalogo_rodas").select("codigo, fotos_urls");
               const mapa = new Map(atuais.map(p => [String(p.codigo), p]));
 
               for (const arq of arquivosFotos) {
                 const cod = arq.name.split(".").slice(0, -1).join(".");
-                const ext = arq.name.split(".").pop().toLowerCase();
-                const nomeStor = `${cod}.${ext}`;
+                const nomeStor = `${cod}.jpg`; // Força JPG pois será comprimido
+                
                 try {
                   const prodAtual = mapa.get(String(cod));
                   if (!prodAtual) { impLog(`⏭ ${arq.name}: Produto não encontrado.`, "warn"); continue; }
                   if (prodAtual.fotos_urls && prodAtual.fotos_urls.length > 0) { impLog(`⏭ ${arq.name}: Já tem foto. Pulando.`, "warn"); continue; }
                   
-                  const { error: upErr } = await supabaseClient.storage.from(BUCKET_FOTOS).upload(nomeStor, arq, { upsert: false });
+                  // COMPRIME A IMAGEM ANTES DO UPLOAD
+                  impLog(`⏳ Otimizando ${arq.name}...`, "info");
+                  const arqComprimido = await comprimirImagem(arq);
+
+                  const { error: upErr } = await supabaseClient.storage.from(BUCKET_FOTOS).upload(nomeStor, arqComprimido, { upsert: false });
                   let urlPub;
                   if (upErr) {
                     if ((upErr.message || "").toLowerCase().includes("already exists")) {
@@ -819,7 +859,7 @@
                     urlPub = u.publicUrl;
                   }
                   await supabaseClient.from("catalogo_rodas").update({ fotos_urls: [urlPub] }).eq("codigo", cod);
-                  impLog(`✅ ${arq.name} vinculada.`, "ok");
+                  impLog(`✅ ${arq.name} vinculada (otimizada).`, "ok");
                 } catch (err) { impLog(`❌ Erro em ${arq.name}: ${err.message}`, "err"); }
               }
             }
