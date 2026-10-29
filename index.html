@@ -509,7 +509,6 @@
         background: rgba(255, 255, 255, 0.1);
       }
 
-      /* Estado Ativo: Disponível */
       .btn-status-card.ativo-disponivel {
         background: rgba(34, 197, 94, 0.2);
         color: #4ade80;
@@ -517,7 +516,6 @@
         box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
       }
 
-      /* Estado Ativo: Vendido */
       .btn-status-card.ativo-vendido {
         background: rgba(239, 68, 68, 0.2);
         color: #f87171;
@@ -525,7 +523,6 @@
         box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
       }
 
-      /* TOAST DE CONFIRMAÇÃO */
       .toast-confirmacao {
         position: fixed;
         bottom: 20px;
@@ -660,7 +657,6 @@
         cursor: not-allowed;
       }
 
-      /* Modal de Edição específico */
       .fotos-atuais-grid {
         display: flex;
         gap: 10px;
@@ -702,15 +698,19 @@
         border: 1px solid #334155;
         border-radius: 8px;
         padding: 10px;
-        height: 120px;
+        height: 180px;
         overflow-y: auto;
         font-family: monospace;
         font-size: 11px;
-        line-height: 1.4;
+        line-height: 1.5;
         display: none;
       }
       .log-box.ativo {
         display: block;
+      }
+      .log-box > div {
+        margin-bottom: 2px;
+        word-break: break-word;
       }
 
       @media (max-width: 700px) {
@@ -1094,7 +1094,7 @@
         let isAdmin = false;
 
         /* ============================================================
-           UTILITÁRIOS E COMPRESSÃO DE IMAGEM
+           UTILITÁRIOS
         ============================================================ */
         function normalizar(s) {
           return String(s)
@@ -1131,50 +1131,56 @@
           });
         }
 
-        // FUNÇÃO DE COMPRESSÃO
         function comprimirImagem(arquivo) {
           return new Promise((resolve, reject) => {
             const reader = new FileReader();
+            reader.onerror = () => reject(new Error("Falha ao ler arquivo"));
             reader.readAsDataURL(arquivo);
             reader.onload = (event) => {
               const img = new Image();
+              img.onerror = () => reject(new Error("Falha ao carregar imagem"));
               img.src = event.target.result;
               img.onload = () => {
-                const canvas = document.createElement("canvas");
-                const MAX_WIDTH = 1280;
-                const MAX_HEIGHT = 1280;
-                let width = img.width;
-                let height = img.height;
-                if (width > height) {
-                  if (width > MAX_WIDTH) {
-                    height *= MAX_WIDTH / width;
-                    width = MAX_WIDTH;
+                try {
+                  const canvas = document.createElement("canvas");
+                  const MAX = 1280;
+                  let width = img.width;
+                  let height = img.height;
+                  if (width > height) {
+                    if (width > MAX) {
+                      height *= MAX / width;
+                      width = MAX;
+                    }
+                  } else {
+                    if (height > MAX) {
+                      width *= MAX / height;
+                      height = MAX;
+                    }
                   }
-                } else {
-                  if (height > MAX_HEIGHT) {
-                    width *= MAX_HEIGHT / height;
-                    height = MAX_HEIGHT;
-                  }
+                  canvas.width = Math.round(width);
+                  canvas.height = Math.round(height);
+                  const ctx = canvas.getContext("2d");
+                  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                  canvas.toBlob(
+                    (blob) => {
+                      if (!blob) {
+                        return reject(new Error("toBlob retornou null"));
+                      }
+                      const nomeBase = arquivo.name.replace(/\.[^.]+$/, "");
+                      const arq = new File([blob], nomeBase + ".jpg", {
+                        type: "image/jpeg",
+                        lastModified: Date.now(),
+                      });
+                      resolve(arq);
+                    },
+                    "image/jpeg",
+                    0.75
+                  );
+                } catch (e) {
+                  reject(e);
                 }
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0, width, height);
-                canvas.toBlob(
-                  (blob) => {
-                    const arquivoComprimido = new File([blob], arquivo.name, {
-                      type: "image/jpeg",
-                      lastModified: Date.now(),
-                    });
-                    resolve(arquivoComprimido);
-                  },
-                  "image/jpeg",
-                  0.7,
-                );
               };
-              img.onerror = (error) => reject(error);
             };
-            reader.onerror = (error) => reject(error);
           });
         }
 
@@ -1186,14 +1192,18 @@
           const cache = localStorage.getItem("@catalogo_dados");
 
           if (cache) {
-            produtos = JSON.parse(cache).map((p) => ({
-              ...p,
-              valor: Number(p.valor) || 0,
-            }));
-            gerarChipsDeAro();
-            document.getElementById("loadingBox").style.display = "none";
-            document.getElementById("gridRodas").style.display = "grid";
-            renderizar();
+            try {
+              produtos = JSON.parse(cache).map((p) => ({
+                ...p,
+                valor: Number(p.valor) || 0,
+              }));
+              gerarChipsDeAro();
+              document.getElementById("loadingBox").style.display = "none";
+              document.getElementById("gridRodas").style.display = "grid";
+              renderizar();
+            } catch (e) {
+              console.warn("Cache inválido:", e);
+            }
           }
 
           try {
@@ -1245,7 +1255,7 @@
                   });
                 } catch (e) {
                   const base64Data = await baixarImagemBase64(
-                    prod.fotos_urls[0],
+                    prod.fotos_urls[0]
                   );
                   await Filesystem.writeFile({
                     path: `CatalogoRodas/${nomeArquivo}`,
@@ -1280,7 +1290,7 @@
         }
 
         /* ============================================================
-           FILTROS E RENDERIZAÇÃO DO CATÁLOGO
+           FILTROS E RENDERIZAÇÃO
         ============================================================ */
         function gerarChipsDeAro() {
           var container = document.getElementById("filtrosAro");
@@ -1297,7 +1307,7 @@
           chipTodos.dataset.aro = "todos";
           chipTodos.textContent = "Todos";
           chipTodos.addEventListener("click", () =>
-            ativarChipAro(chipTodos, "todos"),
+            ativarChipAro(chipTodos, "todos")
           );
           container.appendChild(chipTodos);
 
@@ -1307,7 +1317,7 @@
             chip.dataset.aro = String(aro);
             chip.textContent = "Aro " + aro;
             chip.addEventListener("click", () =>
-              ativarChipAro(chip, String(aro)),
+              ativarChipAro(chip, String(aro))
             );
             container.appendChild(chip);
           });
@@ -1341,8 +1351,8 @@
           if (termo)
             lista = lista.filter(
               (p) =>
-                p.codigo.toLowerCase().includes(termo) ||
-                p.nome.toLowerCase().includes(termo),
+                String(p.codigo).toLowerCase().includes(termo) ||
+                String(p.nome).toLowerCase().includes(termo)
             );
 
           switch (ordenacaoAtual) {
@@ -1353,10 +1363,12 @@
               lista.sort((a, b) => b.valor - a.valor);
               break;
             case "nome":
-              lista.sort((a, b) => a.nome.localeCompare(b.nome));
+              lista.sort((a, b) => String(a.nome).localeCompare(String(b.nome)));
               break;
             default:
-              lista.sort((a, b) => a.codigo.localeCompare(b.codigo));
+              lista.sort((a, b) =>
+                String(a.codigo).localeCompare(String(b.codigo))
+              );
           }
           return lista;
         }
@@ -1397,7 +1409,7 @@
 
             var body = document.createElement("div");
             body.className = "card-body";
-            
+
             body.innerHTML = `
               <span class="codigo">CÓD: ${item.codigo}</span>
               <h3>${item.nome}</h3>
@@ -1410,13 +1422,12 @@
               <div class="admin-card-actions">
                 <button class="btn-admin-card editar" onclick="abrirEditar('${item.codigo}')">✏️ Editar Roda</button>
                 
-                <!-- BOTÕES DE DISPONÍVEL / VENDIDO -->
                 <div class="status-toggle-group">
-                  <button class="btn-status-card ${!item.vendido ? 'ativo-disponivel' : ''}" 
+                  <button class="btn-status-card ${!item.vendido ? "ativo-disponivel" : ""}" 
                           onclick="alterarStatus('${item.codigo}', false, this)">
                     ✅ Disponível
                   </button>
-                  <button class="btn-status-card ${item.vendido ? 'ativo-vendido' : ''}" 
+                  <button class="btn-status-card ${item.vendido ? "ativo-vendido" : ""}" 
                           onclick="alterarStatus('${item.codigo}', true, this)">
                     🚫 Vendido
                   </button>
@@ -1429,65 +1440,57 @@
           container.appendChild(frag);
         }
 
+        async function alterarStatus(codigo, novoStatusVendido, btnClicado) {
+          const produto = produtos.find(
+            (p) => String(p.codigo) === String(codigo)
+          );
 
-async function alterarStatus(codigo, novoStatusVendido, btnClicado) {
-  const produto = produtos.find(
-    (p) => String(p.codigo) === String(codigo)
-  );
+          if (!produto) {
+            alert("Produto não encontrado no catálogo.");
+            return;
+          }
 
-  if (!produto) {
-    alert("Produto não encontrado no catálogo.");
-    return;
-  }
+          const botoes = btnClicado.parentElement.querySelectorAll("button");
+          botoes.forEach((b) => (b.disabled = true));
 
-  const botoes = btnClicado.parentElement.querySelectorAll("button");
-  botoes.forEach((b) => (b.disabled = true));
+          try {
+            const { data, error } = await supabaseClient
+              .from("catalogo_rodas")
+              .update({
+                vendido: novoStatusVendido,
+                disponibilidade: novoStatusVendido ? "VENDIDO" : null,
+              })
+              .eq("codigo", codigo)
+              .select("codigo, vendido, disponibilidade");
 
-  try {
-    const { data, error } = await supabaseClient
-      .from("catalogo_rodas")
-      .update({
-        vendido: novoStatusVendido,
-        disponibilidade: novoStatusVendido ? "VENDIDO" : null,
-      })
-      .eq("codigo", codigo)
-      .select("codigo, vendido, disponibilidade");
+            if (error) throw error;
+            if (!data || data.length === 0) {
+              throw new Error(
+                "Nenhum registro foi atualizado. Verifique o código do produto e as permissões de UPDATE (RLS) no Supabase."
+              );
+            }
 
-    if (error) throw error;
+            const atualizado = data[0];
+            produto.vendido = atualizado.vendido;
+            produto.disponibilidade = atualizado.disponibilidade;
 
-    if (!data || data.length === 0) {
-      throw new Error(
-        "Nenhum registro foi atualizado. Verifique o código do produto e as permissões de UPDATE (RLS) no Supabase."
-      );
-    }
+            localStorage.setItem("@catalogo_dados", JSON.stringify(produtos));
+            await renderizar();
 
-    const atualizado = data[0];
-
-    produto.vendido = atualizado.vendido;
-    produto.disponibilidade = atualizado.disponibilidade;
-
-    localStorage.setItem("@catalogo_dados", JSON.stringify(produtos));
-
-    await renderizar();
-
-    mostrarToast(
-      atualizado.vendido
-        ? "Roda marcada como vendida!"
-        : "Roda marcada como disponível!"
-    );
-  } catch (err) {
-    console.error("Erro ao atualizar status:", err);
-
-    alert("Não foi possível atualizar o produto:\n\n" + err.message);
-
-    // Busca novamente os dados reais do banco.
-    await carregarProdutos();
-    await renderizar();
-  } finally {
-    renderizar();
-  }
-}
-window.alterarStatus = alterarStatus;
+            mostrarToast(
+              atualizado.vendido
+                ? "Roda marcada como vendida!"
+                : "Roda marcada como disponível!"
+            );
+          } catch (err) {
+            console.error("Erro ao atualizar status:", err);
+            alert("Não foi possível atualizar o produto:\n\n" + err.message);
+            await carregarProdutos();
+          } finally {
+            renderizar();
+          }
+        }
+        window.alterarStatus = alterarStatus;
 
         function mostrarToast(mensagem) {
           let toast = document.getElementById("toast-msg");
@@ -1499,11 +1502,13 @@ window.alterarStatus = alterarStatus;
           }
           toast.innerHTML = mensagem;
           toast.classList.add("show");
-          setTimeout(() => { toast.classList.remove("show"); }, 3000);
+          setTimeout(() => {
+            toast.classList.remove("show");
+          }, 3000);
         }
 
         /* ============================================================
-           LIGHTBOX COM GALERIA
+           LIGHTBOX
         ============================================================ */
         let lbFotos = [];
         let lbIndex = 0;
@@ -1521,7 +1526,7 @@ window.alterarStatus = alterarStatus;
             "R$ " +
             item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
 
-          lbFotos = item.fotos_urls || [];
+          lbFotos = (item.fotos_urls || []).slice();
           if (lbFotos.length === 0) lbFotos = [imgUrlInicial];
 
           lbIndex = lbFotos.indexOf(imgUrlInicial);
@@ -1637,7 +1642,9 @@ window.alterarStatus = alterarStatus;
         let novasFotosSelecionadas = [];
 
         window.abrirEditar = function (codigo) {
-          produtoEditando = produtos.find((p) => p.codigo === codigo);
+          produtoEditando = produtos.find(
+            (p) => String(p.codigo) === String(codigo)
+          );
           if (!produtoEditando) return;
 
           document.getElementById("editCodigo").value = produtoEditando.codigo;
@@ -1712,15 +1719,16 @@ window.alterarStatus = alterarStatus;
 
           try {
             if (novasFotosSelecionadas.length > 0) {
-              logEl.innerHTML += `<div style="color:#38bdf8">📸 Otimizando e enviando ${novasFotosSelecionadas.length} foto(s)...</div>`;
+              const infoDiv = document.createElement("div");
+              infoDiv.style.color = "#38bdf8";
+              infoDiv.textContent = `📸 Otimizando e enviando ${novasFotosSelecionadas.length} foto(s)...`;
+              logEl.appendChild(infoDiv);
 
               for (let i = 0; i < novasFotosSelecionadas.length; i++) {
                 const fileOriginal = novasFotosSelecionadas[i];
-
                 const fileComprimido = await comprimirImagem(fileOriginal);
 
-                const ext = fileComprimido.name.split(".").pop();
-                const nomeArquivo = `${produtoEditando.codigo}_galeria_${Date.now()}_${i}.${ext}`;
+                const nomeArquivo = `${produtoEditando.codigo}_galeria_${Date.now()}_${i}.jpg`;
 
                 const { error: upError } = await supabaseClient.storage
                   .from(BUCKET_FOTOS)
@@ -1732,11 +1740,19 @@ window.alterarStatus = alterarStatus;
                   .from(BUCKET_FOTOS)
                   .getPublicUrl(nomeArquivo);
                 fotosAtualizadas.push(urlData.publicUrl);
-                logEl.innerHTML += `<div style="color:#4ade80">✅ Foto ${i + 1} enviada.</div>`;
+
+                const okDiv = document.createElement("div");
+                okDiv.style.color = "#4ade80";
+                okDiv.textContent = `✅ Foto ${i + 1} enviada.`;
+                logEl.appendChild(okDiv);
               }
             }
 
-            logEl.innerHTML += `<div style="color:#38bdf8">💾 Atualizando banco de dados...</div>`;
+            const dbDiv = document.createElement("div");
+            dbDiv.style.color = "#38bdf8";
+            dbDiv.textContent = "💾 Atualizando banco de dados...";
+            logEl.appendChild(dbDiv);
+
             const { error: dbError } = await supabaseClient
               .from("catalogo_rodas")
               .update({
@@ -1753,49 +1769,63 @@ window.alterarStatus = alterarStatus;
             produtoEditando.fotos_urls = fotosAtualizadas;
             localStorage.setItem("@catalogo_dados", JSON.stringify(produtos));
 
-            logEl.innerHTML += `<div style="color:#4ade80">🎉 Salvo com sucesso!</div>`;
+            const doneDiv = document.createElement("div");
+            doneDiv.style.color = "#4ade80";
+            doneDiv.textContent = "🎉 Salvo com sucesso!";
+            logEl.appendChild(doneDiv);
+
             setTimeout(() => {
               fecharEditar();
               renderizar();
               mostrarToast("✏️ Roda editada com sucesso!");
-            }, 1000);
+            }, 800);
           } catch (err) {
             console.error(err);
-            logEl.innerHTML += `<div style="color:#f87171">❌ Erro: ${err.message}</div>`;
+            const errDiv = document.createElement("div");
+            errDiv.style.color = "#f87171";
+            errDiv.textContent = "❌ Erro: " + err.message;
+            logEl.appendChild(errDiv);
             btn.disabled = false;
             btn.innerText = "💾 Salvar Alterações";
           }
         };
 
         /* ============================================================
-           IMPORTAÇÃO EM LOTE (V3)
+           IMPORTAÇÃO EM LOTE (V3 CORRIGIDA)
         ============================================================ */
         const impLogEl = document.getElementById("impLog");
+
         function impLog(msg, type = "") {
           impLogEl.classList.add("ativo");
-          impLogEl.innerHTML += `<div class="${type}">${msg}</div>`;
+          const cores = {
+            info: "#38bdf8",
+            ok: "#4ade80",
+            warn: "#fbbf24",
+            err: "#f87171",
+          };
+          const div = document.createElement("div");
+          div.style.color = cores[type] || "#e2e8f0";
+          div.textContent = msg;
+          impLogEl.appendChild(div);
           impLogEl.scrollTop = impLogEl.scrollHeight;
         }
+
         let arquivoExcel = null;
         let arquivosFotos = [];
 
-        document
-          .getElementById("inputExcel")
-          .addEventListener("change", (e) => {
-            arquivoExcel = e.target.files[0] || null;
-            document.getElementById("nomeExcel").textContent = arquivoExcel
-              ? arquivoExcel.name
-              : "Nenhum arquivo";
-          });
-        document
-          .getElementById("inputFotos")
-          .addEventListener("change", (e) => {
-            arquivosFotos = Array.from(e.target.files);
-            document.getElementById("nomeFotos").textContent =
-              arquivosFotos.length
-                ? `${arquivosFotos.length} imagem(ns)`
-                : "Nenhum arquivo";
-          });
+        document.getElementById("inputExcel").addEventListener("change", (e) => {
+          arquivoExcel = e.target.files[0] || null;
+          document.getElementById("nomeExcel").textContent = arquivoExcel
+            ? arquivoExcel.name
+            : "Nenhum arquivo";
+        });
+
+        document.getElementById("inputFotos").addEventListener("change", (e) => {
+          arquivosFotos = Array.from(e.target.files);
+          document.getElementById("nomeFotos").textContent = arquivosFotos.length
+            ? `${arquivosFotos.length} imagem(ns)`
+            : "Nenhum arquivo";
+        });
 
         window.limparImportacao = function () {
           arquivoExcel = null;
@@ -1805,10 +1835,13 @@ window.alterarStatus = alterarStatus;
           document.getElementById("nomeExcel").textContent = "Nenhum arquivo";
           document.getElementById("nomeFotos").textContent = "Nenhum arquivo";
           impLogEl.innerHTML = "";
+          impLogEl.classList.remove("ativo");
         };
+
         window.fecharImportar = function () {
           document.getElementById("impOverlay").classList.remove("ativo");
         };
+
         document
           .getElementById("btnAbrirImportar")
           .addEventListener("click", () => {
@@ -1817,47 +1850,63 @@ window.alterarStatus = alterarStatus;
 
         window.executarImportacao = async function () {
           const btn = document.getElementById("btnExecutar");
+
+          if (!arquivoExcel && arquivosFotos.length === 0) {
+            alert("Selecione uma planilha e/ou imagens antes de executar.");
+            return;
+          }
+
+          if (typeof XLSX === "undefined" && arquivoExcel) {
+            alert(
+              "Biblioteca XLSX não carregou. Verifique a conexão e recarregue a página."
+            );
+            return;
+          }
+
           btn.disabled = true;
           btn.innerText = "Processando...";
           impLogEl.innerHTML = "";
+          impLogEl.classList.add("ativo");
+
+          const resumo = { inseridos: 0, fotosOk: 0, fotosErro: 0 };
 
           try {
+            /* ---------- 1) PLANILHA ---------- */
             if (arquivoExcel) {
-              impLog(`📊 Lendo planilha...`, "info");
+              impLog("📊 Lendo planilha...", "info");
               const buffer = await arquivoExcel.arrayBuffer();
               const wb = XLSX.read(new Uint8Array(buffer), { type: "array" });
               const ws = wb.Sheets[wb.SheetNames[0]];
               const linhas = XLSX.utils.sheet_to_json(ws, { defval: "" });
 
-              if (linhas.length) {
+              if (!linhas.length) {
+                impLog("⚠ Planilha vazia.", "warn");
+              } else {
                 const mapaColunas = {};
                 Object.keys(linhas[0]).forEach((c) => {
                   mapaColunas[normalizar(c)] = c;
                 });
                 const acharCol = (nomes) => {
-                  for (let n of nomes)
+                  for (const n of nomes) {
                     if (mapaColunas[normalizar(n)])
                       return mapaColunas[normalizar(n)];
+                  }
                   return null;
                 };
 
                 const cCodigo = acharCol(["CODIGO", "codigo", "cod"]);
-                const cNome = acharCol([
-                  "NOME",
-                  "nome",
-                  "produto",
-                  "descricao",
-                ]);
-                const cValor = acharCol([
-                  "VALOR",
-                  "valor",
-                  "preco",
-                  "precovenda",
-                ]);
+                const cNome = acharCol(["NOME", "nome", "produto", "descricao"]);
+                const cValor = acharCol(["VALOR", "valor", "preco", "precovenda"]);
                 const cStatus = acharCol(["STATUS", "status"]);
                 const cDisp = acharCol(["DISPONIBILIDADES", "disponibilidade"]);
 
-                if (cCodigo && cNome) {
+                if (!cCodigo || !cNome) {
+                  impLog(
+                    "❌ Planilha precisa ter colunas CODIGO e NOME. Colunas encontradas: " +
+                      Object.keys(linhas[0]).join(", "),
+                    "err"
+                  );
+                } else {
                   const prodsPlan = linhas
                     .filter((l) => String(l[cCodigo] || "").trim() !== "")
                     .map((l) => {
@@ -1865,104 +1914,150 @@ window.alterarStatus = alterarStatus;
                       const aro = extrairAro(nome);
                       let vRaw = l[cValor];
                       let vNum = 0;
-                      if (typeof vRaw === "number") vNum = vRaw;
-                      else
-                        vNum =
-                          parseFloat(
-                            String(vRaw)
-                              .replace(/R\$\s*/gi, "")
-                              .replace(/\./g, "")
-                              .replace(",", "."),
-                          ) || 0;
-                      const status = limparTexto(l[cStatus]);
-                      const disp = limparTexto(l[cDisp]);
+                      if (typeof vRaw === "number") {
+                        vNum = vRaw;
+                      } else if (vRaw !== null && vRaw !== undefined && vRaw !== "") {
+                        const limpo = String(vRaw)
+                          .replace(/R\$\s*/gi, "")
+                          .replace(/\./g, "")
+                          .replace(",", ".");
+                        vNum = parseFloat(limpo) || 0;
+                      }
                       return {
                         codigo: String(l[cCodigo]).trim(),
                         nome,
                         valor: vNum,
-                        status,
-                        disponibilidade: disp,
-                        aro,
-                        vendido: disp === "VENDIDO",
+                        status: limparTexto(l[cStatus]),
+                        disponibilidade: limparTexto(l[cDisp]),
+                        aro: aro,
+                        vendido: limparTexto(l[cDisp]) === "VENDIDO",
                         fotos_urls: [],
                       };
                     });
 
-                  const { data: exist } = await supabaseClient
-                    .from("catalogo_rodas")
-                    .select("codigo");
-                  const codes = new Set(exist.map((e) => String(e.codigo)));
-                  const novos = prodsPlan.filter((p) => !codes.has(p.codigo));
+                  if (!prodsPlan.length) {
+                    impLog("⚠ Nenhuma linha válida na planilha.", "warn");
+                  } else {
+                    impLog(`📋 ${prodsPlan.length} produto(s) na planilha.`, "info");
 
-                  if (novos.length > 0) {
-                    await supabaseClient.from("catalogo_rodas").insert(novos);
-                    impLog(`🎉 ${novos.length} produtos inseridos.`, "ok");
-                  } else impLog(`Nenhum produto novo.`, "warn");
+                    const { data: exist, error: errExist } = await supabaseClient
+                      .from("catalogo_rodas")
+                      .select("codigo");
+                    if (errExist) throw errExist;
+
+                    const codes = new Set(
+                      (exist || []).map((e) => String(e.codigo))
+                    );
+                    const novos = prodsPlan.filter((p) => !codes.has(p.codigo));
+
+                    if (novos.length > 0) {
+                      impLog(
+                        `📥 Inserindo ${novos.length} novo(s) produto(s)...`,
+                        "info"
+                      );
+
+                      for (const p of novos) {
+                        const { error: insErr } = await supabaseClient
+                          .from("catalogo_rodas")
+                          .insert(p);
+                        if (insErr) {
+                          impLog(
+                            `❌ Erro em ${p.codigo}: ${insErr.message}`,
+                            "err"
+                          );
+                        } else {
+                          resumo.inseridos++;
+                        }
+                      }
+                      impLog(
+                        `🎉 ${resumo.inseridos} produto(s) inserido(s).`,
+                        "ok"
+                      );
+                    } else {
+                      impLog("ℹ Nenhum produto novo para inserir.", "warn");
+                    }
+                  }
                 }
               }
             }
 
+            /* ---------- 2) FOTOS ---------- */
             if (arquivosFotos.length > 0) {
-              impLog(`📸 Processando imagens de capa...`, "info");
-              const { data: atuais } = await supabaseClient
+              impLog(
+                `📸 Processando ${arquivosFotos.length} imagem(ns)...`,
+                "info"
+              );
+
+              const { data: atuais, error: errAtuais } = await supabaseClient
                 .from("catalogo_rodas")
                 .select("codigo, fotos_urls");
-              const mapa = new Map(atuais.map((p) => [String(p.codigo), p]));
+              if (errAtuais) throw errAtuais;
+
+              const mapa = new Map(
+                (atuais || []).map((p) => [String(p.codigo), p])
+              );
 
               for (const arq of arquivosFotos) {
                 const cod = arq.name.split(".").slice(0, -1).join(".");
-                const nomeStor = `${cod}.jpg`; 
-
                 try {
                   const prodAtual = mapa.get(String(cod));
                   if (!prodAtual) {
-                    impLog(`⏭ ${arq.name}: Produto não encontrado.`, "warn");
+                    impLog(
+                      `⏭ ${arq.name}: produto "${cod}" não encontrado.`,
+                      "warn"
+                    );
                     continue;
                   }
                   if (prodAtual.fotos_urls && prodAtual.fotos_urls.length > 0) {
-                    impLog(`⏭ ${arq.name}: Já tem foto. Pulando.`, "warn");
+                    impLog(
+                      `⏭ ${arq.name}: já possui foto. Pulando.`,
+                      "warn"
+                    );
                     continue;
                   }
 
                   impLog(`⏳ Otimizando ${arq.name}...`, "info");
-                  const arqComprimido = await comprimirImagem(arq);
+                  const comprimido = await comprimirImagem(arq);
+
+                  const nomeStor = `${cod}_${Date.now()}.jpg`;
 
                   const { error: upErr } = await supabaseClient.storage
                     .from(BUCKET_FOTOS)
-                    .upload(nomeStor, arqComprimido, { upsert: false });
-                  let urlPub;
-                  if (upErr) {
-                    if (
-                      (upErr.message || "")
-                        .toLowerCase()
-                        .includes("already exists")
-                    ) {
-                      const { data: u } = supabaseClient.storage
-                        .from(BUCKET_FOTOS)
-                        .getPublicUrl(nomeStor);
-                      urlPub = u.publicUrl;
-                    } else throw upErr;
-                  } else {
-                    const { data: u } = supabaseClient.storage
-                      .from(BUCKET_FOTOS)
-                      .getPublicUrl(nomeStor);
-                    urlPub = u.publicUrl;
-                  }
-                  await supabaseClient
+                    .upload(nomeStor, comprimido, { upsert: false });
+
+                  if (upErr) throw upErr;
+
+                  const { data: u } = supabaseClient.storage
+                    .from(BUCKET_FOTOS)
+                    .getPublicUrl(nomeStor);
+                  const urlPub = u.publicUrl;
+
+                  const { error: updErr } = await supabaseClient
                     .from("catalogo_rodas")
                     .update({ fotos_urls: [urlPub] })
                     .eq("codigo", cod);
-                  impLog(`✅ ${arq.name} vinculada (otimizada).`, "ok");
+
+                  if (updErr) throw updErr;
+
+                  impLog(`✅ ${arq.name} vinculada.`, "ok");
+                  resumo.fotosOk++;
                 } catch (err) {
                   impLog(`❌ Erro em ${arq.name}: ${err.message}`, "err");
+                  resumo.fotosErro++;
                 }
               }
             }
+
+            /* ---------- 3) RECARREGAR ---------- */
             await carregarProdutos();
-            impLog(`🏁 Finalizado.`, "ok");
-            mostrarToast("📥 Importação concluída com sucesso!");
+            impLog(
+              `🏁 Finalizado. Inseridos: ${resumo.inseridos} | Fotos OK: ${resumo.fotosOk} | Fotos com erro: ${resumo.fotosErro}`,
+              "ok"
+            );
+            mostrarToast("📥 Importação concluída!");
           } catch (err) {
-            impLog("❌ Erro: " + err.message, "err");
+            console.error(err);
+            impLog("❌ Erro geral: " + (err.message || err), "err");
           } finally {
             btn.disabled = false;
             btn.innerText = "▶ Executar Importação";
