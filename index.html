@@ -6,145 +6,771 @@
     <title>Catálogo de Rodas</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
-        --bg-main: #0b0f17; --bg-surface: #151c28; --bg-card: #1e293b;
-        --border-color: rgba(255, 255, 255, 0.08); --text-primary: #f8fafc;
-        --text-secondary: #94a3b8; --accent-color: #38bdf8;
-        --accent-glow: rgba(56, 189, 248, 0.2); --price-color: #4ade80;
+        --bg-main: #0b0f17;
+        --bg-surface: #151c28;
+        --bg-card: #1e293b;
+        --border-color: rgba(255, 255, 255, 0.08);
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --accent-color: #38bdf8;
+        --accent-glow: rgba(56, 189, 248, 0.2);
+        --price-color: #4ade80;
       }
-      * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-      body { font-family: "Plus Jakarta Sans", sans-serif; background-color: var(--bg-main); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-primary);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
 
-      .topbar { position: sticky; top: 0; z-index: 20; background: rgba(11, 15, 23, 0.94); backdrop-filter: blur(14px); border-bottom: 1px solid var(--border-color); }
-      .topbar-main { display: flex; align-items: center; gap: 12px; padding: 10px 16px; max-width: 1400px; margin: 0 auto; width: 100%; }
-      .topbar-titulo { font-size: 1.1rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; flex-shrink: 0; cursor: pointer; }
-      .search-wrapper { position: relative; flex: 1; min-width: 0; max-width: 500px; }
-      #searchInput { width: 100%; padding: 9px 14px 9px 38px; font-size: 0.9rem; background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid var(--border-color); border-radius: 99px; outline: none; }
-      .search-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); pointer-events: none; font-size: 0.9rem; }
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: rgba(11, 15, 23, 0.94);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border-color);
+      }
+      .topbar-main {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 16px;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+      }
+      .topbar-titulo {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+        cursor: pointer;
+      }
+      .search-wrapper {
+        position: relative;
+        flex: 1;
+        min-width: 0;
+        max-width: 500px;
+      }
+      #searchInput {
+        width: 100%;
+        padding: 9px 14px 9px 38px;
+        font-size: 0.9rem;
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        border: 1px solid var(--border-color);
+        border-radius: 99px;
+        outline: none;
+      }
+      .search-icon {
+        position: absolute;
+        left: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-secondary);
+        pointer-events: none;
+        font-size: 0.9rem;
+      }
 
-      .btn-toggle-filtros { flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 99px; cursor: pointer; position: relative; }
-      .btn-toggle-filtros.aberto { background: var(--accent-color); color: #0f172a; }
-      .btn-toggle-filtros .seta { transition: transform 0.25s ease; font-size: 0.65rem; }
-      .btn-toggle-filtros.aberto .seta { transform: rotate(180deg); }
+      .btn-toggle-filtros {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-secondary);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border-color);
+        border-radius: 99px;
+        cursor: pointer;
+        position: relative;
+      }
+      .btn-toggle-filtros.aberto {
+        background: var(--accent-color);
+        color: #0f172a;
+      }
+      .btn-toggle-filtros .seta {
+        transition: transform 0.25s ease;
+        font-size: 0.65rem;
+      }
+      .btn-toggle-filtros.aberto .seta {
+        transform: rotate(180deg);
+      }
 
-      .btn-importar { display: none; flex-shrink: 0; padding: 8px 14px; font-size: 0.8rem; font-weight: 700; color: #0f172a; background: #fbbf24; border: 1px solid #fbbf24; border-radius: 99px; cursor: pointer; }
-      body.admin-mode .btn-importar { display: inline-flex; align-items: center; gap: 6px; }
+      .btn-importar {
+        display: none;
+        flex-shrink: 0;
+        padding: 8px 14px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #0f172a;
+        background: #fbbf24;
+        border: 1px solid #fbbf24;
+        border-radius: 99px;
+        cursor: pointer;
+      }
+      body.admin-mode .btn-importar {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
 
-      .contador { padding: 0 16px 8px; text-align: center; font-size: 0.75rem; color: var(--text-secondary); }
-      .painel-filtros { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, opacity 0.2s ease, padding 0.3s ease; opacity: 0; background: var(--bg-surface); border-top: 1px solid var(--border-color); }
-      .painel-filtros.aberto { max-height: 400px; opacity: 1; padding: 14px 16px; }
-      .painel-conteudo { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+      .contador {
+        padding: 0 16px 8px;
+        text-align: center;
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+      }
+      .painel-filtros {
+        max-height: 0;
+        overflow: hidden;
+        transition:
+          max-height 0.3s ease,
+          opacity 0.2s ease,
+          padding 0.3s ease;
+        opacity: 0;
+        background: var(--bg-surface);
+        border-top: 1px solid var(--border-color);
+      }
+      .painel-filtros.aberto {
+        max-height: 400px;
+        opacity: 1;
+        padding: 14px 16px;
+      }
+      .painel-conteudo {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+      }
 
-      .filtros-status { display: flex; background: rgba(0, 0, 0, 0.25); padding: 4px; border-radius: 99px; border: 1px solid var(--border-color); }
-      .btn-status { padding: 7px 16px; font-size: 0.78rem; font-weight: 700; border-radius: 99px; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; }
-      .btn-status.ativo { background: var(--accent-color); color: #0f172a; }
-      .btn-status.ativo[data-status="vendidos"] { background: #ef4444; color: #ffffff; }
-      .filtros { display: flex; flex-wrap: nowrap; gap: 8px; padding: 2px 4px; overflow-x: auto; }
-      .filtros .chip { padding: 7px 14px; font-size: 0.78rem; border: 1px solid var(--border-color); border-radius: 99px; background: rgba(255, 255, 255, 0.03); color: var(--text-secondary); cursor: pointer; font-weight: 600; }
-      .filtros .chip.ativo { background: rgba(255, 255, 255, 0.15); color: #fff; }
-      .ordenacao select { padding: 7px 12px; border-radius: 10px; border: 1px solid var(--border-color); font-size: 0.8rem; background: rgba(255, 255, 255, 0.05); color: var(--text-secondary); outline: none; }
+      .filtros-status {
+        display: flex;
+        background: rgba(0, 0, 0, 0.25);
+        padding: 4px;
+        border-radius: 99px;
+        border: 1px solid var(--border-color);
+      }
+      .btn-status {
+        padding: 7px 16px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        border-radius: 99px;
+        border: none;
+        background: transparent;
+        color: var(--text-secondary);
+        cursor: pointer;
+      }
+      .btn-status.ativo {
+        background: var(--accent-color);
+        color: #0f172a;
+      }
+      .btn-status.ativo[data-status="vendidos"] {
+        background: #ef4444;
+        color: #ffffff;
+      }
+      .filtros {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 8px;
+        padding: 2px 4px;
+        overflow-x: auto;
+      }
+      .filtros .chip {
+        padding: 7px 14px;
+        font-size: 0.78rem;
+        border: 1px solid var(--border-color);
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text-secondary);
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .filtros .chip.ativo {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+      }
+      .ordenacao select {
+        padding: 7px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        font-size: 0.8rem;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-secondary);
+        outline: none;
+      }
 
-      .loading { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; color: var(--text-secondary); }
-      .spinner { width: 44px; height: 44px; border: 3px solid rgba(255, 255, 255, 0.1); border-top-color: var(--accent-color); border-radius: 50%; animation: girar 0.8s linear infinite; margin-bottom: 18px; }
-      @keyframes girar { to { transform: rotate(360deg); } }
+      .loading {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 20px;
+        color: var(--text-secondary);
+      }
+      .spinner {
+        width: 44px;
+        height: 44px;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+        border-top-color: var(--accent-color);
+        border-radius: 50%;
+        animation: girar 0.8s linear infinite;
+        margin-bottom: 18px;
+      }
+      @keyframes girar {
+        to {
+          transform: rotate(360deg);
+        }
+      }
 
-      .grid-container { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; padding: 24px; max-width: 1400px; margin: 0 auto; width: 100%; }
-      .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
-      .card.vendido::before { content: "VENDIDO"; position: absolute; top: 16px; right: -32px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 800; padding: 4px 36px; transform: rotate(35deg); z-index: 2; }
-      .card.vendido img { filter: grayscale(80%) opacity(0.6); }
-      .card img { width: 100%; height: 220px; object-fit: cover; background: #0f172a; border-bottom: 1px solid var(--border-color); cursor: zoom-in; }
-      .card-body { padding: 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-      .codigo { font-size: 0.75rem; font-weight: 700; color: var(--accent-color); }
-      .card-body h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); min-height: 2.8em; }
-      .badges { display: flex; flex-wrap: wrap; gap: 6px; }
-      .status, .dispo { font-size: 0.65rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; }
-      .status { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
-      .dispo { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-      .preco { font-size: 1.4rem; font-weight: 800; color: var(--price-color); margin-top: auto; }
-      .vazio { grid-column: 1 / -1; text-align: center; color: var(--text-secondary); padding: 80px 20px; }
-      footer { background: var(--bg-surface); border-top: 1px solid var(--border-color); color: var(--text-secondary); text-align: center; padding: 20px; font-size: 0.85rem; }
+      .grid-container {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 24px;
+        padding: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+      }
+      .card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      .card.vendido::before {
+        content: "VENDIDO";
+        position: absolute;
+        top: 16px;
+        right: -32px;
+        background: #ef4444;
+        color: #fff;
+        font-size: 0.65rem;
+        font-weight: 800;
+        padding: 4px 36px;
+        transform: rotate(35deg);
+        z-index: 2;
+      }
+      .card.vendido img {
+        filter: grayscale(80%) opacity(0.6);
+      }
+      .card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        background: #0f172a;
+        border-bottom: 1px solid var(--border-color);
+        cursor: zoom-in;
+      }
+      .card-body {
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex: 1;
+      }
+      .codigo {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--accent-color);
+      }
+      .card-body h3 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        min-height: 2.8em;
+      }
+      .badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .status,
+      .dispo {
+        font-size: 0.65rem;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 6px;
+        text-transform: uppercase;
+      }
+      .status {
+        background: rgba(34, 197, 94, 0.15);
+        color: #4ade80;
+      }
+      .dispo {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+      }
+      .preco {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--price-color);
+        margin-top: auto;
+      }
+      .vazio {
+        grid-column: 1 / -1;
+        text-align: center;
+        color: var(--text-secondary);
+        padding: 80px 20px;
+      }
+      footer {
+        background: var(--bg-surface);
+        border-top: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        text-align: center;
+        padding: 20px;
+        font-size: 0.85rem;
+      }
 
       /* --- LIGHTBOX --- */
-      .lightbox { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92); display: none; align-items: center; justify-content: center; z-index: 999; padding: 20px; }
-      .lightbox.ativo { display: flex; }
-      .lightbox img { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 12px; transition: transform 0.2s ease; }
-      .lightbox-close { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); color: #fff; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; }
-      .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); color: #fff; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; border: none; outline: none; }
-      .lightbox-nav:hover { background: rgba(255, 255, 255, 0.2); }
-      .lightbox-prev { left: 20px; }
-      .lightbox-next { right: 20px; }
-      .lightbox-info { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.9); padding: 12px 20px; border-radius: 12px; color: #fff; text-align: center; width: 90%; max-width: 500px; }
-      .lightbox-info .cod { font-size: 0.75rem; color: var(--accent-color); font-weight: 700; }
-      .lightbox-info .nome { font-size: 0.9rem; margin-top: 4px; color: #e2e8f0; }
-      .lightbox-info .preco-lb { font-size: 1.2rem; font-weight: 800; color: var(--price-color); margin-top: 4px; }
-      .lightbox-info .galeria-contador { font-size: 0.75rem; color: #94a3b8; margin-top: 8px; }
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.92);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+        padding: 20px;
+      }
+      .lightbox.ativo {
+        display: flex;
+      }
+      .lightbox img {
+        max-width: 95vw;
+        max-height: 80vh;
+        object-fit: contain;
+        border-radius: 12px;
+        transition: transform 0.2s ease;
+      }
+      .lightbox-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+      .lightbox-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        border: none;
+        outline: none;
+      }
+      .lightbox-nav:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .lightbox-prev {
+        left: 20px;
+      }
+      .lightbox-next {
+        right: 20px;
+      }
+      .lightbox-info {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(15, 23, 42, 0.9);
+        padding: 12px 20px;
+        border-radius: 12px;
+        color: #fff;
+        text-align: center;
+        width: 90%;
+        max-width: 500px;
+      }
+      .lightbox-info .cod {
+        font-size: 0.75rem;
+        color: var(--accent-color);
+        font-weight: 700;
+      }
+      .lightbox-info .nome {
+        font-size: 0.9rem;
+        margin-top: 4px;
+        color: #e2e8f0;
+      }
+      .lightbox-info .preco-lb {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--price-color);
+        margin-top: 4px;
+      }
+      .lightbox-info .galeria-contador {
+        font-size: 0.75rem;
+        color: #94a3b8;
+        margin-top: 8px;
+      }
 
       /* --- BOTOES ADMIN NO CARD --- */
-      .admin-card-actions { display: none; margin-top: 10px; gap: 8px; flex-direction: column; }
-      body.admin-mode .admin-card-actions { display: flex; }
-      
-      .btn-admin-card { width: 100%; padding: 8px; border-radius: 8px; font-weight: 700; cursor: pointer; text-align: center; border: 1px solid transparent; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.8rem;}
-      .btn-admin-card.vender { background: rgba(239, 68, 68, 0.2); color: #f87171; border-color: rgba(239, 68, 68, 0.4); }
-      .btn-admin-card.disponivel { background: rgba(34, 197, 94, 0.2); color: #4ade80; border-color: rgba(34, 197, 94, 0.4); }
-      .btn-admin-card.editar { background: rgba(255, 255, 255, 0.1); color: #fff; border-color: rgba(255, 255, 255, 0.2); }
-      .btn-admin-card.editar:hover { background: rgba(255, 255, 255, 0.2); }
+      .admin-card-actions {
+        display: none;
+        margin-top: 10px;
+        gap: 8px;
+        flex-direction: column;
+      }
+      body.admin-mode .admin-card-actions {
+        display: flex;
+      }
+
+      .btn-admin-card {
+        width: 100%;
+        padding: 8px;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        text-align: center;
+        border: 1px solid transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-size: 0.8rem;
+      }
+      .btn-admin-card.editar {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+      .btn-admin-card.editar:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      /* --- NOVOS BOTOES DE STATUS (DISPONÍVEL / VENDIDO) --- */
+      .status-toggle-group {
+        display: flex;
+        gap: 8px;
+        margin-top: 4px;
+        width: 100%;
+      }
+
+      .btn-status-card {
+        flex: 1;
+        padding: 8px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 0.75rem;
+        cursor: pointer;
+        border: 1px solid var(--border-color);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-secondary);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+      }
+
+      .btn-status-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      /* Estado Ativo: Disponível */
+      .btn-status-card.ativo-disponivel {
+        background: rgba(34, 197, 94, 0.2);
+        color: #4ade80;
+        border-color: #4ade80;
+        box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+      }
+
+      /* Estado Ativo: Vendido */
+      .btn-status-card.ativo-vendido {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+        border-color: #f87171;
+        box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+      }
+
+      /* TOAST DE CONFIRMAÇÃO */
+      .toast-confirmacao {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: #1e293b;
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 99px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        border: 1px solid var(--border-color);
+        z-index: 9999;
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .toast-confirmacao.show {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
 
       /* --- MODAIS --- */
-      .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: flex-start; justify-content: center; z-index: 1000; padding: 20px; overflow-y: auto; }
-      .modal-overlay.ativo { display: flex; }
-      .modal-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; width: 100%; max-width: 500px; margin: 40px auto; display: flex; flex-direction: column; overflow: hidden; }
-      .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border-color); background: var(--bg-surface); }
-      .modal-header h2 { font-size: 1.1rem; }
-      .modal-close { background: transparent; border: none; color: var(--text-secondary); font-size: 1.4rem; cursor: pointer; padding: 4px 8px; }
-      .modal-body { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-      .modal-footer { padding: 16px 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 10px; background: var(--bg-surface); }
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: none;
+        align-items: flex-start;
+        justify-content: center;
+        z-index: 1000;
+        padding: 20px;
+        overflow-y: auto;
+      }
+      .modal-overlay.ativo {
+        display: flex;
+      }
+      .modal-box {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        width: 100%;
+        max-width: 500px;
+        margin: 40px auto;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border-color);
+        background: var(--bg-surface);
+      }
+      .modal-header h2 {
+        font-size: 1.1rem;
+      }
+      .modal-close {
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 1.4rem;
+        cursor: pointer;
+        padding: 4px 8px;
+      }
+      .modal-body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .modal-footer {
+        padding: 16px 20px;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        background: var(--bg-surface);
+      }
 
-      .form-group { display: flex; flex-direction: column; gap: 6px; }
-      .form-group label { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); }
-      .form-group input { padding: 10px 14px; font-size: 0.9rem; background: rgba(0,0,0,0.2); color: #fff; border: 1px solid var(--border-color); border-radius: 8px; outline: none; }
-      .form-group input:focus { border-color: var(--accent-color); }
-      
-      .imp-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 16px; font-size: 0.85rem; font-weight: 700; color: #0f172a; background: var(--accent-color); border: none; border-radius: 8px; cursor: pointer; }
-      .imp-btn.secundario { background: rgba(255,255,255,0.06); color: var(--text-primary); border: 1px solid var(--border-color); }
-      .imp-btn:disabled { background: #475569; color: #94a3b8; cursor: not-allowed; }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .form-group label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+      }
+      .form-group input {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        background: rgba(0, 0, 0, 0.2);
+        color: #fff;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        outline: none;
+      }
+      .form-group input:focus {
+        border-color: var(--accent-color);
+      }
+
+      .imp-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #0f172a;
+        background: var(--accent-color);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      .imp-btn.secundario {
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+      }
+      .imp-btn:disabled {
+        background: #475569;
+        color: #94a3b8;
+        cursor: not-allowed;
+      }
 
       /* Modal de Edição específico */
-      .fotos-atuais-grid { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; }
-      .fotos-atuais-grid img { height: 80px; width: 80px; object-fit: cover; border-radius: 8px; border: 2px solid var(--border-color); }
-      .fotos-atuais-grid img.capa { border-color: var(--accent-color); }
-      
-      .upload-area { border: 2px dashed var(--border-color); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; background: rgba(0,0,0,0.2); transition: 0.2s; }
-      .upload-area:hover { border-color: var(--accent-color); background: rgba(56, 189, 248, 0.05); }
-      .upload-area p { font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px; }
-      
-      .log-box { background: #000; border: 1px solid #334155; border-radius: 8px; padding: 10px; height: 120px; overflow-y: auto; font-family: monospace; font-size: 11px; line-height: 1.4; display: none; }
-      .log-box.ativo { display: block; }
+      .fotos-atuais-grid {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+      }
+      .fotos-atuais-grid img {
+        height: 80px;
+        width: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid var(--border-color);
+      }
+      .fotos-atuais-grid img.capa {
+        border-color: var(--accent-color);
+      }
+
+      .upload-area {
+        border: 2px dashed var(--border-color);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        background: rgba(0, 0, 0, 0.2);
+        transition: 0.2s;
+      }
+      .upload-area:hover {
+        border-color: var(--accent-color);
+        background: rgba(56, 189, 248, 0.05);
+      }
+      .upload-area p {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-top: 8px;
+      }
+
+      .log-box {
+        background: #000;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        padding: 10px;
+        height: 120px;
+        overflow-y: auto;
+        font-family: monospace;
+        font-size: 11px;
+        line-height: 1.4;
+        display: none;
+      }
+      .log-box.ativo {
+        display: block;
+      }
 
       @media (max-width: 700px) {
-        .topbar-titulo .texto-titulo { display: none; }
-        .grid-container { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; padding: 16px 12px; }
-        .card img { height: 160px; }
-        .card-body { padding: 12px; }
-        .card-body h3 { font-size: 0.85rem; }
-        .preco { font-size: 1.15rem; }
-        .btn-importar .texto-imp { display: none; }
-        .lightbox-nav { width: 40px; height: 40px; font-size: 1.2rem; }
-        .lightbox-prev { left: 10px; }
-        .lightbox-next { right: 10px; }
+        .topbar-titulo .texto-titulo {
+          display: none;
+        }
+        .grid-container {
+          grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+          gap: 14px;
+          padding: 16px 12px;
+        }
+        .card img {
+          height: 160px;
+        }
+        .card-body {
+          padding: 12px;
+        }
+        .card-body h3 {
+          font-size: 0.85rem;
+        }
+        .preco {
+          font-size: 1.15rem;
+        }
+        .btn-importar .texto-imp {
+          display: none;
+        }
+        .lightbox-nav {
+          width: 40px;
+          height: 40px;
+          font-size: 1.2rem;
+        }
+        .lightbox-prev {
+          left: 10px;
+        }
+        .lightbox-next {
+          right: 10px;
+        }
       }
     </style>
   </head>
   <body>
     <div class="topbar">
       <div class="topbar-main">
-        <div class="topbar-titulo" id="tituloApp">🛞 <span class="texto-titulo">Catálogo</span></div>
+        <div class="topbar-titulo" id="tituloApp">
+          🛞 <span class="texto-titulo">Catálogo</span>
+        </div>
         <div class="search-wrapper">
           <span class="search-icon">🔍</span>
-          <input type="text" id="searchInput" placeholder="Buscar por código, aro ou modelo..." autocomplete="off" />
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Buscar por código, aro ou modelo..."
+            autocomplete="off"
+          />
         </div>
-        <button class="btn-importar" id="btnAbrirImportar" title="Importar planilha e fotos">
+        <button
+          class="btn-importar"
+          id="btnAbrirImportar"
+          title="Importar planilha e fotos"
+        >
           📥 <span class="texto-imp">Importar</span>
         </button>
         <button class="btn-toggle-filtros" id="btnToggleFiltros">
@@ -155,7 +781,9 @@
       <div class="painel-filtros" id="painelFiltros">
         <div class="painel-conteudo">
           <div class="filtros-status">
-            <button class="btn-status ativo" data-status="disponiveis">Disponíveis</button>
+            <button class="btn-status ativo" data-status="disponiveis">
+              Disponíveis
+            </button>
             <button class="btn-status" data-status="vendidos">Vendidos</button>
             <button class="btn-status" data-status="todos">Todos</button>
           </div>
@@ -185,11 +813,39 @@
       <div class="modal-box">
         <div class="modal-header"><h2>🔒 Acesso Restrito</h2></div>
         <div class="modal-body">
-          <p style="font-size: 0.85rem; color: var(--text-secondary); text-align:center;">Digite o PIN de administrador.</p>
-          <input type="password" id="inputPin" placeholder="••••" maxlength="4" inputmode="numeric" style="width: 100%; padding: 12px; font-size: 1.5rem; text-align: center; letter-spacing: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.3); color: #fff; outline: none;" />
+          <p
+            style="
+              font-size: 0.85rem;
+              color: var(--text-secondary);
+              text-align: center;
+            "
+          >
+            Digite o PIN de administrador.
+          </p>
+          <input
+            type="password"
+            id="inputPin"
+            placeholder="••••"
+            maxlength="4"
+            inputmode="numeric"
+            style="
+              width: 100%;
+              padding: 12px;
+              font-size: 1.5rem;
+              text-align: center;
+              letter-spacing: 8px;
+              border-radius: 8px;
+              border: 1px solid var(--border-color);
+              background: rgba(0, 0, 0, 0.3);
+              color: #fff;
+              outline: none;
+            "
+          />
         </div>
         <div class="modal-footer">
-          <button class="imp-btn secundario" onclick="fecharPin()">Cancelar</button>
+          <button class="imp-btn secundario" onclick="fecharPin()">
+            Cancelar
+          </button>
           <button class="imp-btn" onclick="verificarPin()">Entrar</button>
         </div>
       </div>
@@ -197,42 +853,122 @@
 
     <!-- MODAL IMPORTAÇÃO EM LOTE -->
     <div class="modal-overlay" id="impOverlay">
-      <div class="modal-box" style="max-width: 780px;">
+      <div class="modal-box" style="max-width: 780px">
         <div class="modal-header">
           <h2>📥 Importar em Lote</h2>
           <button class="modal-close" onclick="fecharImportar()">✕</button>
         </div>
         <div class="modal-body">
-          <div style="border: 1px dashed var(--border-color); padding: 14px; border-radius: 12px;">
-            <h3 style="font-size: 0.95rem; margin-bottom: 6px;">1. Planilha de Produtos</h3>
-            <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 10px;">Colunas: CODIGO, NOME, VALOR, STATUS, DISPONIBILIDADES. Produtos já existentes são ignorados.</p>
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <label for="inputExcel" class="imp-btn">📊 Escolher Planilha</label>
-              <input type="file" id="inputExcel" accept=".xlsx,.xls,.csv" style="display:none;" />
-              <span id="nomeExcel" style="font-size: 0.8rem; color: var(--text-secondary);">Nenhum arquivo</span>
+          <div
+            style="
+              border: 1px dashed var(--border-color);
+              padding: 14px;
+              border-radius: 12px;
+            "
+          >
+            <h3 style="font-size: 0.95rem; margin-bottom: 6px">
+              1. Planilha de Produtos
+            </h3>
+            <p
+              style="
+                font-size: 0.78rem;
+                color: var(--text-secondary);
+                margin-bottom: 10px;
+              "
+            >
+              Colunas: CODIGO, NOME, VALOR, STATUS, DISPONIBILIDADES. Produtos
+              já existentes são ignorados.
+            </p>
+            <div style="display: flex; gap: 10px; align-items: center">
+              <label for="inputExcel" class="imp-btn"
+                >📊 Escolher Planilha</label
+              >
+              <input
+                type="file"
+                id="inputExcel"
+                accept=".xlsx,.xls,.csv"
+                style="display: none"
+              />
+              <span
+                id="nomeExcel"
+                style="font-size: 0.8rem; color: var(--text-secondary)"
+                >Nenhum arquivo</span
+              >
             </div>
           </div>
 
-          <div style="border: 1px dashed var(--border-color); padding: 14px; border-radius: 12px;">
-            <h3 style="font-size: 0.95rem; margin-bottom: 6px;">2. Imagens de Capa</h3>
-            <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 10px;">Nome do arquivo = código (ex: 550096.jpg). Não sobrescreve foto existente. <b>As imagens serão comprimidas.</b></p>
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <label for="inputFotos" class="imp-btn">📸 Escolher Imagens</label>
-              <input type="file" id="inputFotos" multiple accept="image/*" style="display:none;" />
-              <span id="nomeFotos" style="font-size: 0.8rem; color: var(--text-secondary);">Nenhum arquivo</span>
+          <div
+            style="
+              border: 1px dashed var(--border-color);
+              padding: 14px;
+              border-radius: 12px;
+            "
+          >
+            <h3 style="font-size: 0.95rem; margin-bottom: 6px">
+              2. Imagens de Capa
+            </h3>
+            <p
+              style="
+                font-size: 0.78rem;
+                color: var(--text-secondary);
+                margin-bottom: 10px;
+              "
+            >
+              Nome do arquivo = código (ex: 550096.jpg). Não sobrescreve foto
+              existente. <b>As imagens serão comprimidas.</b>
+            </p>
+            <div style="display: flex; gap: 10px; align-items: center">
+              <label for="inputFotos" class="imp-btn"
+                >📸 Escolher Imagens</label
+              >
+              <input
+                type="file"
+                id="inputFotos"
+                multiple
+                accept="image/*"
+                style="display: none"
+              />
+              <span
+                id="nomeFotos"
+                style="font-size: 0.8rem; color: var(--text-secondary)"
+                >Nenhum arquivo</span
+              >
             </div>
           </div>
 
-          <div style="border: 1px dashed var(--border-color); padding: 14px; border-radius: 12px;">
-            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
-              <button class="imp-btn" id="btnExecutar" onclick="executarImportacao()">▶ Executar Importação</button>
-              <button class="imp-btn secundario" onclick="limparImportacao()">🗑 Limpar</button>
+          <div
+            style="
+              border: 1px dashed var(--border-color);
+              padding: 14px;
+              border-radius: 12px;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                margin-bottom: 10px;
+              "
+            >
+              <button
+                class="imp-btn"
+                id="btnExecutar"
+                onclick="executarImportacao()"
+              >
+                ▶ Executar Importação
+              </button>
+              <button class="imp-btn secundario" onclick="limparImportacao()">
+                🗑 Limpar
+              </button>
             </div>
             <div class="log-box" id="impLog"></div>
           </div>
         </div>
         <div class="modal-footer">
-          <button class="imp-btn secundario" onclick="fecharImportar()">Fechar</button>
+          <button class="imp-btn secundario" onclick="fecharImportar()">
+            Fechar
+          </button>
         </div>
       </div>
     </div>
@@ -247,7 +983,7 @@
         <div class="modal-body">
           <div class="form-group">
             <label>Código (Não editável)</label>
-            <input type="text" id="editCodigo" disabled style="opacity: 0.5;" />
+            <input type="text" id="editCodigo" disabled style="opacity: 0.5" />
           </div>
           <div class="form-group">
             <label>Nome da Roda</label>
@@ -257,7 +993,7 @@
             <label>Preço (R$)</label>
             <input type="number" id="editValor" step="0.01" />
           </div>
-          
+
           <div class="form-group">
             <label>Fotos Atuais</label>
             <div class="fotos-atuais-grid" id="editFotosAtuais"></div>
@@ -266,18 +1002,36 @@
           <div class="form-group">
             <label>Adicionar novas fotos (serão comprimidas)</label>
             <label for="editInputFotos" class="upload-area">
-              <div style="font-size: 1.5rem;">📸</div>
+              <div style="font-size: 1.5rem">📸</div>
               <p>Clique para selecionar imagens</p>
             </label>
-            <input type="file" id="editInputFotos" multiple accept="image/*" style="display:none;" />
-            <div id="editPreviewNovas" style="display:flex; gap:10px; overflow-x:auto; margin-top:10px;"></div>
+            <input
+              type="file"
+              id="editInputFotos"
+              multiple
+              accept="image/*"
+              style="display: none"
+            />
+            <div
+              id="editPreviewNovas"
+              style="
+                display: flex;
+                gap: 10px;
+                overflow-x: auto;
+                margin-top: 10px;
+              "
+            ></div>
           </div>
 
           <div class="log-box" id="editLog"></div>
         </div>
         <div class="modal-footer">
-          <button class="imp-btn secundario" onclick="fecharEditar()">Cancelar</button>
-          <button class="imp-btn" id="btnSalvarEdicao" onclick="salvarEdicao()">💾 Salvar Alterações</button>
+          <button class="imp-btn secundario" onclick="fecharEditar()">
+            Cancelar
+          </button>
+          <button class="imp-btn" id="btnSalvarEdicao" onclick="salvarEdicao()">
+            💾 Salvar Alterações
+          </button>
         </div>
       </div>
     </div>
@@ -285,14 +1039,32 @@
     <!-- LIGHTBOX COM GALERIA -->
     <div class="lightbox" id="lightbox">
       <button class="lightbox-close" id="lightboxClose">✕</button>
-      <button class="lightbox-nav lightbox-prev" id="lightboxPrev" style="display:none;">◀</button>
+      <button
+        class="lightbox-nav lightbox-prev"
+        id="lightboxPrev"
+        style="display: none"
+      >
+        ◀
+      </button>
       <img id="lightboxImg" src="" alt="" />
-      <button class="lightbox-nav lightbox-next" id="lightboxNext" style="display:none;">▶</button>
+      <button
+        class="lightbox-nav lightbox-next"
+        id="lightboxNext"
+        style="display: none"
+      >
+        ▶
+      </button>
       <div class="lightbox-info">
         <div class="cod" id="lightboxCod"></div>
         <div class="nome" id="lightboxNome"></div>
         <div class="preco-lb" id="lightboxPreco"></div>
-        <div class="galeria-contador" id="lightboxContador" style="display:none;">1 / 1</div>
+        <div
+          class="galeria-contador"
+          id="lightboxContador"
+          style="display: none"
+        >
+          1 / 1
+        </div>
       </div>
     </div>
 
@@ -309,8 +1081,11 @@
         const PIN_ADMIN = "1234";
         const BUCKET_FOTOS = "fotos-ordens";
 
-        const isNative = window.Capacitor && window.Capacitor.isNativePlatform();
-        const { Filesystem, Directory } = window.Capacitor ? window.Capacitor.Plugins : {};
+        const isNative =
+          window.Capacitor && window.Capacitor.isNativePlatform();
+        const { Filesystem, Directory } = window.Capacitor
+          ? window.Capacitor.Plugins
+          : {};
 
         let produtos = [];
         let filtroStatusAtual = "disponiveis";
@@ -322,12 +1097,24 @@
            UTILITÁRIOS E COMPRESSÃO DE IMAGEM
         ============================================================ */
         function normalizar(s) {
-          return String(s).replace(/\s+/g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+          return String(s)
+            .replace(/\s+/g, "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
         }
         function limparTexto(v) {
           if (v === null || v === undefined) return "";
-          var s = String(v).trim(); var low = s.toLowerCase();
-          if (low === "nan" || low === "null" || low === "undefined" || low === "none" || low === "") return "";
+          var s = String(v).trim();
+          var low = s.toLowerCase();
+          if (
+            low === "nan" ||
+            low === "null" ||
+            low === "undefined" ||
+            low === "none" ||
+            low === ""
+          )
+            return "";
           return s.toUpperCase();
         }
         function extrairAro(nome) {
@@ -344,7 +1131,7 @@
           });
         }
 
-        // FUNÇÃO DE COMPRESSÃO ADAPTADA DO OSFACIL
+        // FUNÇÃO DE COMPRESSÃO
         function comprimirImagem(arquivo) {
           return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -359,9 +1146,15 @@
                 let width = img.width;
                 let height = img.height;
                 if (width > height) {
-                  if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                  if (width > MAX_WIDTH) {
+                    height *= MAX_WIDTH / width;
+                    width = MAX_WIDTH;
+                  }
                 } else {
-                  if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                  if (height > MAX_HEIGHT) {
+                    width *= MAX_HEIGHT / height;
+                    height = MAX_HEIGHT;
+                  }
                 }
                 canvas.width = width;
                 canvas.height = height;
@@ -369,11 +1162,14 @@
                 ctx.drawImage(img, 0, 0, width, height);
                 canvas.toBlob(
                   (blob) => {
-                    const arquivoComprimido = new File([blob], arquivo.name, { type: "image/jpeg", lastModified: Date.now() });
+                    const arquivoComprimido = new File([blob], arquivo.name, {
+                      type: "image/jpeg",
+                      lastModified: Date.now(),
+                    });
                     resolve(arquivoComprimido);
                   },
                   "image/jpeg",
-                  0.7
+                  0.7,
                 );
               };
               img.onerror = (error) => reject(error);
@@ -390,7 +1186,10 @@
           const cache = localStorage.getItem("@catalogo_dados");
 
           if (cache) {
-            produtos = JSON.parse(cache).map((p) => ({ ...p, valor: Number(p.valor) || 0 }));
+            produtos = JSON.parse(cache).map((p) => ({
+              ...p,
+              valor: Number(p.valor) || 0,
+            }));
             gerarChipsDeAro();
             document.getElementById("loadingBox").style.display = "none";
             document.getElementById("gridRodas").style.display = "grid";
@@ -398,13 +1197,21 @@
           }
 
           try {
-            loadingText.innerText = cache ? "Atualizando dados..." : "Baixando dados da nuvem...";
-            const { data, error } = await supabaseClient.from("catalogo_rodas").select("*").order("codigo", { ascending: true });
+            loadingText.innerText = cache
+              ? "Atualizando dados..."
+              : "Baixando dados da nuvem...";
+            const { data, error } = await supabaseClient
+              .from("catalogo_rodas")
+              .select("*")
+              .order("codigo", { ascending: true });
             if (error) throw error;
 
             if (data && data.length > 0) {
               localStorage.setItem("@catalogo_dados", JSON.stringify(data));
-              produtos = data.map((p) => ({ ...p, valor: Number(p.valor) || 0 }));
+              produtos = data.map((p) => ({
+                ...p,
+                valor: Number(p.valor) || 0,
+              }));
 
               if (isNative && Filesystem) {
                 loadingText.innerText = "Sincronizando fotos...";
@@ -419,7 +1226,8 @@
           } catch (err) {
             console.warn("Usando modo offline.", err);
             if (!cache) {
-              document.getElementById("loadingBox").innerHTML = `<p style="color:#f87171; text-align:center; padding: 20px;">Sem internet e sem dados.</p>`;
+              document.getElementById("loadingBox").innerHTML =
+                `<p style="color:#f87171; text-align:center; padding: 20px;">Sem internet e sem dados.</p>`;
             }
           }
         }
@@ -430,72 +1238,125 @@
             for (const prod of produtosData) {
               if (prod.fotos_urls && prod.fotos_urls.length > 0) {
                 const nomeArquivo = `roda_${prod.codigo}.jpg`;
-                try { await Filesystem.stat({ path: `CatalogoRodas/${nomeArquivo}`, directory: Directory.Documents }); } 
-                catch (e) {
-                  const base64Data = await baixarImagemBase64(prod.fotos_urls[0]);
-                  await Filesystem.writeFile({ path: `CatalogoRodas/${nomeArquivo}`, data: base64Data, directory: Directory.Documents, recursive: true });
+                try {
+                  await Filesystem.stat({
+                    path: `CatalogoRodas/${nomeArquivo}`,
+                    directory: Directory.Documents,
+                  });
+                } catch (e) {
+                  const base64Data = await baixarImagemBase64(
+                    prod.fotos_urls[0],
+                  );
+                  await Filesystem.writeFile({
+                    path: `CatalogoRodas/${nomeArquivo}`,
+                    data: base64Data,
+                    directory: Directory.Documents,
+                    recursive: true,
+                  });
                 }
               }
             }
-          } catch (e) { console.warn("Erro ao salvar fotos no celular:", e); }
+          } catch (e) {
+            console.warn("Erro ao salvar fotos no celular:", e);
+          }
         }
 
         async function obterUrlLocal(codigo) {
           if (!isNative || !Filesystem) return null;
           try {
             const caminho = `CatalogoRodas/roda_${codigo}.jpg`;
-            await Filesystem.stat({ path: caminho, directory: Directory.Documents });
-            const uriResult = await Filesystem.getUri({ path: caminho, directory: Directory.Documents });
+            await Filesystem.stat({
+              path: caminho,
+              directory: Directory.Documents,
+            });
+            const uriResult = await Filesystem.getUri({
+              path: caminho,
+              directory: Directory.Documents,
+            });
             return window.Capacitor.convertFileSrc(uriResult.uri);
-          } catch (e) { return null; }
+          } catch (e) {
+            return null;
+          }
         }
 
         /* ============================================================
            FILTROS E RENDERIZAÇÃO DO CATÁLOGO
         ============================================================ */
         function gerarChipsDeAro() {
-          var container = document.getElementById("filtrosAro"); container.innerHTML = "";
+          var container = document.getElementById("filtrosAro");
+          container.innerHTML = "";
           var arosUnicos = [];
-          produtos.forEach(function (p) { if (p.aro && arosUnicos.indexOf(p.aro) === -1) arosUnicos.push(p.aro); });
+          produtos.forEach(function (p) {
+            if (p.aro && arosUnicos.indexOf(p.aro) === -1)
+              arosUnicos.push(p.aro);
+          });
           arosUnicos.sort((a, b) => a - b);
 
           var chipTodos = document.createElement("button");
-          chipTodos.className = "chip ativo"; chipTodos.dataset.aro = "todos"; chipTodos.textContent = "Todos";
-          chipTodos.addEventListener("click", () => ativarChipAro(chipTodos, "todos"));
+          chipTodos.className = "chip ativo";
+          chipTodos.dataset.aro = "todos";
+          chipTodos.textContent = "Todos";
+          chipTodos.addEventListener("click", () =>
+            ativarChipAro(chipTodos, "todos"),
+          );
           container.appendChild(chipTodos);
 
           arosUnicos.forEach(function (aro) {
             var chip = document.createElement("button");
-            chip.className = "chip"; chip.dataset.aro = String(aro); chip.textContent = "Aro " + aro;
-            chip.addEventListener("click", () => ativarChipAro(chip, String(aro)));
+            chip.className = "chip";
+            chip.dataset.aro = String(aro);
+            chip.textContent = "Aro " + aro;
+            chip.addEventListener("click", () =>
+              ativarChipAro(chip, String(aro)),
+            );
             container.appendChild(chip);
           });
         }
 
         function ativarChipAro(chipClicado, aro) {
-          document.querySelectorAll("#filtrosAro .chip").forEach(c => c.classList.remove("ativo"));
+          document
+            .querySelectorAll("#filtrosAro .chip")
+            .forEach((c) => c.classList.remove("ativo"));
           chipClicado.classList.add("ativo");
-          filtroAroAtual = aro; renderizar();
+          filtroAroAtual = aro;
+          renderizar();
         }
 
         function aplicarFiltros() {
           var lista = produtos.slice();
-          if (filtroStatusAtual === "disponiveis") lista = lista.filter(p => !p.vendido);
-          else if (filtroStatusAtual === "vendidos") lista = lista.filter(p => p.vendido);
+          if (filtroStatusAtual === "disponiveis")
+            lista = lista.filter((p) => !p.vendido);
+          else if (filtroStatusAtual === "vendidos")
+            lista = lista.filter((p) => p.vendido);
 
           if (filtroAroAtual !== "todos") {
             var aro = parseInt(filtroAroAtual, 10);
-            lista = lista.filter(p => p.aro === aro);
+            lista = lista.filter((p) => p.aro === aro);
           }
 
-          var termo = document.getElementById("searchInput").value.toLowerCase().trim();
-          if (termo) lista = lista.filter(p => p.codigo.toLowerCase().includes(termo) || p.nome.toLowerCase().includes(termo));
+          var termo = document
+            .getElementById("searchInput")
+            .value.toLowerCase()
+            .trim();
+          if (termo)
+            lista = lista.filter(
+              (p) =>
+                p.codigo.toLowerCase().includes(termo) ||
+                p.nome.toLowerCase().includes(termo),
+            );
 
           switch (ordenacaoAtual) {
-            case "menor": lista.sort((a, b) => a.valor - b.valor); break;
-            case "maior": lista.sort((a, b) => b.valor - a.valor); break;
-            case "nome": lista.sort((a, b) => a.nome.localeCompare(b.nome)); break;
-            default: lista.sort((a, b) => a.codigo.localeCompare(b.codigo));
+            case "menor":
+              lista.sort((a, b) => a.valor - b.valor);
+              break;
+            case "maior":
+              lista.sort((a, b) => b.valor - a.valor);
+              break;
+            case "nome":
+              lista.sort((a, b) => a.nome.localeCompare(b.nome));
+              break;
+            default:
+              lista.sort((a, b) => a.codigo.localeCompare(b.codigo));
           }
           return lista;
         }
@@ -504,9 +1365,14 @@
           var lista = aplicarFiltros();
           var container = document.getElementById("gridRodas");
           container.innerHTML = "";
-          document.getElementById("contador").textContent = lista.length + " roda(s) encontrada(s)";
+          document.getElementById("contador").textContent =
+            lista.length + " roda(s) encontrada(s)";
 
-          if (!lista.length) { container.innerHTML = '<p class="vazio">Nenhuma roda encontrada.</p>'; return; }
+          if (!lista.length) {
+            container.innerHTML =
+              '<p class="vazio">Nenhuma roda encontrada.</p>';
+            return;
+          }
 
           var frag = document.createDocumentFragment();
 
@@ -515,32 +1381,46 @@
             card.className = "card" + (item.vendido ? " vendido" : "");
 
             var img = document.createElement("img");
-            img.alt = item.nome; img.loading = "lazy";
+            img.alt = item.nome;
+            img.loading = "lazy";
 
             let urlLocal = await obterUrlLocal(item.codigo);
             if (urlLocal) img.src = urlLocal;
-            else if (item.fotos_urls && item.fotos_urls.length > 0) img.src = item.fotos_urls[0];
+            else if (item.fotos_urls && item.fotos_urls.length > 0)
+              img.src = item.fotos_urls[0];
             else img.src = "fotos/placeholder.jpg";
 
-            img.addEventListener("click", (e) => { abrirLightbox(item, e.target.src); });
+            img.addEventListener("click", (e) => {
+              abrirLightbox(item, e.target.src);
+            });
             card.appendChild(img);
 
             var body = document.createElement("div");
             body.className = "card-body";
+            
             body.innerHTML = `
               <span class="codigo">CÓD: ${item.codigo}</span>
               <h3>${item.nome}</h3>
               <div class="badges">
-                ${item.status && item.status !== 'NAN' ? `<span class="status">${item.status}</span>` : ''}
-                ${item.disponibilidade && item.disponibilidade !== 'NAN' ? `<span class="dispo">${item.disponibilidade}</span>` : ''}
+                ${item.status && item.status !== "NAN" ? `<span class="status">${item.status}</span>` : ""}
+                ${item.disponibilidade && item.disponibilidade !== "NAN" ? `<span class="dispo">${item.disponibilidade}</span>` : ""}
               </div>
               <p class="preco">R$ ${item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p>
               
               <div class="admin-card-actions">
                 <button class="btn-admin-card editar" onclick="abrirEditar('${item.codigo}')">✏️ Editar Roda</button>
-                <button class="btn-admin-card ${item.vendido ? 'disponivel' : 'vender'}" onclick="alterarStatus('${item.codigo}', ${item.vendido})">
-                  ${item.vendido ? 'Marcar Disponível' : 'Marcar Vendido'}
-                </button>
+                
+                <!-- BOTÕES DE DISPONÍVEL / VENDIDO -->
+                <div class="status-toggle-group">
+                  <button class="btn-status-card ${!item.vendido ? 'ativo-disponivel' : ''}" 
+                          onclick="alterarStatus('${item.codigo}', false, this)">
+                    ✅ Disponível
+                  </button>
+                  <button class="btn-status-card ${item.vendido ? 'ativo-vendido' : ''}" 
+                          onclick="alterarStatus('${item.codigo}', true, this)">
+                    🚫 Vendido
+                  </button>
+                </div>
               </div>
             `;
             card.appendChild(body);
@@ -549,26 +1429,84 @@
           container.appendChild(frag);
         }
 
-        async function alterarStatus(codigo, statusAtual) {
-          const novoStatus = !statusAtual;
-          try {
-            const { error } = await supabaseClient.from("catalogo_rodas").update({ vendido: novoStatus, disponibilidade: novoStatus ? "VENDIDO" : "" }).eq("codigo", codigo);
-            if (error) throw error;
 
-            const index = produtos.findIndex(p => p.codigo === codigo);
-            if (index !== -1) {
-              produtos[index].vendido = novoStatus;
-              produtos[index].disponibilidade = novoStatus ? "VENDIDO" : "";
-              localStorage.setItem("@catalogo_dados", JSON.stringify(produtos));
-            }
-            renderizar();
-          } catch (err) { alert("Erro ao alterar status. Verifique a internet."); }
+async function alterarStatus(codigo, novoStatusVendido, btnClicado) {
+  const produto = produtos.find(
+    (p) => String(p.codigo) === String(codigo)
+  );
+
+  if (!produto) {
+    alert("Produto não encontrado no catálogo.");
+    return;
+  }
+
+  const botoes = btnClicado.parentElement.querySelectorAll("button");
+  botoes.forEach((b) => (b.disabled = true));
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("catalogo_rodas")
+      .update({
+        vendido: novoStatusVendido,
+        disponibilidade: novoStatusVendido ? "VENDIDO" : null,
+      })
+      .eq("codigo", codigo)
+      .select("codigo, vendido, disponibilidade");
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      throw new Error(
+        "Nenhum registro foi atualizado. Verifique o código do produto e as permissões de UPDATE (RLS) no Supabase."
+      );
+    }
+
+    const atualizado = data[0];
+
+    produto.vendido = atualizado.vendido;
+    produto.disponibilidade = atualizado.disponibilidade;
+
+    localStorage.setItem("@catalogo_dados", JSON.stringify(produtos));
+
+    await renderizar();
+
+    mostrarToast(
+      atualizado.vendido
+        ? "Roda marcada como vendida!"
+        : "Roda marcada como disponível!"
+    );
+  } catch (err) {
+    console.error("Erro ao atualizar status:", err);
+
+    alert("Não foi possível atualizar o produto:\n\n" + err.message);
+
+    // Busca novamente os dados reais do banco.
+    await carregarProdutos();
+    await renderizar();
+  } finally {
+    renderizar();
+  }
+}
+window.alterarStatus = alterarStatus;
+
+        function mostrarToast(mensagem) {
+          let toast = document.getElementById("toast-msg");
+          if (!toast) {
+            toast = document.createElement("div");
+            toast.id = "toast-msg";
+            toast.className = "toast-confirmacao";
+            document.body.appendChild(toast);
+          }
+          toast.innerHTML = mensagem;
+          toast.classList.add("show");
+          setTimeout(() => { toast.classList.remove("show"); }, 3000);
         }
 
         /* ============================================================
            LIGHTBOX COM GALERIA
         ============================================================ */
-        let lbFotos = []; let lbIndex = 0;
+        let lbFotos = [];
+        let lbIndex = 0;
         const lightbox = document.getElementById("lightbox");
         const lightboxImg = document.getElementById("lightboxImg");
         const lightboxContador = document.getElementById("lightboxContador");
@@ -576,13 +1514,16 @@
         const btnNext = document.getElementById("lightboxNext");
 
         function abrirLightbox(item, imgUrlInicial) {
-          document.getElementById("lightboxCod").textContent = "CÓD: " + item.codigo;
+          document.getElementById("lightboxCod").textContent =
+            "CÓD: " + item.codigo;
           document.getElementById("lightboxNome").textContent = item.nome;
-          document.getElementById("lightboxPreco").textContent = "R$ " + item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-          
+          document.getElementById("lightboxPreco").textContent =
+            "R$ " +
+            item.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+
           lbFotos = item.fotos_urls || [];
           if (lbFotos.length === 0) lbFotos = [imgUrlInicial];
-          
+
           lbIndex = lbFotos.indexOf(imgUrlInicial);
           if (lbIndex === -1) lbIndex = 0;
 
@@ -592,37 +1533,67 @@
 
         function atualizarLightbox() {
           lightboxImg.src = lbFotos[lbIndex];
-          
+
           if (lbFotos.length > 1) {
-            btnPrev.style.display = "flex"; btnNext.style.display = "flex";
+            btnPrev.style.display = "flex";
+            btnNext.style.display = "flex";
             lightboxContador.style.display = "block";
             lightboxContador.textContent = `${lbIndex + 1} / ${lbFotos.length}`;
           } else {
-            btnPrev.style.display = "none"; btnNext.style.display = "none";
+            btnPrev.style.display = "none";
+            btnNext.style.display = "none";
             lightboxContador.style.display = "none";
           }
         }
 
-        btnPrev.addEventListener("click", (e) => { e.stopPropagation(); lbIndex = (lbIndex - 1 + lbFotos.length) % lbFotos.length; atualizarLightbox(); });
-        btnNext.addEventListener("click", (e) => { e.stopPropagation(); lbIndex = (lbIndex + 1) % lbFotos.length; atualizarLightbox(); });
-        document.getElementById("lightboxClose").addEventListener("click", () => lightbox.classList.remove("ativo"));
-        lightbox.addEventListener("click", (e) => { if (e.target === lightbox || e.target === lightboxImg) lightbox.classList.remove("ativo"); });
+        btnPrev.addEventListener("click", (e) => {
+          e.stopPropagation();
+          lbIndex = (lbIndex - 1 + lbFotos.length) % lbFotos.length;
+          atualizarLightbox();
+        });
+        btnNext.addEventListener("click", (e) => {
+          e.stopPropagation();
+          lbIndex = (lbIndex + 1) % lbFotos.length;
+          atualizarLightbox();
+        });
+        document
+          .getElementById("lightboxClose")
+          .addEventListener("click", () => lightbox.classList.remove("ativo"));
+        lightbox.addEventListener("click", (e) => {
+          if (e.target === lightbox || e.target === lightboxImg)
+            lightbox.classList.remove("ativo");
+        });
 
         /* ============================================================
            EVENTOS TOPBAR E FILTROS
         ============================================================ */
-        document.getElementById("btnToggleFiltros").addEventListener("click", function () {
-          var aberto = document.getElementById("painelFiltros").classList.toggle("aberto");
-          this.classList.toggle("aberto", aberto);
-        });
-        document.getElementById("searchInput").addEventListener("input", renderizar);
+        document
+          .getElementById("btnToggleFiltros")
+          .addEventListener("click", function () {
+            var aberto = document
+              .getElementById("painelFiltros")
+              .classList.toggle("aberto");
+            this.classList.toggle("aberto", aberto);
+          });
+        document
+          .getElementById("searchInput")
+          .addEventListener("input", renderizar);
         document.querySelectorAll(".btn-status").forEach(function (btn) {
           btn.addEventListener("click", function () {
-            document.querySelectorAll(".btn-status").forEach(b => b.classList.remove("ativo"));
-            btn.classList.add("ativo"); filtroStatusAtual = btn.dataset.status; renderizar();
+            document
+              .querySelectorAll(".btn-status")
+              .forEach((b) => b.classList.remove("ativo"));
+            btn.classList.add("ativo");
+            filtroStatusAtual = btn.dataset.status;
+            renderizar();
           });
         });
-        document.getElementById("ordenarPor").addEventListener("change", (e) => { ordenacaoAtual = e.target.value; renderizar(); });
+        document
+          .getElementById("ordenarPor")
+          .addEventListener("change", (e) => {
+            ordenacaoAtual = e.target.value;
+            renderizar();
+          });
 
         /* ============================================================
            MODO ADMIN (PIN)
@@ -631,19 +1602,33 @@
         document.getElementById("tituloApp").addEventListener("click", () => {
           if (isAdmin) {
             cliquesTitulo++;
-            if (cliquesTitulo >= 3) { isAdmin = false; document.body.classList.remove("admin-mode"); cliquesTitulo = 0; alert("Modo Admin desativado."); }
+            if (cliquesTitulo >= 3) {
+              isAdmin = false;
+              document.body.classList.remove("admin-mode");
+              cliquesTitulo = 0;
+              alert("Modo Admin desativado.");
+            }
           } else {
             document.getElementById("pinOverlay").classList.add("ativo");
-            document.getElementById("inputPin").value = ""; document.getElementById("inputPin").focus();
+            document.getElementById("inputPin").value = "";
+            document.getElementById("inputPin").focus();
           }
         });
 
         window.verificarPin = function () {
           if (document.getElementById("inputPin").value === PIN_ADMIN) {
-            isAdmin = true; document.body.classList.add("admin-mode"); fecharPin(); renderizar();
-          } else { alert("PIN incorreto."); document.getElementById("inputPin").value = ""; }
+            isAdmin = true;
+            document.body.classList.add("admin-mode");
+            fecharPin();
+            renderizar();
+          } else {
+            alert("PIN incorreto.");
+            document.getElementById("inputPin").value = "";
+          }
         };
-        window.fecharPin = function () { document.getElementById("pinOverlay").classList.remove("ativo"); };
+        window.fecharPin = function () {
+          document.getElementById("pinOverlay").classList.remove("ativo");
+        };
 
         /* ============================================================
            MODAL DE EDIÇÃO INDIVIDUAL
@@ -651,107 +1636,134 @@
         let produtoEditando = null;
         let novasFotosSelecionadas = [];
 
-        window.abrirEditar = function(codigo) {
-          produtoEditando = produtos.find(p => p.codigo === codigo);
+        window.abrirEditar = function (codigo) {
+          produtoEditando = produtos.find((p) => p.codigo === codigo);
           if (!produtoEditando) return;
 
           document.getElementById("editCodigo").value = produtoEditando.codigo;
           document.getElementById("editNome").value = produtoEditando.nome;
           document.getElementById("editValor").value = produtoEditando.valor;
-          
+
           const containerFotos = document.getElementById("editFotosAtuais");
           containerFotos.innerHTML = "";
-          if (produtoEditando.fotos_urls && produtoEditando.fotos_urls.length > 0) {
+          if (
+            produtoEditando.fotos_urls &&
+            produtoEditando.fotos_urls.length > 0
+          ) {
             produtoEditando.fotos_urls.forEach((url, idx) => {
               const img = document.createElement("img");
               img.src = url;
-              if (idx === 0) { img.className = "capa"; img.title = "Capa"; }
+              if (idx === 0) {
+                img.className = "capa";
+                img.title = "Capa";
+              }
               containerFotos.appendChild(img);
             });
           } else {
-            containerFotos.innerHTML = '<p style="font-size:0.8rem; color:var(--text-secondary);">Nenhuma foto cadastrada.</p>';
+            containerFotos.innerHTML =
+              '<p style="font-size:0.8rem; color:var(--text-secondary);">Nenhuma foto cadastrada.</p>';
           }
 
           novasFotosSelecionadas = [];
           document.getElementById("editPreviewNovas").innerHTML = "";
           document.getElementById("editInputFotos").value = "";
-          const logEl = document.getElementById("editLog"); logEl.innerHTML = ""; logEl.classList.remove("ativo");
+          const logEl = document.getElementById("editLog");
+          logEl.innerHTML = "";
+          logEl.classList.remove("ativo");
 
           document.getElementById("editOverlay").classList.add("ativo");
         };
 
-        window.fecharEditar = function() {
+        window.fecharEditar = function () {
           document.getElementById("editOverlay").classList.remove("ativo");
           produtoEditando = null;
         };
 
-        document.getElementById("editInputFotos").addEventListener("change", (e) => {
-          novasFotosSelecionadas = Array.from(e.target.files);
-          const preview = document.getElementById("editPreviewNovas");
-          preview.innerHTML = "";
-          novasFotosSelecionadas.forEach(file => {
-            const img = document.createElement("img");
-            img.style.height = "60px"; img.style.borderRadius = "4px";
-            img.src = URL.createObjectURL(file);
-            preview.appendChild(img);
+        document
+          .getElementById("editInputFotos")
+          .addEventListener("change", (e) => {
+            novasFotosSelecionadas = Array.from(e.target.files);
+            const preview = document.getElementById("editPreviewNovas");
+            preview.innerHTML = "";
+            novasFotosSelecionadas.forEach((file) => {
+              const img = document.createElement("img");
+              img.style.height = "60px";
+              img.style.borderRadius = "4px";
+              img.src = URL.createObjectURL(file);
+              preview.appendChild(img);
+            });
           });
-        });
 
-        window.salvarEdicao = async function() {
+        window.salvarEdicao = async function () {
           if (!produtoEditando) return;
           const btn = document.getElementById("btnSalvarEdicao");
           const logEl = document.getElementById("editLog");
-          
-          btn.disabled = true; btn.innerText = "Salvando...";
-          logEl.innerHTML = ""; logEl.classList.add("ativo");
+
+          btn.disabled = true;
+          btn.innerText = "Salvando...";
+          logEl.innerHTML = "";
+          logEl.classList.add("ativo");
 
           const novoNome = document.getElementById("editNome").value.trim();
-          const novoValor = parseFloat(document.getElementById("editValor").value) || 0;
-          
+          const novoValor =
+            parseFloat(document.getElementById("editValor").value) || 0;
+
           let fotosAtualizadas = [...(produtoEditando.fotos_urls || [])];
 
           try {
             if (novasFotosSelecionadas.length > 0) {
               logEl.innerHTML += `<div style="color:#38bdf8">📸 Otimizando e enviando ${novasFotosSelecionadas.length} foto(s)...</div>`;
-              
+
               for (let i = 0; i < novasFotosSelecionadas.length; i++) {
                 const fileOriginal = novasFotosSelecionadas[i];
-                
-                // COMPRIME A IMAGEM ANTES DO UPLOAD
+
                 const fileComprimido = await comprimirImagem(fileOriginal);
-                
-                const ext = fileComprimido.name.split('.').pop();
+
+                const ext = fileComprimido.name.split(".").pop();
                 const nomeArquivo = `${produtoEditando.codigo}_galeria_${Date.now()}_${i}.${ext}`;
-                
-                const { error: upError } = await supabaseClient.storage.from(BUCKET_FOTOS).upload(nomeArquivo, fileComprimido, { upsert: false });
-                if (upError) throw new Error(`Erro no upload: ${upError.message}`);
-                
-                const { data: urlData } = supabaseClient.storage.from(BUCKET_FOTOS).getPublicUrl(nomeArquivo);
+
+                const { error: upError } = await supabaseClient.storage
+                  .from(BUCKET_FOTOS)
+                  .upload(nomeArquivo, fileComprimido, { upsert: false });
+                if (upError)
+                  throw new Error(`Erro no upload: ${upError.message}`);
+
+                const { data: urlData } = supabaseClient.storage
+                  .from(BUCKET_FOTOS)
+                  .getPublicUrl(nomeArquivo);
                 fotosAtualizadas.push(urlData.publicUrl);
-                logEl.innerHTML += `<div style="color:#4ade80">✅ Foto ${i+1} enviada.</div>`;
+                logEl.innerHTML += `<div style="color:#4ade80">✅ Foto ${i + 1} enviada.</div>`;
               }
             }
 
             logEl.innerHTML += `<div style="color:#38bdf8">💾 Atualizando banco de dados...</div>`;
             const { error: dbError } = await supabaseClient
               .from("catalogo_rodas")
-              .update({ nome: novoNome, valor: novoValor, fotos_urls: fotosAtualizadas })
+              .update({
+                nome: novoNome,
+                valor: novoValor,
+                fotos_urls: fotosAtualizadas,
+              })
               .eq("codigo", produtoEditando.codigo);
 
             if (dbError) throw dbError;
-            
+
             produtoEditando.nome = novoNome;
             produtoEditando.valor = novoValor;
             produtoEditando.fotos_urls = fotosAtualizadas;
             localStorage.setItem("@catalogo_dados", JSON.stringify(produtos));
 
             logEl.innerHTML += `<div style="color:#4ade80">🎉 Salvo com sucesso!</div>`;
-            setTimeout(() => { fecharEditar(); renderizar(); }, 1000);
-
+            setTimeout(() => {
+              fecharEditar();
+              renderizar();
+              mostrarToast("✏️ Roda editada com sucesso!");
+            }, 1000);
           } catch (err) {
             console.error(err);
             logEl.innerHTML += `<div style="color:#f87171">❌ Erro: ${err.message}</div>`;
-            btn.disabled = false; btn.innerText = "💾 Salvar Alterações";
+            btn.disabled = false;
+            btn.innerText = "💾 Salvar Alterações";
           }
         };
 
@@ -764,30 +1776,51 @@
           impLogEl.innerHTML += `<div class="${type}">${msg}</div>`;
           impLogEl.scrollTop = impLogEl.scrollHeight;
         }
-        let arquivoExcel = null; let arquivosFotos = [];
+        let arquivoExcel = null;
+        let arquivosFotos = [];
 
-        document.getElementById("inputExcel").addEventListener("change", (e) => {
-          arquivoExcel = e.target.files[0] || null;
-          document.getElementById("nomeExcel").textContent = arquivoExcel ? arquivoExcel.name : "Nenhum arquivo";
-        });
-        document.getElementById("inputFotos").addEventListener("change", (e) => {
-          arquivosFotos = Array.from(e.target.files);
-          document.getElementById("nomeFotos").textContent = arquivosFotos.length ? `${arquivosFotos.length} imagem(ns)` : "Nenhum arquivo";
-        });
+        document
+          .getElementById("inputExcel")
+          .addEventListener("change", (e) => {
+            arquivoExcel = e.target.files[0] || null;
+            document.getElementById("nomeExcel").textContent = arquivoExcel
+              ? arquivoExcel.name
+              : "Nenhum arquivo";
+          });
+        document
+          .getElementById("inputFotos")
+          .addEventListener("change", (e) => {
+            arquivosFotos = Array.from(e.target.files);
+            document.getElementById("nomeFotos").textContent =
+              arquivosFotos.length
+                ? `${arquivosFotos.length} imagem(ns)`
+                : "Nenhum arquivo";
+          });
 
         window.limparImportacao = function () {
-          arquivoExcel = null; arquivosFotos = [];
-          document.getElementById("inputExcel").value = ""; document.getElementById("inputFotos").value = "";
-          document.getElementById("nomeExcel").textContent = "Nenhum arquivo"; document.getElementById("nomeFotos").textContent = "Nenhum arquivo";
+          arquivoExcel = null;
+          arquivosFotos = [];
+          document.getElementById("inputExcel").value = "";
+          document.getElementById("inputFotos").value = "";
+          document.getElementById("nomeExcel").textContent = "Nenhum arquivo";
+          document.getElementById("nomeFotos").textContent = "Nenhum arquivo";
           impLogEl.innerHTML = "";
         };
-        window.fecharImportar = function () { document.getElementById("impOverlay").classList.remove("ativo"); };
-        document.getElementById("btnAbrirImportar").addEventListener("click", () => { document.getElementById("impOverlay").classList.add("ativo"); });
+        window.fecharImportar = function () {
+          document.getElementById("impOverlay").classList.remove("ativo");
+        };
+        document
+          .getElementById("btnAbrirImportar")
+          .addEventListener("click", () => {
+            document.getElementById("impOverlay").classList.add("ativo");
+          });
 
         window.executarImportacao = async function () {
           const btn = document.getElementById("btnExecutar");
-          btn.disabled = true; btn.innerText = "Processando..."; impLogEl.innerHTML = "";
-          
+          btn.disabled = true;
+          btn.innerText = "Processando...";
+          impLogEl.innerHTML = "";
+
           try {
             if (arquivoExcel) {
               impLog(`📊 Lendo planilha...`, "info");
@@ -798,28 +1831,68 @@
 
               if (linhas.length) {
                 const mapaColunas = {};
-                Object.keys(linhas[0]).forEach(c => { mapaColunas[normalizar(c)] = c; });
-                const acharCol = (nomes) => { for (let n of nomes) if (mapaColunas[normalizar(n)]) return mapaColunas[normalizar(n)]; return null; };
+                Object.keys(linhas[0]).forEach((c) => {
+                  mapaColunas[normalizar(c)] = c;
+                });
+                const acharCol = (nomes) => {
+                  for (let n of nomes)
+                    if (mapaColunas[normalizar(n)])
+                      return mapaColunas[normalizar(n)];
+                  return null;
+                };
 
                 const cCodigo = acharCol(["CODIGO", "codigo", "cod"]);
-                const cNome = acharCol(["NOME", "nome", "produto", "descricao"]);
-                const cValor = acharCol(["VALOR", "valor", "preco", "precovenda"]);
+                const cNome = acharCol([
+                  "NOME",
+                  "nome",
+                  "produto",
+                  "descricao",
+                ]);
+                const cValor = acharCol([
+                  "VALOR",
+                  "valor",
+                  "preco",
+                  "precovenda",
+                ]);
                 const cStatus = acharCol(["STATUS", "status"]);
                 const cDisp = acharCol(["DISPONIBILIDADES", "disponibilidade"]);
 
                 if (cCodigo && cNome) {
-                  const prodsPlan = linhas.filter(l => String(l[cCodigo] || "").trim() !== "").map(l => {
-                    const nome = String(l[cNome] || "").trim();
-                    const aro = extrairAro(nome);
-                    let vRaw = l[cValor]; let vNum = 0;
-                    if (typeof vRaw === "number") vNum = vRaw; else vNum = parseFloat(String(vRaw).replace(/R\$\s*/gi, "").replace(/\./g, "").replace(",", ".")) || 0;
-                    const status = limparTexto(l[cStatus]); const disp = limparTexto(l[cDisp]);
-                    return { codigo: String(l[cCodigo]).trim(), nome, valor: vNum, status, disponibilidade: disp, aro, vendido: disp === "VENDIDO", fotos_urls: [] };
-                  });
+                  const prodsPlan = linhas
+                    .filter((l) => String(l[cCodigo] || "").trim() !== "")
+                    .map((l) => {
+                      const nome = String(l[cNome] || "").trim();
+                      const aro = extrairAro(nome);
+                      let vRaw = l[cValor];
+                      let vNum = 0;
+                      if (typeof vRaw === "number") vNum = vRaw;
+                      else
+                        vNum =
+                          parseFloat(
+                            String(vRaw)
+                              .replace(/R\$\s*/gi, "")
+                              .replace(/\./g, "")
+                              .replace(",", "."),
+                          ) || 0;
+                      const status = limparTexto(l[cStatus]);
+                      const disp = limparTexto(l[cDisp]);
+                      return {
+                        codigo: String(l[cCodigo]).trim(),
+                        nome,
+                        valor: vNum,
+                        status,
+                        disponibilidade: disp,
+                        aro,
+                        vendido: disp === "VENDIDO",
+                        fotos_urls: [],
+                      };
+                    });
 
-                  const { data: exist } = await supabaseClient.from("catalogo_rodas").select("codigo");
-                  const codes = new Set(exist.map(e => String(e.codigo)));
-                  const novos = prodsPlan.filter(p => !codes.has(p.codigo));
+                  const { data: exist } = await supabaseClient
+                    .from("catalogo_rodas")
+                    .select("codigo");
+                  const codes = new Set(exist.map((e) => String(e.codigo)));
+                  const novos = prodsPlan.filter((p) => !codes.has(p.codigo));
 
                   if (novos.length > 0) {
                     await supabaseClient.from("catalogo_rodas").insert(novos);
@@ -831,42 +1904,69 @@
 
             if (arquivosFotos.length > 0) {
               impLog(`📸 Processando imagens de capa...`, "info");
-              const { data: atuais } = await supabaseClient.from("catalogo_rodas").select("codigo, fotos_urls");
-              const mapa = new Map(atuais.map(p => [String(p.codigo), p]));
+              const { data: atuais } = await supabaseClient
+                .from("catalogo_rodas")
+                .select("codigo, fotos_urls");
+              const mapa = new Map(atuais.map((p) => [String(p.codigo), p]));
 
               for (const arq of arquivosFotos) {
                 const cod = arq.name.split(".").slice(0, -1).join(".");
-                const nomeStor = `${cod}.jpg`; // Força JPG pois será comprimido
-                
+                const nomeStor = `${cod}.jpg`; 
+
                 try {
                   const prodAtual = mapa.get(String(cod));
-                  if (!prodAtual) { impLog(`⏭ ${arq.name}: Produto não encontrado.`, "warn"); continue; }
-                  if (prodAtual.fotos_urls && prodAtual.fotos_urls.length > 0) { impLog(`⏭ ${arq.name}: Já tem foto. Pulando.`, "warn"); continue; }
-                  
-                  // COMPRIME A IMAGEM ANTES DO UPLOAD
+                  if (!prodAtual) {
+                    impLog(`⏭ ${arq.name}: Produto não encontrado.`, "warn");
+                    continue;
+                  }
+                  if (prodAtual.fotos_urls && prodAtual.fotos_urls.length > 0) {
+                    impLog(`⏭ ${arq.name}: Já tem foto. Pulando.`, "warn");
+                    continue;
+                  }
+
                   impLog(`⏳ Otimizando ${arq.name}...`, "info");
                   const arqComprimido = await comprimirImagem(arq);
 
-                  const { error: upErr } = await supabaseClient.storage.from(BUCKET_FOTOS).upload(nomeStor, arqComprimido, { upsert: false });
+                  const { error: upErr } = await supabaseClient.storage
+                    .from(BUCKET_FOTOS)
+                    .upload(nomeStor, arqComprimido, { upsert: false });
                   let urlPub;
                   if (upErr) {
-                    if ((upErr.message || "").toLowerCase().includes("already exists")) {
-                      const { data: u } = supabaseClient.storage.from(BUCKET_FOTOS).getPublicUrl(nomeStor);
+                    if (
+                      (upErr.message || "")
+                        .toLowerCase()
+                        .includes("already exists")
+                    ) {
+                      const { data: u } = supabaseClient.storage
+                        .from(BUCKET_FOTOS)
+                        .getPublicUrl(nomeStor);
                       urlPub = u.publicUrl;
                     } else throw upErr;
                   } else {
-                    const { data: u } = supabaseClient.storage.from(BUCKET_FOTOS).getPublicUrl(nomeStor);
+                    const { data: u } = supabaseClient.storage
+                      .from(BUCKET_FOTOS)
+                      .getPublicUrl(nomeStor);
                     urlPub = u.publicUrl;
                   }
-                  await supabaseClient.from("catalogo_rodas").update({ fotos_urls: [urlPub] }).eq("codigo", cod);
+                  await supabaseClient
+                    .from("catalogo_rodas")
+                    .update({ fotos_urls: [urlPub] })
+                    .eq("codigo", cod);
                   impLog(`✅ ${arq.name} vinculada (otimizada).`, "ok");
-                } catch (err) { impLog(`❌ Erro em ${arq.name}: ${err.message}`, "err"); }
+                } catch (err) {
+                  impLog(`❌ Erro em ${arq.name}: ${err.message}`, "err");
+                }
               }
             }
             await carregarProdutos();
             impLog(`🏁 Finalizado.`, "ok");
-          } catch (err) { impLog("❌ Erro: " + err.message, "err"); }
-          finally { btn.disabled = false; btn.innerText = "▶ Executar Importação"; }
+            mostrarToast("📥 Importação concluída com sucesso!");
+          } catch (err) {
+            impLog("❌ Erro: " + err.message, "err");
+          } finally {
+            btn.disabled = false;
+            btn.innerText = "▶ Executar Importação";
+          }
         };
 
         /* INIT */
